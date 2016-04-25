@@ -38,7 +38,7 @@ class RestAPI(object):
 
     def start(self):
     	if __name__ == '__main__':
-            self.app.run(host='0.0.0.0',debug=True)
+            self.app.run(host='0.0.0.0',debug=True)#threaded=True to enable multithreading
 mainprogram = MainProgram()
 restapi = RestAPI(mainprogram)
 restapi.start()
