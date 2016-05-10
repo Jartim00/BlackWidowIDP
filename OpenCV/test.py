@@ -2,13 +2,17 @@ import cv2
 import os
 import math
 import numpy as np
+from multiprocessing import Queue
 
 class Camera:
 	lastPosition = None
-	framesRequired = 10
+	framesRequired = 5
 	count = 0
-	def start(self):
+	def targetLock(self,q):
 		cap = cv2.VideoCapture(0)
+		width = cap.get(3) 
+		height = cap.get(4)
+		print str(width) + " " + str(height)
 		while(1):
 			cv2.waitKey(1)
 			ref, frame = cap.read()
@@ -22,18 +26,18 @@ class Camera:
 
 			mask = mask0+mask1
 
-			kernel = np.ones((10,10),np.uint8)
+			kernel = np.ones((12,12),np.uint8)
 			mask =  cv2.erode(mask,kernel,iterations = 1)
 
-			dilation = np.ones((8, 8), "uint8")
+			dilation = np.ones((12, 12), "uint8")
 			mask = cv2.dilate(mask, dilation)
 
 			mask = cv2.medianBlur(mask,5)
 
-			circles = cv2.HoughCircles(mask,cv2.HOUGH_GRADIENT,1.9,50,param1=80,param2=70,minRadius=1, maxRadius=3600)
+			circles = cv2.HoughCircles(mask,cv2.HOUGH_GRADIENT,2,50,param1=80,param2=70,minRadius=10, maxRadius=36000)
 			if circles is None:
 				cv2.imshow('mask',mask)
-				count = 0
+				self.count = 0
 				continue
 
 			#circles = np.uint16(np.around(circles))
@@ -45,9 +49,13 @@ class Camera:
 
 			cv2.imshow('maskShot',mask)
 			cv2.imshow('frameShot',frame)
-                        count += 1
+                        self.count += 1
 			
-			print "X: "+ str(lastPosition[0]) + " Y: " + str(lastPosition[1]) + " radius: " + str(lastPosition[2])
+			if self.count >= self.framesRequired:
+				q.put(lastPosition)
+				print "LOCK ON"
+			print self.count
+			#print "X: "+ str(lastPosition[0]) + " Y: " + str(lastPosition[1]) + " radius: " + str(lastPosition[2])
 
 			k = cv2.waitKey(5) & 0xFF
 			if k == 27:
