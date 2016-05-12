@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="match_parent"
+        android:id="@+id/imageView"
+        android:layout_gravity="top|left"
+        android:src="@mipmap/battery_icon" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/battery_health"
+        android:text="test"
+        android:layout_marginTop="0dp" />
+
+</LinearLayout>
