@@ -35,7 +35,7 @@ De methode die gebruikt wordt om dit project in goede banen te lijden is Scrum, 
 In deze wedstrijd zitten verschillende onderdelen waarin verschillende eigenschappen van de spin worden beproefd.
 Een combinatie tussen een goed ontwerp, constructie en programmering zal het verschil moeten maken in deze strijd.</div>
 <br><center>
-<p><img src='images/Black Widow.jpg' class="img-responsive"></p>
+<p><img src='images/spider.jpg' class="img-responsive"></p>
 
 <?php include_once("foot.php"); ?>
 </center>
