@@ -39,10 +39,8 @@ public class ServoActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        debugHelper.AddToList("DEBUG: SERVO ACTIVITY LOADED.");
         setContentView(R.layout.servoview_layout);
         gridView = (GridLayout) findViewById(R.id.gridView);
-        FOCUSSED = true;
         Start.start();
     }
 
@@ -62,7 +60,6 @@ public class ServoActivity extends Activity {
         super.onResume();
         debugHelper.AddToList("DEBUG: SERVO ACTIVITY LOADED.");
         FOCUSSED = true;
-        if(updateServos == null){
             updateServos = new Thread()
             {
                 @Override
@@ -79,8 +76,6 @@ public class ServoActivity extends Activity {
                     }
                 }
             };
-        }
-
         updateServos.start();
     }
 
@@ -132,7 +127,6 @@ public class ServoActivity extends Activity {
                     }
                 }
             }
-            //updateServos.start();
         } else {
             jsonData = new JSONObject("{'servos':[{'error':'error'}]}");
         }
@@ -215,7 +209,7 @@ public class ServoActivity extends Activity {
 
     private void EditGridView(final Servo s) {
         LinearLayout ll = (LinearLayout) findViewById(s.getId());
-        if (s.getAllData().length > 0) {
+        if (s.getAllData().length > 0 && ll != null) {
             if (s.isMoving() == 1) { //
                 ll.setBackgroundColor(Color.parseColor("#99FF00"));
             } else {

@@ -30,8 +30,6 @@ public class SlopeActivity extends Activity {
         Backward = (LinearLayout) findViewById(R.id.Backward);
         Left = (LinearLayout) findViewById(R.id.Left);
         Right = (LinearLayout) findViewById(R.id.Right);
-        FOCUSSED = true;
-        GetSlopeData_Loop();
     }
 
     @Override
@@ -43,12 +41,6 @@ public class SlopeActivity extends Activity {
     @Override
     protected void onResume(){
         super.onResume();
-        setContentView( R.layout.slopeview_layout);
-        img_animation = (ImageView) findViewById(R.id.spider);
-        Forward = (LinearLayout) findViewById(R.id.Forward);
-        Backward = (LinearLayout) findViewById(R.id.Backward);
-        Left = (LinearLayout) findViewById(R.id.Left);
-        Right = (LinearLayout) findViewById(R.id.Right);
         FOCUSSED = true;
         GetSlopeData_Loop();
     }

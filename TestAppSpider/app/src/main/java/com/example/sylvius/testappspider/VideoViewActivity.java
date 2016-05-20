@@ -20,7 +20,6 @@ public class VideoViewActivity extends Activity {
 
         setContentView( R.layout.videoview_layout);
         videoStream = (WebView) findViewById(R.id.webView);
-        SetupWebView();
     }
 
     @Override
@@ -32,8 +31,7 @@ public class VideoViewActivity extends Activity {
     @Override
     protected void onResume(){
         super.onResume();
-        setContentView( R.layout.videoview_layout);
-        videoStream = (WebView) findViewById(R.id.webView);
+        FOCUSSED = true;
         SetupWebView();
     }
 
