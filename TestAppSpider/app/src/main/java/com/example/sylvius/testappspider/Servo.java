@@ -1,138 +1,64 @@
 package com.example.sylvius.testappspider;
 
-import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Sylvius on 11-5-2016.
  */
 public class Servo {
     private int id;
-    private String PresentPositionL, PresentPositionH, PresentSpeedL, PresentSpeedH,PresentLoadL,PresentLoadH, PresentVoltage, Temperature, PunchL, PunchH;
+    private float Position,Load, Voltage, Temperature;
     private int IsMoving;
-    private String[] allData = new String[]{id+"",PresentLoadL+"",PresentLoadH+"", PresentSpeedL+"", PresentSpeedH+"",
-            PresentPositionL+"", PresentPositionH+"", PresentVoltage+"", Temperature+"", PunchL+"", PunchH+""}; //without IsMoving!
+    private String[] allData = new String[]{"ID: "+id,"Position: "+Position+"","Load: "+Load+"","Temperature: "+Temperature+"","Voltage: "+Voltage+""}; //without IsMoving!
 
-    public Servo(int id, String presentPositionL, String presentPositionH, String presentSpeedL, String presentSpeedH, String presentLoadL, String presentLoadH, String presentVoltage, String temperature, String punchL, String punchH, int isMoving) {
+    public Servo(int id, float Position, float Load, float Temperature, float Voltage, int isMoving) {
         this.id = id;
-        PresentPositionL = presentPositionL;
-        PresentPositionH = presentPositionH;
-        PresentSpeedL = presentSpeedL;
-        PresentSpeedH = presentSpeedH;
-        PresentLoadL = presentLoadL;
-        PresentLoadH = presentLoadH;
-        PresentVoltage = presentVoltage;
-        Temperature = temperature;
-        PunchL = punchL;
-        PunchH = punchH;
-        IsMoving = isMoving;
+        this.Position = Position;
+        this.Load = Load;
+        this.Temperature = Temperature;
+        this.Voltage = Voltage;
+        this.IsMoving = isMoving;
     }
 
-    public Servo(){
+    public Servo(){}
 
-    }
-
-    public int GetID(){
+    public int getId() {
         return id;
     }
 
-    public String getPresentPositionL() {
-        return PresentPositionL;
+    public float getPosition() {
+        return Position;
     }
 
-    public String getPresentPositionH() {
-        return PresentPositionH;
+    public void setPosition(float position) {
+        Position = position;
     }
-
-    public String getPresentSpeedL() {
-        return PresentSpeedL;
+    public float getLoad(){
+        return Load;
     }
-
-    public String getPresentSpeedH() {
-        return PresentSpeedH;
+    public void setLoad(float load){
+        Load = load;
     }
-
-    public String getPresentLoadL() {
-        return this.PresentLoadL;
+    public float getVoltage() {
+        return Voltage;
     }
-
-    public String getPresentLoadH() {
-        return PresentLoadH;
+    public void setVoltage(float voltage) {
+        Voltage = voltage;
     }
-
-    public String getPresentVoltage() {
-        return PresentVoltage;
-    }
-
-    public String getTemperature() {
+    public float getTemperature() {
         return Temperature;
     }
-
-    public String getPunchL() {
-        return PunchL;
-    }
-
-    public String getPunchH() {
-        return PunchH;
-    }
-
-    public String[] getAllData(){
-        allData = new String[]{this.GetID()+"",this.getPresentLoadL(),this.getPresentLoadH(), this.getPresentSpeedL(), this.getPresentSpeedH(),
-                this.getPresentPositionL(), this.getPresentPositionH(), this.getPresentVoltage(), this.getTemperature(), this.getPunchL(), this.getPunchH()};
-        return allData;
-    }
-
-    public int isMoving(){
-        return IsMoving;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setPresentPositionL(String presentPositionL) {
-        PresentPositionL = presentPositionL;
-    }
-
-    public void setPresentPositionH(String presentPositionH) {
-        PresentPositionH = presentPositionH;
-    }
-
-    public void setPresentSpeedL(String presentSpeedL) {
-        PresentSpeedL = presentSpeedL;
-    }
-
-    public void setPresentSpeedH(String presentSpeedH) {
-        PresentSpeedH = presentSpeedH;
-    }
-
-    public void setPresentLoadL(String presentLoadL) {
-        this.PresentLoadL = presentLoadL;
-    }
-
-    public void setPresentLoadH(String presentLoadH) {
-        this.PresentLoadH = presentLoadH;
-    }
-
-    public void setPresentVoltage(String presentVoltage) {
-        PresentVoltage = presentVoltage;
-    }
-
-    public void setTemperature(String temperature) {
+    public void setTemperature(float temperature) {
         Temperature = temperature;
     }
-
-    public void setPunchL(String punchL) {
-        PunchL = punchL;
-    }
-
-    public void setPunchH(String punchH) {
-        PunchH = punchH;
+    public int isMoving() {
+        return IsMoving;
     }
 
     public void setMoving(int moving) {
         IsMoving = moving;
+    }
+
+    public String[] getAllData(){
+        allData = new String[]{"ID: "+this.getId(),"Position: "+this.getPosition()+"","Load: "+this.getLoad()+"","Temperature: "+this.getTemperature()+"","Voltage: "+this.getVoltage()+""};
+        return allData;
     }
 }
