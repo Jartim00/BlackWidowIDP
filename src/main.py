@@ -1,53 +1,46 @@
 #!/usr/bin/python
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, request
 from camera_pi import Camera
 import json
 import threading
+from multiprocessing import Process
+from servo import Servo
 from time import sleep
 from ax import Ax12
 ax = Ax12()
-
-class Servo(object):
-    def __init__(self,id):
-        self.id = id
-        self.position = 0
-        self.load = 0
-        self.voltage = 0
-        self.temperature = 0
-        self.moving = 0
-
-    def getId(self):
-        return self.id
-
-    def getPosition(self):
-        return self.position
-
-    def getLoad(self):
-        return self.load
-
-    def getVoltage(self):
-        return self.voltage
-
-    def getTemperature(self):
-        return self.temperature
-
-    def getMovingStatus(self):
-        return self.moving
-
-    def updateVariables(self):
-        self.position = ax.readPosition(self.id)
-        self.load = ax.readLoad(self.id)
-        self.voltage = ax.readVoltage(self.id)
-        self.temperature = ax.readTemperature(self.id)
-        self.moving = ax.readMovingStatus(self.id)
 
 class MainProgram(object):
     servos = []
     def __init__(self):
         print "Main...."
         self.createServos(6,3)
-        self.startUpdateThread()
         print "Main end..."
+
+    def start(self):
+        self.running = True
+        self.startUpdateThread()
+        #continuous updates
+        while self.running:
+            try:
+                print "another loop..."
+                sleep(1)
+            except KeyboardInterrupt:
+                print "exiting mainprogram..."
+                self.shutdown()
+                return
+
+    def shutdown(self):
+        self.running = False
+        #shutdown flask
+        #self.apiserver.terminate()
+        #self.apiserver.join()
+        # self.shutdown_server()
+
+    # def shutdown_server(self):
+    #     func = request.environ.get('werkzeug.server.shutdown')
+    #     if func is None:
+    #         raise RuntimeError('Not running with the Werkzeug Server')
+    #     func()
 
     def createServos(self,numLegs,servosPerLeg):
         if not 1 <= servosPerLeg <= 9:
@@ -61,18 +54,24 @@ class MainProgram(object):
 
     def startUpdateThread(self):
         print "starting update thread..."
-        t = threading.Thread(target=self.updateServos)
-        t.start()
+        threading.Thread(target=self.updateServos,args=(self.servos,)).start()
+        restapi = RestAPI(self)
+        self.apiserver = threading.Thread(target=restapi.start)
+        self.apiserver.daemon = True
+        self.apiserver.start()
 
-    def updateServos(self):
-        while True:
-            try:
-                print "updating servos..."
-                for servo in self.servos:
-                    servo.updateVariables()
-                sleep(5)
-            except KeyboardInterrupt:
-                break
+    def updateServos(self,toUpdateServos):
+        while self.running:
+           try:
+               print "updating servos..."
+               for servo in toUpdateServos:
+                   try:
+                       servo.updateVariables()
+                   except ax.timeoutError:
+                       print "error...."
+               sleep(1)
+           except:
+               print "Timeout error in update servo thread..."
 
 def gen(camera):
     """Video streaming generator function."""
@@ -115,7 +114,7 @@ class RestAPI(object):
     def start(self):
     	if __name__ == '__main__':
             self.app.run(host='0.0.0.0',debug=False)#threaded=True to enable multithreading
-mainprogram = MainProgram()
-restapi = RestAPI(mainprogram)
-restapi.start()
-print "done...."
+if __name__ == '__main__':
+    mainprogram = MainProgram()
+    mainprogram.start()
+    print "done...."

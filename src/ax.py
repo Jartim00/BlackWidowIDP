@@ -9,6 +9,7 @@ http://savageelectronics.blogspot.it/2011/01/arduino-y-dynamixel-ax-12.html
 from time import sleep
 from serial import Serial
 import RPi.GPIO as GPIO
+import time
 
 class Ax12:
     # important AX-12 constants
@@ -123,7 +124,7 @@ class Ax12:
     LEFT = 0
     RIGTH = 1
     RX_TIME_OUT = 10
-    TX_DELAY_TIME = 0.00002
+    TX_DELAY_TIME = 0.0004
 
     # RPi constants
     RPI_DIRECTION_PIN = 18
@@ -137,7 +138,7 @@ class Ax12:
 
     def __init__(self):
         if(Ax12.port == None):
-            Ax12.port = Serial("/dev/ttyAMA0", baudrate=1000000, timeout=0.001)
+            Ax12.port = Serial("/dev/ttyAMA0", baudrate=1000000, timeout=0.001)#timeout 0.001 standaard
         if(not Ax12.gpioSet):
             GPIO.setwarnings(False)
             GPIO.setmode(GPIO.BCM)
@@ -326,7 +327,7 @@ class Ax12:
         outData += chr(checksum)
         Ax12.port.write(outData)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return 0		#return self.readData(id)
 
     def moveSpeed(self, id, position, speed):
         self.direction(Ax12.RPI_DIRECTION_TX)
@@ -398,7 +399,7 @@ class Ax12:
         outData += chr(Ax12.AX_ACTION)
         outData += chr(Ax12.AX_ACTION_CHECKSUM)
         Ax12.port.write(outData)
-        #sleep(Ax12.TX_DELAY_TIME)
+        sleep(Ax12.TX_DELAY_TIME)
 
     def setTorqueStatus(self, id, status):
         self.direction(Ax12.RPI_DIRECTION_TX)
@@ -655,6 +656,7 @@ class Ax12:
         sleep(Ax12.TX_DELAY_TIME)
         return self.readData(id)
 
+	#hiermee kun je aflezen of de servo beweegt of niet
     def readMovingStatus(self, id):
         self.direction(Ax12.RPI_DIRECTION_TX)
         Ax12.port.flushInput()
@@ -688,7 +690,7 @@ class Ax12:
         return self.readData(id)
 
 
-    def learnServos(self,minValue=1, maxValue=6, verbose=False) :
+    def learnServos(self,minValue=1, maxValue=44, verbose=False) :
         servoList = []
         for i in range(minValue, maxValue + 1):
             try :
@@ -701,6 +703,8 @@ class Ax12:
                 if verbose : print "Error pinging servo #" + str(i) + ': ' + str(detail)
                 pass
         return servoList
+    
+
 
 #
 #def playPose() :
