@@ -1,16 +1,15 @@
 package com.example.sylvius.testappspider;
 
-import android.app.Activity;
-import android.app.LocalActivityManager;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
+
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 
 /**
  * Created by Sylvius on 9-5-2016.
@@ -19,7 +18,9 @@ public class TabClass extends TabActivity {
 
     BatteryData b_data = new BatteryData();
     Thread thread;
+
     TabHost tabHost;
+    ImageView connectionView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,7 @@ public class TabClass extends TabActivity {
 
         // create the TabHost that will contain the Tabs
         tabHost = (TabHost)findViewById(android.R.id.tabhost);
+        connectionView = (ImageView)findViewById(R.id.Connection);
 
         TabHost.TabSpec tab1 = tabHost.newTabSpec("Servo Data");
         TabHost.TabSpec tab2 = tabHost.newTabSpec("Video View");
@@ -67,14 +69,37 @@ public class TabClass extends TabActivity {
                             public void run() {
                                 TextView tv = (TextView) findViewById(R.id.battery_health);
                                 tv.setText(b_data.GetBatteryPercentage());
+                                if(ConnectionAvailable()) {
+                                    connectionView.setImageResource(R.mipmap.img_connection);
+                                } else {
+                                    connectionView.setImageResource(R.mipmap.img_noconnection);
+                                }
                             }
                         });
-                        Thread.sleep(10);
+                        Thread.sleep(5000);
                     } catch (InterruptedException e) {
                     }
                 }
             }
         };
         thread.start();
+    }
+
+    private boolean ConnectionAvailable(){
+        boolean exists = false;
+        try {
+            SocketAddress sockaddr = new InetSocketAddress("10.1.1.1", 5000);
+            // Create an unbound socket
+            Socket sock = new Socket();
+
+            // This method will block no more than timeoutMs.
+            // If the timeout occurs, SocketTimeoutException is thrown.
+            int timeoutMs = 2000;   // 2 seconds
+            sock.connect(sockaddr, timeoutMs);
+            exists = true;
+        }catch(Exception e){
+
+        }
+        return exists;
     }
 }

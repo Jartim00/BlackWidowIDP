@@ -8,9 +8,10 @@ import android.webkit.WebView;
  * Created by Sylvius on 9-5-2016.
  */
 public class VideoViewActivity extends Activity {
-    private String httpLiveUrl = "http://141.252.236.44:5000"; //Video Feed from raspberry
+    private String httpLiveUrl = "http://10.1.1.1:5000"; //Video Feed from raspberry
     DebugHelper debugHelper = new DebugHelper();
     WebView videoStream;
+    boolean FOCUSSED;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,15 +20,29 @@ public class VideoViewActivity extends Activity {
 
         setContentView( R.layout.videoview_layout);
         videoStream = (WebView) findViewById(R.id.webView);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        FOCUSSED = false;
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        FOCUSSED = true;
         SetupWebView();
     }
 
     private void SetupWebView(){
-        try {
-            videoStream.loadUrl(httpLiveUrl);
-            debugHelper.AddToList("DEBUG: VIDEOSTREAM LOADED");
-        } catch (Exception ex){
-            debugHelper.AddToList("ERROR: NO VIDEOSTREAM FOUND");
+        if(FOCUSSED) {
+            try {
+                videoStream.loadUrl(httpLiveUrl);
+                debugHelper.AddToList("DEBUG: VIDEOSTREAM LOADED");
+            } catch (Exception ex) {
+                debugHelper.AddToList("ERROR: NO VIDEOSTREAM FOUND");
+            }
         }
     }
 }
