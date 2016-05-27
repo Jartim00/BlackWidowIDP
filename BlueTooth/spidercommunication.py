@@ -33,7 +33,7 @@ class SpiderCommunication(object):
         return self.sock.recv(1024)
 
     def sendData(self,data):
-        self.sock.send(str(data))
+        self.sock.send(str(json.dumps(data, separators=(',',':'))))
 
     def start(self):
         try:
@@ -72,7 +72,7 @@ class SpiderCommunication(object):
 
     def synchronizeFrontLegs(self,gyroscope):
         sync_json = {
-            "mode" : 3,
+            "cmd" : "setGyro",
             "gyro" : gyroscope
         }
         self.sendData(sync_json)
