@@ -56,14 +56,21 @@ def parseJSON(jsonData):
 				print "set gyro position"
 try:
 	while True:
-		data = client_sock.recv(1024)
+		data = ""
+		try:
+			data = client_sock.recv(1024)
+		except bluetooth.btcommon.BluetoothError as e:
+			print "connection reset"
+			#if lost connection, accept connecion for reconnect
+			client_sock,address = server_sock.accept()
+			continue
 		print "received [%s]" % data
-		# try:
-		jsonData = json.loads(data)
-		parseJSON(jsonData)
-		# except:
-		# 	#send something back if something goes wrong
-		# 	print "SOMETHING WENT WRONG"
+		try:
+			jsonData = json.loads(data)
+			parseJSON(jsonData)
+		except:
+			#send something back if something goes wrong
+			print "SOMETHING WENT WRONG"
 		client_sock.send(data)
 except KeyboardInterrupt:
 	client_sock.close()
