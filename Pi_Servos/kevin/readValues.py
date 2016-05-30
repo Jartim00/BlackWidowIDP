@@ -1,73 +1,62 @@
 #!/usr/bin/python
 from ax import Ax12
 from time import sleep
-import os
-
+import os, sys
 ax = Ax12()
-leg = 2
-_HEUP = 10*leg+1
-_KNIE = 10*leg+2
-_VOET = 10*leg+3
 
-print ax.readMovingStatus(_VOET)
-print ax.readRWStatus(_VOET)
-
-def prN(num):
+def prN(num): #print Number with indentation
 	if(num < -100) :
 		return str(num)
 	elif(num < -10) :
 		return str(num) + " "
 	elif(num < 0) :
-		return str(num) + "  "
+		return " " + str(num) + " "
 	elif(num < 10):
-		return str(num) + "   "
+		return " " + str(num) + "  "
 	elif(num <100):
-		return str(num) + "  "
+		return " " + str(num) + " "
 	elif(num<1000):
 		return str(num) + " "
 	else:
 		return str(num)
 
+def speed(servo) :
+	#speed is a bit tricky at times
+	if ax.readMovingStatus(servo) : #alleen als er een commando gegeven is om te bewegen - niet als je 'm handmatig beweegt :(
+		try:
+			spd = ax.readSpeed(servo)
+		except:
+			spd = "----"
+	else :
+		spd = "----"
+	return spd
 
-while(True) :
-	tempH = ax.readTemperature(_HEUP)
-	tempK = ax.readTemperature(_KNIE)
-	tempV = ax.readTemperature(_VOET)
+def readValues(delay=0.25) :
+	#print table
+	while screenRunning :
+		try:
+			os.system('clear')
+			print "     | pos  | temp | spd  | volt | load "
+			print "========================================"
+			list = ax.learnServos(10,64) #min-ID, max-ID, verbose=False
+			for i in range(0, len(list)) :
+				servo = list[i]	
+				print prN(servo), "|", prN(ax.readPosition(servo)), "|", prN(ax.readTemperature(servo)), "|", prN(speed(servo)), "|", prN(ax.readVoltage(servo)), "|", prN(ax.readLoad(servo))
+			sleep(delay)
+		except KeyboardInterrupt :
+			os.system('clear')
+			print "Exited"
+			print "     | pos  | temp | spd  | volt | load "
+			print "========================================"
+			list = ax.learnServos(10,64) #min-ID, max-ID, verbose=False
+			for i in range(0, len(list)) :
+				servo = list[i]	
+				print prN(servo), "|", prN(ax.readPosition(servo)), "|", prN(ax.readTemperature(servo)), "|", prN(speed(servo)), "|", prN(ax.readVoltage(servo)), "|", prN(ax.readLoad(servo))
+			print "========================================"
+			sys.exit(0)
 
-	posiH = ax.readPosition(_HEUP)
-	posiK = ax.readPosition(_KNIE)
-	posiV = ax.readPosition(_VOET)
-
-	voltH = ax.readVoltage(_HEUP)
-	voltK = ax.readVoltage(_KNIE)
-	voltV = ax.readVoltage(_VOET)
-
-	loadH = ax.readLoad(_HEUP)
-	loadK = ax.readLoad(_KNIE)
-	loadV = ax.readLoad(_VOET)
-
-	try:
-		speeH = ax.readSpeed(_HEUP)
-	except:
-		speeH = "----"
-	try:
-		speeK = ax.readSpeed(_KNIE)
-	except:
-		speeK = "----"
-	try:
-		speeV = ax.readSpeed(_VOET)
-	except:
-		speeV = "----"
-
-	os.system('clear')
-	print ax.learnServos(10, 70) #min-ID, max-ID, verbose=False
-	print " "
-	print "     | HEUP | KNIE | VOET "
-	print "=========================="
-	print "pos  |", prN(posiH), "|", prN(posiK), "|", prN(posiV)
-	print "temp |", prN(tempH), "|", prN(tempK), "|", prN(tempV)
-	print "spd  |", prN(speeH), "|", prN(speeK), "|", prN(speeV)
-	print "volt |", prN(voltH), "|", prN(voltK), "|", prN(voltV)
-	print "load |", prN(loadH), "|", prN(loadK), "|", prN(loadV)
-
-	sleep(0.5)
+try :
+	screenRunning = True
+	readValues(0.25)
+except KeyboardInterrupt :
+	print " exit."
