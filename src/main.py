@@ -7,6 +7,8 @@ from multiprocessing import Process
 from servo import Servo
 from time import sleep
 from ax import Ax12
+#import vision.vision
+import btcommunication.btserver
 ax = Ax12()
 
 class MainProgram(object):
@@ -103,7 +105,7 @@ class RestAPI(object):
                 "position":servo.getPosition(),
                 "moving": servo.getMovingStatus()
             })
-        return str(infoJSON)#getJSON()
+        return str(infoJSON) #str(json.dumps(infoJSON, separators=(',',':'))#getJSON()
 
     @app.route('/video_feed')
     def video_feed():
