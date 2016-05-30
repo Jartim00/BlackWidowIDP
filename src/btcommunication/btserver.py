@@ -20,7 +20,7 @@ class BluetoothServer(object):
 		self.server_sock.listen(1)
 		#make server discoverable
 		subprocess.call(['sudo', 'hciconfig', 'hci0', 'piscan'])
-		self.acceptClient()
+		self.acceptClient(True)
 		self.communicate()
 
 	def stop(self):
@@ -43,7 +43,7 @@ class BluetoothServer(object):
 				print "connection reset"
 				#if lost connection, accept connecion for reconnect
 				#set timeout
-				self.acceptClient()
+				self.acceptClient(False)
 				continue
 			print "received [%s]" % data
 			try:
@@ -55,7 +55,9 @@ class BluetoothServer(object):
 			print "sending..."
 			self.client_sock.send(data)
 
-	def acceptClient(self):
+	def acceptClient(self, blocking):
+		if not blocking:
+			self.client_sock.settimeout(0)
 		self.client_sock,self.address = self.server_sock.accept()
 		print "Accepted connection from ",self.address
 
