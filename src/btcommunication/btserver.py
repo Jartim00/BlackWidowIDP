@@ -20,7 +20,7 @@ class BluetoothServer(object):
 		self.server_sock.listen(1)
 		#make server discoverable
 		subprocess.call(['sudo', 'hciconfig', 'hci0', 'piscan'])
-		self.acceptClient(True)
+		self.acceptClient()
 		self.communicate()
 
 	def stop(self):
@@ -31,13 +31,27 @@ class BluetoothServer(object):
 		self.running = False
 		print "stopped"
 
+	def receive(self,buf=1024,blocking=True):
+		if not blocking:
+			self.client_sock.settimeout(3.0)
+		try:
+			#receive
+			data = self.client_sock.recv(buf)
+			return data
+		except bluetooth.btcommon.BluetoothError as e:
+			# if blocking:
+			raise e
+
 	def communicate(self):
 		print "communicate"
 		while self.running:
+			print "SELF.RUNNING : ",self.running
 			data = ""
 			try:
 				print "receiving..."
-				data = self.client_sock.recv(1024)
+				data = self.receive(1024,False)
+				if data is None or data == "":
+					continue
 				print "end receive..."
 			except bluetooth.btcommon.BluetoothError as e:
 				print "connection reset"
@@ -55,11 +69,18 @@ class BluetoothServer(object):
 			print "sending..."
 			self.client_sock.send(data)
 
-	def acceptClient(self, blocking):
+	def acceptClient(self, blocking=True):
 		if not blocking:
-			self.client_sock.settimeout(0)
-		self.client_sock,self.address = self.server_sock.accept()
-		print "Accepted connection from ",self.address
+			self.server_sock.settimeout(3.0)
+		try:
+			self.client_sock,self.address = self.server_sock.accept()
+			print "Accepted connection from ",self.address
+		except bluetooth.btcommon.BluetoothError as e:
+			if blocking:
+				raise e
+		# finally:
+		# 	if blocking:
+		# 		self.server_sock.settimeout(None)
 
 	def parseJSON(self,jsonData):
 		if 'mode' in jsonData:
