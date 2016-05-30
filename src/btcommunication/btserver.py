@@ -1,16 +1,20 @@
 #!/usr/bin/python
-
 import bluetooth
 import subprocess
 import json
+import vision.vision as vision
 
 class BluetoothServer(object):
 	def __init__(self,bind_address,port):
+		print "init"
 		self.bind_address = bind_address
 		self.port = port
 		self.server_sock = bluetooth.BluetoothSocket( bluetooth.RFCOMM )
+		self.running = False
 
 	def start(self):
+		print "started"
+		self.running = True
 		#change the bind address when ready
 		self.server_sock.bind((self.bind_address,self.port))
 		self.server_sock.listen(1)
@@ -19,28 +23,37 @@ class BluetoothServer(object):
 		self.acceptClient()
 		self.communicate()
 
+	def stop(self):
+		self.client_sock.shutdown(1)
+		self.server_sock.shutdown(1)
+		self.client_sock.close()
+		self.server_sock.close()
+		self.running = False
+		print "stopped"
+
 	def communicate(self):
-		try:
-			while True:
-				data = ""
-				try:
-					data = self.client_sock.recv(1024)
-				except bluetooth.btcommon.BluetoothError as e:
-					print "connection reset"
-					#if lost connection, accept connecion for reconnect
-					self.acceptClient()
-					continue
-				print "received [%s]" % data
-				try:
-					jsonData = json.loads(data)
-					self.parseJSON(jsonData)
-				except:
-					#send something back if something goes wrong
-					print "SOMETHING WENT WRONG"
-				self.client_sock.send(data)
-		except KeyboardInterrupt:
-			self.client_sock.close()
-			self.server_sock.close()
+		print "communicate"
+		while self.running:
+			data = ""
+			try:
+				print "receiving..."
+				data = self.client_sock.recv(1024)
+				print "end receive..."
+			except bluetooth.btcommon.BluetoothError as e:
+				print "connection reset"
+				#if lost connection, accept connecion for reconnect
+				#set timeout
+				self.acceptClient()
+				continue
+			print "received [%s]" % data
+			try:
+				jsonData = json.loads(data)
+				self.parseJSON(jsonData)
+			except:
+				#send something back if something goes wrong
+				print "SOMETHING WENT WRONG"
+			print "sending..."
+			self.client_sock.send(data)
 
 	def acceptClient(self):
 		self.client_sock,self.address = self.server_sock.accept()

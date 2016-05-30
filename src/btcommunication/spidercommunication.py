@@ -20,6 +20,7 @@ class SpiderCommunication(object):
         self.shutdown()
 
     def shutdown(self):
+        print "disconnecting..."
         self.sock.close()
 
     def startBluetooth(self):

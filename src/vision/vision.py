@@ -1,9 +1,9 @@
 #!/usr/bin/python
+import cv2
 from multiprocessing import Process, Queue
 from recognition import Recognition
 from datetime import datetime, timedelta
 from camera_pi import Camera
-import cv2
 
 
 class Vision:
@@ -56,7 +56,7 @@ class Vision:
 				elif attackPast and coord[2] <= 2000:# balloon is gone, but scraps lying around
 					rec.resetValues()
 					self.running = False
-				elif direction not None:
+				elif direction is not None:
 					__SpiderAction(direction)
 			timePast = 0
 
@@ -74,7 +74,7 @@ class Vision:
 
 			if coord is not None:
 				direction = __direction(coord, False)
-				if direction not None:
+				if direction is not None:
 					__SpiderAction(direction)
 		attackPast = False
 
@@ -82,16 +82,17 @@ class Vision:
 
 	def __SpiderAction(command):
 		#command
+		pass
 
-	def __detectLine(self, frame)
+	def __detectLine(self, frame):
 		self.buffer = 50
 		frame = self.__decodeFrame(frame)
 		return rec.targetLine(frame)
 
-	def __targetBalloon(self, frame)
+	def __targetBalloon(self, frame):
 		frame = self.__decodeFrame(frame)
 		return rec.targetBalloon(frame)
 
-	def __decodeFrame(self, frame)
+	def __decodeFrame(self, frame):
 		data = np.fromstring(frame, dtype=np.uint8)
 		return cv2.imdecode(data,1)

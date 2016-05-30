@@ -1,11 +1,9 @@
 import cv2
-import cv2.cv as cv
 import math
 import numpy as np
-from morphology as Morphology
+import morphology as morph
 
 class Recognition:
-	morph = Morphology()
 
 	lastPosition = None
 	framesRequired = 3
@@ -28,15 +26,15 @@ class Recognition:
 		lower_white = np.array([0, 0, 190])
 		upper_white = np.array([180, 255, 255])
 		mask = morph.thresholdImage(frame, lower_white, upper_white)
-		
+
 		mask = morph.morphFrame(frame)
-	
-		mask = morph.floodFill(mask)		
+
+		mask = morph.floodFill(mask)
 		mask = cv2.GaussianBlur(mask,(5,5),0)
 
 		return self.__detectLine(mask)
 
-	#returns array containing X, Y and Area	
+	#returns array containing X, Y and Area
 	def targetBalloon(self, frame):
 		if frame is None:
 			 return None
@@ -44,42 +42,42 @@ class Recognition:
 		lower_red = np.array([0, 100, 60])
 		upper_red = np.array([10, 255, 255])
 		mask = morph.thresholdImage(mask, lower_red, upper_red)
-		
+
 		mask = morph.morphFrame(frame)
 
-		mask = morph.floodFill(mask)		
+		mask = morph.floodFill(mask)
 
 		mask = cv2.medianBlur(mask,5)
 
 		currentCoordinate = self.__detectCircleBlob(mask)
-			
+
 		if currentCoordinate is None:
 			self.count = 0
 			self.lastPosition = None
 			return None
-		
+
 		self.lastPosition = currentCoordinate
-		
+
                 self.count += 1
 
-		if self.count >= self.framesRequired:			
+		if self.count >= self.framesRequired:
 			return self.lastPosition
-	
+
 		return None
 
-	def __detectCircleHough(self,frame):
-		radius = 0
-		circles = cv2.HoughCircles(frame,cv.CV_HOUGH_GRADIENT,2.5,50,param1=80,param2=70,minRadius=0, maxRadius=3000)
-	
-		if circles is None:
-			return None
+	# def __detectCircleHough(self,frame):
+	# 	radius = 0
+	# 	circles = cv2.HoughCircles(frame,cv.CV_HOUGH_GRADIENT,2.5,50,param1=80,param2=70,minRadius=0, maxRadius=3000)
+	#
+	# 	if circles is None:
+	# 		return None
+	#
+	# 	position = None
+	# 	for i in circles[0,:]:
+	# 		if radius < i[2]:
+	# 			position = i
+	# 	return position
 
-		position = None
-		for i in circles[0,:]:
-			if radius < i[2]:
-				position = i
-		return position
-	
 	def __detectCircleBlob(self,mask):
 		contours = cv2.findContours(mask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)[0]
 		height, width = mask.shape[:2]
@@ -131,6 +129,6 @@ class Recognition:
 			if M["m00"] != 0:
 				if area > max_area:
 					max_area = area
-            				best_cnt = cnt	
+            				best_cnt = cnt
 					x,y,w,h = cv2.boundingRect(cnt)
 		return [x + self.bufferX, y + self.bufferY]

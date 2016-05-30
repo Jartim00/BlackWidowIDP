@@ -8,9 +8,8 @@ from servo import Servo
 from time import sleep
 from ax import Ax12
 #import vision.vision
-import btcommunication.btserver
+import btcommunication.btserver as btserver
 ax = Ax12()
-
 class MainProgram(object):
     servos = []
     def __init__(self):
@@ -21,6 +20,8 @@ class MainProgram(object):
     def start(self):
         self.running = True
         self.startUpdateThread()
+        self.startRESTAPI()
+        self.startBluetoothServer()
         #continuous updates
         while self.running:
             try:
@@ -33,6 +34,7 @@ class MainProgram(object):
 
     def shutdown(self):
         self.running = False
+        self.bluetoothServer.stop()
         #shutdown flask
         #self.apiserver.terminate()
         #self.apiserver.join()
@@ -57,10 +59,17 @@ class MainProgram(object):
     def startUpdateThread(self):
         print "starting update thread..."
         threading.Thread(target=self.updateServos,args=(self.servos,)).start()
+
+    def startRESTAPI(self):
         restapi = RestAPI(self)
         self.apiserver = threading.Thread(target=restapi.start)
         self.apiserver.daemon = True
         self.apiserver.start()
+
+    def startBluetoothServer(self):
+        self.bluetoothServer = btserver.BluetoothServer("",1)
+        self.bluetoothThread = threading.Thread(target=self.bluetoothServer.start)
+        self.bluetoothThread.start()
 
     def updateServos(self,toUpdateServos):
         while self.running:
