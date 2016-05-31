@@ -9,6 +9,7 @@ http://savageelectronics.blogspot.it/2011/01/arduino-y-dynamixel-ax-12.html
 from time import sleep
 from serial import Serial
 import RPi.GPIO as GPIO
+import time
 
 class Ax12:
     # important AX-12 constants
@@ -123,13 +124,13 @@ class Ax12:
     LEFT = 0
     RIGTH = 1
     RX_TIME_OUT = 10
-    TX_DELAY_TIME = 0.00002
+    TX_DELAY_TIME = 0.00002  #onveranderd, moet misschien nog wat getweakt worden om het goed te hebben, maar hoeft waarschijnlijk niet
 
     # RPi constants
     RPI_DIRECTION_PIN = 18
     RPI_DIRECTION_TX = GPIO.HIGH
     RPI_DIRECTION_RX = GPIO.LOW
-    RPI_DIRECTION_SWITCH_DELAY = 0.0001
+    RPI_DIRECTION_SWITCH_DELAY = 0.0002 #originele getal vermenigvuldigd met 2 (0.0001 is origineel)
 
     # static variables
     port = None
@@ -137,7 +138,7 @@ class Ax12:
 
     def __init__(self):
         if(Ax12.port == None):
-            Ax12.port = Serial("/dev/ttyAMA0", baudrate=1000000, timeout=0.001)
+            Ax12.port = Serial("/dev/ttyAMA0", baudrate=1000000, timeout=0.004)  #originele getal vermenigvuldigd met 4 (0.001 is origineel)
         if(not Ax12.gpioSet):
             GPIO.setwarnings(False)
             GPIO.setmode(GPIO.BCM)
@@ -174,7 +175,8 @@ class Ax12:
             assert ord(reply[0]) == 0xFF
         except:
             e = "Timeout on servo " + str(id)
-            raise Ax12.timeoutError(e)
+            #Ax12.timeoutError(e)	#uitgecommenteerd
+	    Exception(e)		#toegevoegd, dit sluit niet het hele programma af als er een timeout error is bvb.
 
         try :
             length = ord(reply[3]) - 2
@@ -326,7 +328,7 @@ class Ax12:
         outData += chr(checksum)
         Ax12.port.write(outData)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.readData(id) #0
 
     def moveSpeed(self, id, position, speed):
         self.direction(Ax12.RPI_DIRECTION_TX)
@@ -386,7 +388,7 @@ class Ax12:
         outData += chr(checksum)
         Ax12.port.write(outData)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id)
+        return self.readData(id) #0 #weer ingecommenteerd #uitgecommenteerd, geen errors meer :D
 
     def action(self):
         self.direction(Ax12.RPI_DIRECTION_TX)
@@ -687,7 +689,7 @@ class Ax12:
         sleep(Ax12.TX_DELAY_TIME)
         return self.readData(id)
 
-    def learnServos(self,minValue=1, maxValue=6, verbose=False) :
+    def learnServos(self,minValue=1, maxValue=44, verbose=False) :
         servoList = []
         for i in range(minValue, maxValue + 1):
             try :
@@ -701,6 +703,7 @@ class Ax12:
                 pass
         return servoList
 
+#
 #def playPose() :
 #    '''
 #    Open a file and move the servos to specified positions in a group move
@@ -715,8 +718,6 @@ class Ax12:
 #
 #    groupMove2(poseDict)
 #
-
-
 #def writePose() :
 #    '''
 #    Read the servos and save the positions to a file
