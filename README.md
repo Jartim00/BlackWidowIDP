@@ -1,2 +1,2 @@
 # BlackWidowIDP
-Super vette awesome shizzle spoderman stuff
+Mechanical spider, controlled by a self-designed smart controller.
