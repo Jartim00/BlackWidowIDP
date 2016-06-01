@@ -21,7 +21,8 @@ class vision:
 	running = False
 	width = 640
 	height = 480
-
+	
+	#Returns command to be taken in string format
 	def __direction(self, coord, balloon):
 		middleX = self.width / 2
 		if balloon and coord[2] >= 900000:
@@ -34,8 +35,8 @@ class vision:
 			return "Right"
 
 		return None
-
-
+	
+	#starts autonomousLine sequence, which controls the spider. it needs to run on different thread!
 	def startAutonomousLine(self):
 		self.buffer = 50
 		self.running = True
@@ -49,7 +50,7 @@ class vision:
 					self.__SpiderAction(direction)
 		attackPast = False
 
-
+	#starts autonomous balloon detection sequence, which controls the spider. it needs to run on different thread!
 	def startAutonomousBalloon(self):
 		self.buffer = 80
 		self.running = True
@@ -84,9 +85,11 @@ class vision:
 
 		self.attackPast = False
 
+	#used to stop the infinite loop
 	def stopAutonomous(self):
 		self.running = False
 
+	#translates string action to a predefined Movement pattern
 	def __SpiderAction(self,command):
 		print command
 		if command == "Forward":
@@ -96,15 +99,18 @@ class vision:
 		elif command == "Right":
 			movement().rechts()
 		movement().rust()
-
+	
+	#decodes frame and returns x y coordinates of line
 	def __detectLine(self, frame):
 		frame = self.__decodeFrame(frame)
 		return self.rec.targetLine(frame)
-
+	
+	#decodes frame and returns x y coordinates of balloon
 	def __targetBalloon(self, frame):
 		frame = self.__decodeFrame(frame)
 		return self.rec.targetBalloon(frame)
 
+	#decodes frame from string to a Numphy array	
 	def __decodeFrame(self, frame):
 		data = np.fromstring(frame, dtype=np.uint8)
 		return cv2.imdecode(data,1)
