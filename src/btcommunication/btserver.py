@@ -2,8 +2,7 @@
 import bluetooth
 import subprocess
 import json
-import vision.vision as vision
-
+from vision.vision import Vision
 class BluetoothServer(object):
 	def __init__(self,bind_address,port):
 		print "init"
@@ -11,6 +10,10 @@ class BluetoothServer(object):
 		self.port = port
 		self.server_sock = bluetooth.BluetoothSocket( bluetooth.RFCOMM )
 		self.running = False
+		#make threads
+		self.visionDetection = Vision()
+		self.visionLineThread = threading.Thread(target=visionDetection.startAutonomousLine)
+		self.visionBalloonThread = threading.Thread(target=visionDetection.startAutonomousBalloon)
 
 	def start(self):
 		print "started"
@@ -104,9 +107,13 @@ class BluetoothServer(object):
 			elif mode == 4:
 				#call the autonomousLine function
 				print "autonomousLine"
+				self.visionLineThread = threading.Thread(target=visionDetection.startAutonomousLine)
+				self.visionLineThread.start()
 			elif mode == 5:
 				# call the autonomousBalloon function
 				print "autonomousBalloon"
+				self.visionBalloonThread = threading.Thread(target=visionDetection.startAutonomousBalloon)
+				self.visionBalloonThread.start()
 			elif mode == 6:
 				# go to sleep
 				print "go to sleep"

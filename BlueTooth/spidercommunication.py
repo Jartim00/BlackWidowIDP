@@ -70,7 +70,7 @@ class SpiderCommunication(object):
         self.sendData(stab_json)
         return self.readData()
 
-    def synchronizeFrontLegs(self,gyroscope):
+    def setGyro(self,gyroscope):
         sync_json = {
             "cmd" : "setGyro",
             "gyro" : gyroscope
@@ -108,7 +108,7 @@ def main():
     print moveTest
     moveTest = spiderCommunication.stab()
     print moveTest
-    moveTest = spiderCommunication.synchronizeFrontLegs(56)
+    moveTest = spiderCommunication.setGyro(56)
     print moveTest
     moveTest = spiderCommunication.autonomousLine()
     print moveTest

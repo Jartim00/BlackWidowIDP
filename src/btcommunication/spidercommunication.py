@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import bluetooth
 import json
+#import gyro
 
 class ServerDown(Exception):
 
@@ -15,6 +16,7 @@ class SpiderCommunication(object):
     def __init__(self,bd_addr,port):
         self.bd_addr = bd_addr
         self.port = port
+        self.synclegs = False
 
     def __del__(self):
         self.shutdown()
@@ -71,13 +73,20 @@ class SpiderCommunication(object):
         self.sendData(stab_json)
         return self.readData()
 
-    def synchronizeFrontLegs(self,gyroscope):
+    def setGyro(self,gyroscope):
         sync_json = {
             "cmd" : "setGyro",
             "gyro" : gyroscope
         }
         self.sendData(sync_json)
         return self.readData()
+
+    def synchronizeFrontLegs(self):
+        self.synclegs = True
+        while self.synclegs:
+            #get the gyro value
+            setGyro(20)
+            sleep(0.25)
 
     def autonomousLine(self):
         line_json = { "mode" : 4 }
