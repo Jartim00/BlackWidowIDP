@@ -3,6 +3,7 @@ import bluetooth
 import subprocess
 import json
 from vision.vision import vision
+from movement.vooruit import vooruit as movement
 
 class BluetoothServer(object):
 	def __init__(self,bind_address,port):
@@ -69,6 +70,15 @@ class BluetoothServer(object):
 			print "sending..."
 			self.client_sock.send(data)
 
+	def __SpiderAction(self,command):
+		print command
+		if command == "Forward":
+			movement().vooruit()
+		elif command == "Left":
+			movement().links()
+		elif command == "Right":
+			movement().rechts()
+		movement().rust()
 	def acceptClient(self, blocking=True):
 		if not blocking:
 			self.server_sock.settimeout(3.0)
