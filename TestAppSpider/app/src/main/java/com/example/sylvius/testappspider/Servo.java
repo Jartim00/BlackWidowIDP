@@ -23,11 +23,9 @@ public class Servo {
     public int getId() {
         return id;
     }
-
     public float getPosition() {
         return Position;
     }
-
     public void setPosition(float position) {
         Position = position;
     }
@@ -52,13 +50,8 @@ public class Servo {
     public int isMoving() {
         return IsMoving;
     }
-
     public void setMoving(int moving) {
         IsMoving = moving;
     }
-
-    public String[] getAllData(){
-        allData = new String[]{"ID: "+this.getId(),"Position: "+this.getPosition()+"","Load: "+this.getLoad()+"","Temperature: "+this.getTemperature()+"","Voltage: "+this.getVoltage()+""};
-        return allData;
-    }
+    public String[] getAllData(){allData = new String[]{"ID: "+this.getId(),"Position: "+this.getPosition()+"","Load: "+this.getLoad()+"","Temperature: "+this.getTemperature()+"","Voltage: "+this.getVoltage()+""};return allData;}
 }
