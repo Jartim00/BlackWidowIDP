@@ -2,7 +2,7 @@
 import bluetooth
 import subprocess
 import json
-import vision.vision as vision
+from vision.vision import vision
 
 class BluetoothServer(object):
 	def __init__(self,bind_address,port):
