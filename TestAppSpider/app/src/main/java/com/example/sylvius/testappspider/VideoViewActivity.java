@@ -25,6 +25,7 @@ public class VideoViewActivity extends Activity {
     @Override
     protected void onPause(){
         super.onPause();
+        videoStream.loadUrl("about:blank");
         FOCUSSED = false;
     }
 
