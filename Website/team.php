@@ -47,7 +47,7 @@
 <div class="row">
 	<?php
 	for($i=0; $i<sizeof($members); $i++) {
-		echo("<div class='col=sm-12 col-md-4". ($i == 12 ? " tile-middle" : "")."' >
+		echo("<div class='col=sm-12 col-md-4' >
 				<div class='tile'>
 				<img src='images/" . $fotos[$i] . "' class='img-responsive'>");
 		echo("<span class='tile-caption' style=''>" . $members[$i] . " (");

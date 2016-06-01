@@ -60,11 +60,7 @@
 			$photoID = $num["MAX(id)"] + 1;
 
 			$message = db_escape($_POST['message']);
-			$message = nl2br($message); //replace enters with linebreaks (<br>'s)
-			$message = str_replace(array("  ", "\t"), ' ', $message); //remove all extra spaces and tabs (indents and stuffs)
-			$message = str_replace(array("\n", "\r"), '', $message); //remove all \r and \n's
-			$message = str_replace("<br />", "</p><p>", $message); //replace <br>'s with <p>'s
-			$message = "<p>" . $message . "</p>"; //add the remaining <p> brackets.
+			$message = str_replace('\r\n', "<br>", $message); //remove all extra spaces and tabs (indents and stuffs)
 			$messageQuery = ("INSERT INTO Messages (messageID, uploaded, message) VALUES (" . $messageID . ", '". date("Y-m-d H:i:s") ."', '" . $message . "')");
 
 			$imageQuery = "INSERT INTO Photos (id, name, messageID) VALUES (".$photoID.", '".$target_file."', ".$messageID.")";
@@ -79,6 +75,8 @@
 				} else {
 					if (move_uploaded_file($_FILES["imgs"]["tmp_name"], "images/".$target_file)) {
 						echo "<p>: The file ". basename( $_FILES["imgs"]["name"]). " has been uploaded.</p>";
+						include_once("email.php"); 
+						email($target_file, $message);
 					} else {
 						echo "<p>: Sorry, there was an error uploading your file ".basename($_FILES["imgs"]["name"]).".</p>";
 						

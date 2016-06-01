@@ -1,10 +1,10 @@
 import cv2
 import math
 import numpy as np
-import morphology as morph
+from morphology import Morphology
 
 class Recognition:
-
+	morph = Morphology()
 	lastPosition = None
 	framesRequired = 3
 	count = 0
@@ -17,7 +17,7 @@ class Recognition:
 		self.count = 0
 		self.lastPosition = None
 
-	#return array containing X and Y
+	#return array containing X and Y of line
 	def targetLine(self, frame):
 		if frame is None:
 			 return None
@@ -25,12 +25,12 @@ class Recognition:
 
 		lower_white = np.array([0, 0, 190])
 		upper_white = np.array([180, 255, 255])
-		mask = morph.thresholdImage(frame, lower_white, upper_white)
+		thresholded = self.morph.thresholdImage(frame, lower_white, upper_white)
 
-		mask = morph.morphFrame(frame)
+		mask = self.morph.morphFrame(thresholded)
 
-		mask = morph.floodFill(mask)
 		mask = cv2.GaussianBlur(mask,(5,5),0)
+		mask = self.morph.floodFill(mask)		
 
 		return self.__detectLine(mask)
 
@@ -41,11 +41,11 @@ class Recognition:
 
 		lower_red = np.array([0, 100, 60])
 		upper_red = np.array([10, 255, 255])
-		mask = morph.thresholdImage(mask, lower_red, upper_red)
+		thresholded = self.morph.thresholdImage(frame, lower_red, upper_red)
 
-		mask = morph.morphFrame(frame)
+		mask = self.morph.morphFrame(thresholded)
 
-		mask = morph.floodFill(mask)
+		mask = self.morph.floodFill(mask)
 
 		mask = cv2.medianBlur(mask,5)
 
@@ -64,7 +64,8 @@ class Recognition:
 			return self.lastPosition
 
 		return None
-
+	#houghCircle can only detect circles at 3 meters max, unless resolution is increased. 
+	#However greater resolution can solve this, but this increases computation time
 	# def __detectCircleHough(self,frame):
 	# 	radius = 0
 	# 	circles = cv2.HoughCircles(frame,cv.CV_HOUGH_GRADIENT,2.5,50,param1=80,param2=70,minRadius=0, maxRadius=3000)
@@ -78,8 +79,10 @@ class Recognition:
 	# 			position = i
 	# 	return position
 
+	#detects blob with the greatest area and returns X,Y and area of this blob
 	def __detectCircleBlob(self,mask):
-		contours = cv2.findContours(mask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)[0]
+		#contours = cv2.findContours(mask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)[0]
+		image, contours, hierarchy = cv2.findContours(mask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)		
 		height, width = mask.shape[:2]
 		middleThree = height / 3
 
@@ -107,6 +110,7 @@ class Recognition:
     			cx, cy = 0, 0
 		return [cx, cy, max_area]
 
+	#crops frame in much smaller resolution and returns the newly created frame
 	def __cropFrame(self, frame):
 		rows, cols = frame.shape[:2]
 		x2 = cols - self.bufferX
@@ -117,7 +121,8 @@ class Recognition:
 		return frame[y1: y2, x1:x2]
 
 	def __detectLine(self,croppedImage):
-		contours = cv2.findContours(croppedImage,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)[0]
+		#contours = cv2.findContours(croppedImage,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)[0]
+		im2, contours, hierarchy = cv2.findContours(croppedImage,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 		#image, contours, hierarchy = cv2.findContours(croppedImage,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 		if len(contours) == 0:
 			return None

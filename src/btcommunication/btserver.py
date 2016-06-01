@@ -3,6 +3,8 @@ import bluetooth
 import subprocess
 import json
 from vision.vision import Vision
+from movement.vooruit import vooruit as movement
+
 class BluetoothServer(object):
 	def __init__(self,bind_address,port):
 		print "init"
@@ -95,6 +97,12 @@ class BluetoothServer(object):
 					joy_x = jsonData['joy_x']
 					joy_y = jsonData['joy_y']
 					#call the move function
+					if joy_x > 0 and joy_y == 0:
+						self.__SpiderAction('Right')
+					elif joy_x < 0 and joy_y == 0:
+						self.__SpiderAction('Left')
+					elif joy_y > 0 and joy_x == 0:
+						self.__SpiderAction('Forward')
 					print "move"
 			elif mode == 2:
 				if 'danceId' in jsonData:
@@ -127,3 +135,13 @@ class BluetoothServer(object):
 					#gyro position
 					gyro_pos = jsonData['gyro'];
 					print "set gyro position"
+
+	def __SpiderAction(self,command):
+		print command
+		if command == "Forward":
+			movement().vooruit()
+		elif command == "Left":
+			movement().links()
+		elif command == "Right":
+			movement().rechts()
+		movement().rust()
