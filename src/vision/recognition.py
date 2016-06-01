@@ -17,7 +17,7 @@ class Recognition:
 		self.count = 0
 		self.lastPosition = None
 
-	#return array containing X and Y
+	#return array containing X and Y of line
 	def targetLine(self, frame):
 		if frame is None:
 			 return None
@@ -64,7 +64,8 @@ class Recognition:
 			return self.lastPosition
 
 		return None
-
+	#houghCircle can only detect circles at 3 meters max, unless resolution is increased. 
+	#However greater resolution can solve this, but this increases computation time
 	# def __detectCircleHough(self,frame):
 	# 	radius = 0
 	# 	circles = cv2.HoughCircles(frame,cv.CV_HOUGH_GRADIENT,2.5,50,param1=80,param2=70,minRadius=0, maxRadius=3000)
@@ -78,6 +79,7 @@ class Recognition:
 	# 			position = i
 	# 	return position
 
+	#detects blob with the greatest area and returns X,Y and area of this blob
 	def __detectCircleBlob(self,mask):
 		#contours = cv2.findContours(mask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)[0]
 		image, contours, hierarchy = cv2.findContours(mask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)		
@@ -108,6 +110,7 @@ class Recognition:
     			cx, cy = 0, 0
 		return [cx, cy, max_area]
 
+	#crops frame in much smaller resolution and returns the newly created frame
 	def __cropFrame(self, frame):
 		rows, cols = frame.shape[:2]
 		x2 = cols - self.bufferX
