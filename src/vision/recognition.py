@@ -1,10 +1,10 @@
 import cv2
 import math
 import numpy as np
-import morphology as morph
+from morphology import Morphology
 
 class Recognition:
-
+	morph = Morphology()
 	lastPosition = None
 	framesRequired = 3
 	count = 0
@@ -25,12 +25,12 @@ class Recognition:
 
 		lower_white = np.array([0, 0, 190])
 		upper_white = np.array([180, 255, 255])
-		mask = morph.thresholdImage(frame, lower_white, upper_white)
+		thresholded = self.morph.thresholdImage(frame, lower_white, upper_white)
 
-		mask = morph.morphFrame(frame)
+		mask = self.morph.morphFrame(thresholded)
 
-		mask = morph.floodFill(mask)
 		mask = cv2.GaussianBlur(mask,(5,5),0)
+		mask = self.morph.floodFill(mask)		
 
 		return self.__detectLine(mask)
 
@@ -41,11 +41,11 @@ class Recognition:
 
 		lower_red = np.array([0, 100, 60])
 		upper_red = np.array([10, 255, 255])
-		mask = morph.thresholdImage(mask, lower_red, upper_red)
+		thresholded = self.morph.thresholdImage(frame, lower_red, upper_red)
 
-		mask = morph.morphFrame(frame)
+		mask = self.morph.morphFrame(thresholded)
 
-		mask = morph.floodFill(mask)
+		mask = self.morph.floodFill(mask)
 
 		mask = cv2.medianBlur(mask,5)
 
@@ -79,7 +79,8 @@ class Recognition:
 	# 	return position
 
 	def __detectCircleBlob(self,mask):
-		contours = cv2.findContours(mask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)[0]
+		#contours = cv2.findContours(mask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)[0]
+		image, contours, hierarchy = cv2.findContours(mask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)		
 		height, width = mask.shape[:2]
 		middleThree = height / 3
 
@@ -117,7 +118,8 @@ class Recognition:
 		return frame[y1: y2, x1:x2]
 
 	def __detectLine(self,croppedImage):
-		contours = cv2.findContours(croppedImage,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)[0]
+		#contours = cv2.findContours(croppedImage,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)[0]
+		im2, contours, hierarchy = cv2.findContours(croppedImage,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 		#image, contours, hierarchy = cv2.findContours(croppedImage,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 		if len(contours) == 0:
 			return None
