@@ -3,6 +3,7 @@ import bluetooth
 import subprocess
 import json
 from vision.vision import Vision
+import threading
 from movement.vooruit import vooruit as movement
 
 class BluetoothServer(object):
@@ -14,8 +15,8 @@ class BluetoothServer(object):
 		self.running = False
 		#make threads
 		self.visionDetection = Vision()
-		self.visionLineThread = threading.Thread(target=visionDetection.startAutonomousLine)
-		self.visionBalloonThread = threading.Thread(target=visionDetection.startAutonomousBalloon)
+		self.visionLineThread = threading.Thread(target=self.visionDetection.startAutonomousLine)
+		self.visionBalloonThread = threading.Thread(target=self.visionDetection.startAutonomousBalloon)
 
 	def start(self):
 		print "started"
@@ -86,6 +87,18 @@ class BluetoothServer(object):
 		# finally:
 		# 	if blocking:
 		# 		self.server_sock.settimeout(None)
+	def stopEverything(self):
+		self.stopVision()
+
+	def stopVision(self):
+		print "stopAutonomous"
+		self.visionDetection.stopAutonomous()
+		print "join thread"
+		if self.visionLineThread.isAlive():
+			self.visionLineThread.join()
+		print "join last thread"
+		if self.visionBalloonThread.isAlive():
+			self.visionBalloonThread.join()
 
 	def parseJSON(self,jsonData):
 		if 'mode' in jsonData:
@@ -107,6 +120,7 @@ class BluetoothServer(object):
 			elif mode == 2:
 				if 'danceId' in jsonData:
 					danceId = jsonData['danceId']
+					self.stopEverything()
 					#call the dance function
 					print "dance"
 			elif mode == 3:
@@ -115,14 +129,17 @@ class BluetoothServer(object):
 			elif mode == 4:
 				#call the autonomousLine function
 				print "autonomousLine"
-				self.visionLineThread = threading.Thread(target=visionDetection.startAutonomousLine)
+				self.stopEverything()
+				self.visionLineThread = threading.Thread(target=self.visionDetection.startAutonomousLine)
 				self.visionLineThread.start()
 			elif mode == 5:
 				# call the autonomousBalloon function
 				print "autonomousBalloon"
-				self.visionBalloonThread = threading.Thread(target=visionDetection.startAutonomousBalloon)
+				self.stopEverything()
+				self.visionBalloonThread = threading.Thread(target=self.visionDetection.startAutonomousBalloon)
 				self.visionBalloonThread.start()
 			elif mode == 6:
+				self.stopEverything()
 				# go to sleep
 				print "go to sleep"
 		elif 'client_sockcmd' in jsonData:
