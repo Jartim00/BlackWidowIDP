@@ -197,7 +197,7 @@ class Ax12:
                     returnValue = ord(reply[0])
                 return returnValue
         except Exception, detail:
-            raise Ax12.axError(detail)
+            raise Exception(detail) #Ax12.axError(detail)
 
     def ping(self,id):
         self.direction(Ax12.RPI_DIRECTION_TX)
