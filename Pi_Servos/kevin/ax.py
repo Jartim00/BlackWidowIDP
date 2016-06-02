@@ -197,7 +197,7 @@ class Ax12:
                     returnValue = ord(reply[0])
                 return returnValue
         except Exception, detail:
-            raise Ax12.axError(detail)
+            raise Exception(detail) #Ax12.axError(detail)
 
     def ping(self,id):
         self.direction(Ax12.RPI_DIRECTION_TX)
@@ -328,7 +328,7 @@ class Ax12:
         outData += chr(checksum)
         Ax12.port.write(outData)
         sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id) #0
+        return 0 #self.readData(id)
 
     def moveSpeed(self, id, position, speed):
         self.direction(Ax12.RPI_DIRECTION_TX)
@@ -387,8 +387,8 @@ class Ax12:
         outData += chr(s[1])
         outData += chr(checksum)
         Ax12.port.write(outData)
-        sleep(Ax12.TX_DELAY_TIME)
-        return self.readData(id) #0 #weer ingecommenteerd #uitgecommenteerd, geen errors meer :D
+        #sleep(Ax12.TX_DELAY_TIME)
+        return 0 #self.readData(id)  uitgecommenteerd, geen errors meer :D
 
     def action(self):
         self.direction(Ax12.RPI_DIRECTION_TX)
@@ -400,7 +400,7 @@ class Ax12:
         outData += chr(Ax12.AX_ACTION)
         outData += chr(Ax12.AX_ACTION_CHECKSUM)
         Ax12.port.write(outData)
-        sleep(Ax12.TX_DELAY_TIME)
+        #sleep(Ax12.TX_DELAY_TIME)
 
     def setTorqueStatus(self, id, status):
         self.direction(Ax12.RPI_DIRECTION_TX)
@@ -689,7 +689,7 @@ class Ax12:
         sleep(Ax12.TX_DELAY_TIME)
         return self.readData(id)
 
-    def learnServos(self,minValue=1, maxValue=44, verbose=False) :
+    def learnServos(self,minValue=1, maxValue=6, verbose=False) :
         servoList = []
         for i in range(minValue, maxValue + 1):
             try :

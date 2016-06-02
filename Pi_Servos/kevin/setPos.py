@@ -29,9 +29,9 @@ def rest(legNr) :
 		loc[2] = 137.17
 
 	#ready positions
-	ax.move(10*legNr+1, int(512 + (loc[0]/_FACTOR)))
-	ax.move(10*legNr+2, int(512 + (loc[1]/_FACTOR)))
-	ax.move(10*legNr+3, int(512 + (loc[2]/_FACTOR)))
+	ax.moveSpeed(10*legNr+1, int(512 + (loc[0]/_FACTOR)), 512)
+	ax.moveSpeed(10*legNr+2, int(512 + (loc[1]/_FACTOR)), 512)
+	ax.moveSpeed(10*legNr+3, int(512 + (loc[2]/_FACTOR)), 512)
 	
 for legNr in range (1,7) :	
 	rest(legNr)
