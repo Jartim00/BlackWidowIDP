@@ -7,16 +7,18 @@ import gyro
 ax = Ax12()
 
 a = 512/60.0
+z = 35.0 / 60.0
+calc = a * z
 def gyroSens(b):
-	if not -36 <= b <= 35:
+	if not -60 <= b <= 60:
 		raise IndexError("position should be between -36 and 35")
-	ax.moveSpeedRW(12,511+int(a*int(b)),250)
-	ax.moveSpeedRW(22,511+int(a*int(b)),250)
-	ax.moveSpeedRW(32,511+int(a*int(b)),250)
+	ax.moveSpeedRW(12,511+int(calc*int(b)),250)
+	ax.moveSpeedRW(22,511+int(calc*int(b)),250)
+	ax.moveSpeedRW(32,511+int(calc*int(b)),250)
 	sleep(0.04)
-	ax.moveSpeedRW(42,511+int(a*int(b)),250)
-	ax.moveSpeedRW(52,511+int(a*int(b)),250)
-	ax.moveSpeedRW(62,511+int(a*int(b)),250)
+	ax.moveSpeedRW(42,511+int(calc*int(b)),250)
+	ax.moveSpeedRW(52,511+int(calc*int(b)),250)
+	ax.moveSpeedRW(62,511+int(calc*int(b)),250)
 	ax.action()
 
 

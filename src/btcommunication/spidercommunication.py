@@ -4,6 +4,7 @@ import json
 from time import sleep
 import random
 #import Gyro
+import Joy
 
 class ServerDown(Exception):
 
@@ -28,11 +29,14 @@ class SpiderCommunication(object):
         self.sock.close()
 
     def startBluetooth(self):
-        devices = bluetooth.discover_devices()
-        if self.bd_addr not in devices:
-            raise ServerDown("Couldn't find the server")
-        self.sock=bluetooth.BluetoothSocket( bluetooth.RFCOMM )
-        self.sock.connect((self.bd_addr,self.port))
+        # devices = bluetooth.discover_devices()
+        # if self.bd_addr not in devices:
+        #     raise ServerDown("Couldn't find the server")
+        try:
+            self.sock=bluetooth.BluetoothSocket( bluetooth.RFCOMM )
+            self.sock.connect((self.bd_addr,self.port))
+        except bluetooth.btcommon.BluetoothError:
+			raise ServerDown("Couldn't find the server")
 
     def readData(self):
         return self.sock.recv(1024)
@@ -88,10 +92,10 @@ class SpiderCommunication(object):
         while self.synclegs:
             #get the gyro value
             #gyropositions = [Gyro.x_gyroscoop(),Gyro.y_gyroscoop(),0]
-            randomx = random.randint(-36,35)
-            gyropositions = [randomx,1,2]
+            #randomx = random.randint(-60,60)
+            gyropositions = [Joy.read_x(),Joy.read_y(),0]
             self.setGyro(gyropositions)
-            sleep(0.5)
+            sleep(0.05)
 
     def autonomousLine(self):
         line_json = { "mode" : 4 }
