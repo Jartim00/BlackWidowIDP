@@ -13,7 +13,7 @@ public class BatteryData {
 
     public String GetBatteryPercentage(){
         //stuff
-        String s = "88% ";
+        String s = "69% ";
         Date date = new Date();
         if(date.getHours() >= 17){
             s = s + "Wtf are you on school?";
