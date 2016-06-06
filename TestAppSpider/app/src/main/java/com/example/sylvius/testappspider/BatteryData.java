@@ -13,10 +13,12 @@ public class BatteryData {
 
     public String GetBatteryPercentage(){
         //stuff
-        String s = "69% ";
+        String s = "69% : Is het tijd voor bier? ";
         Date date = new Date();
-        if(date.getHours() >= 17){
-            s = s + "Is het tijd voor bier?";
+        if(date.getHours() >= 15){
+            s += "Ja";
+        } else {
+            s += "Nein";
         }
         return s;
     }
