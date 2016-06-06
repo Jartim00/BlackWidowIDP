@@ -16,7 +16,7 @@ public class BatteryData {
         String s = "69% ";
         Date date = new Date();
         if(date.getHours() >= 17){
-            s = s + "Wtf are you on school?";
+            s = s + "Is het tijd voor bier?";
         }
         return s;
     }
