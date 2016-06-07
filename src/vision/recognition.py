@@ -6,12 +6,15 @@ from morphology import Morphology
 class Recognition:
 	morph = Morphology()
 	lastPosition = None
+		
 	framesRequired = 3
 	count = 0
-
+	
+	#used to create subsection of frame
 	cropHeight = 30
 	bufferX = 10
 	bufferY = 100
+
 	##Resets all internal values used within the Recognition class
 	def resetValues(self):
 		self.count = 0
@@ -68,21 +71,23 @@ class Recognition:
 			return self.lastPosition
 
 		return None
-	'''
-	#houghCircle can only detect circles at 3 meters max, unless resolution is increased. 
+	
+	##houghCircle can only detect circles at 3 meters max, unless resolution is increased. 
 	#However greater resolution can solve this, but this increases computation time
-	# def __detectCircleHough(self,frame):
-	# 	radius = 0
-	# 	circles = cv2.HoughCircles(frame,cv.CV_HOUGH_GRADIENT,2.5,50,param1=80,param2=70,minRadius=0, maxRadius=3000)
-	#
-	# 	if circles is None:
-	# 		return None
-	#
-	# 	position = None
-	# 	for i in circles[0,:]:
-	# 		if radius < i[2]:
-	# 			position = i
-	# 	return position'''
+	#@param mask binary mask where detection is performed
+	#Returns X, Y coordinates of centre of circle, returns none if no circle was found
+	def __detectCircleHough(self,frame):
+		radius = 0
+	 	circles = cv2.HoughCircles(frame,cv.CV_HOUGH_GRADIENT,2.5,50,param1=80,param2=70,minRadius=0, maxRadius=3000)
+	
+	 	if circles is None:
+	 		return None
+	
+	 	position = None
+	 	for i in circles[0,:]:
+	 		if radius < i[2]:
+	 			position = i
+	 	return position
 
 	##detects blob with the greatest area and returns X,Y and area of this blob
 	#@param mask binary mask where detection is performed

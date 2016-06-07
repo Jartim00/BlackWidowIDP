@@ -13,7 +13,8 @@ class Morphology:
 		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 		return cv2.inRange(hsv, lower, upper)
 
-	##cleans noise from image
+	##cleans noise from image, using opening and closing operation.
+	#note that these operation are costly on the raspberry pi
 	#@param frame Binary image 
 	#returns edited binary image
 	def morphFrame(self,frame):
