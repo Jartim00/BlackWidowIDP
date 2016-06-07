@@ -6,7 +6,7 @@ import os
 class vooruit:
 	ax = Ax12()
 
-	def vooruit(self):
+	def forward(self):
 		self.ax.move(61,674)
 		self.ax.move(11,350)
 		sleep(0.4)
@@ -14,19 +14,19 @@ class vooruit:
 		self.ax.move(11,512)
 		sleep(0.4)
 
-	def rechts(self):
+	def right(self):
 		self.ax.move(11,512)
 		sleep(0.4)
 		self.ax.move(11,674)
 		sleep(0.4)
 
-	def links(self):
+	def left(self):
 		self.ax.move(61,674)
 		sleep(0.4)
 		self.ax.move(61,512)
 		sleep(0.4)
 
-	def rust(self):
+	def rest(self):
 		self.upper1()
 		self.upper2()
 		sleep(0.5)
