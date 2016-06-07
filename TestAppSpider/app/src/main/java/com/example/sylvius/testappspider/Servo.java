@@ -2,6 +2,7 @@ package com.example.sylvius.testappspider;
 
 /**
  * Created by Sylvius on 11-5-2016.
+ * Object class for each servo.
  */
 public class Servo {
     private int id;

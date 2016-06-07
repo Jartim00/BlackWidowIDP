@@ -21,17 +21,13 @@ import java.util.List;
  * Created by Sylvius on 9-5-2016.
  */
 public class ServoActivity extends Activity {
-
+    //Global variables
     Servo servo = new Servo();
     DebugHelper debugHelper = new DebugHelper();
-
     GridLayout gridView;
-
-    List<LinearLayout> layoutList = new ArrayList<LinearLayout>() {
-    };
+    List<LinearLayout> layoutList = new ArrayList<LinearLayout>() {};
     List<Servo> servoList = new ArrayList<Servo>();
-
-    boolean FOCUSSED;
+    boolean FOCUSED;
 
     //{'servos': [{'load': {'H': 3, 'L': 2}, 'punch': {'H': 4, 'L': 3}, 'moving': 0, 'voltage': 50, 'position': {'H': 2, 'L': 1}, 'speed': {'H': 24, 'L': 33}, 'id': 11, 'temperature': 30}, {'load': {'H': 23, 'L': 23}, 'punch': {'H': 4, 'L': 3}, 'moving': 0, 'voltage': 50, 'position': {'H': 2, 'L': 1}, 'speed': {'H': 24, 'L': 33}, 'id': 12, 'temperature': 30}]}
     private static String url = "http://10.1.1.1:5000/api";//Connection with Raspberry for json //\\ http://10.1.1.1:5000/api || http://141.252.236.44:5000/api
@@ -52,20 +48,20 @@ public class ServoActivity extends Activity {
             updateServos = null;
             moribund.interrupt();
         }
-        FOCUSSED = false;
+        FOCUSED = false;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         debugHelper.AddToList("DEBUG: SERVO ACTIVITY LOADED.");
-        FOCUSSED = true;
+        FOCUSED = true;
             updateServos = new Thread()
             {
                 @Override
                 public void run() {
                     try {
-                        while (FOCUSSED) {
+                        while (FOCUSED) {
                             UpdateServos();
                             Thread.sleep(1000);
                         }
@@ -104,40 +100,47 @@ public class ServoActivity extends Activity {
     String TAG_TEMPERATURE = "temperature";
     String TAG_MOVING = "moving";
 
+    /*
+    * Class will get JSON String, parses it and creates a new servo for each
+    * of the servos in the JSON string.
+    * Then a call to AddToGridView will be made to visually add them on the screen.
+    */
     private void CreateServos() throws JSONException {
-        JSONParser jParser = new JSONParser();                  //Parser for webserver
-        JSONObject jsonData = jParser.getJSONFromUrl(url);      //For Webserver
+        JSONParser jParser = new JSONParser();                                                              //Parser for webserver
+        JSONObject jsonData = jParser.getJSONFromUrl(url);                                                  //For Webserver
         if (jsonData != null) {
-            JSONArray j = jsonData.optJSONArray("servos");          //"servos" = jsonArray name
+            JSONArray j = jsonData.optJSONArray("servos");                                                  //"servos" = jsonArray name
             if (j.length() > 0) {
                 for (int i = 0; i < j.length(); i++) {
                     try {
-                        Servo servo = new Servo(
-                                j.getJSONObject(i).getInt(TAG_ID),                                          //ID OR i if no ID is supplied.
-                                Float.parseFloat(j.getJSONObject(i).getString(TAG_POSITION)),
-                                Float.parseFloat(j.getJSONObject(i).getString(TAG_LOAD)),
-                                Float.parseFloat(j.getJSONObject(i).getString(TAG_TEMPERATURE)),
-                                Float.parseFloat(j.getJSONObject(i).getString(TAG_VOLTAGE)),
-                                j.getJSONObject(i).getInt(TAG_MOVING)                                    //IsMoving
+                        Servo servo = new Servo(                                                            // Create a new servo Object
+                                j.getJSONObject(i).getInt(TAG_ID),                                          // ID OR i if no ID is supplied.
+                                Float.parseFloat(j.getJSONObject(i).getString(TAG_POSITION)),               // Get Position value
+                                Float.parseFloat(j.getJSONObject(i).getString(TAG_LOAD)),                   // Get Load value
+                                Float.parseFloat(j.getJSONObject(i).getString(TAG_TEMPERATURE)),            // Get Temperature value
+                                Float.parseFloat(j.getJSONObject(i).getString(TAG_VOLTAGE)),                // Get Voltage value
+                                j.getJSONObject(i).getInt(TAG_MOVING)                                       // IsMoving 1 or 0
                         );
-                        servoList.add(servo); //Add servo to the List
-                        AddToGridView(servo); //add servo to the view
+                        servoList.add(servo);                                                               //Add servo to the List
+                        AddToGridView(servo);                                                               //add servo to the view
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
             }
         } else {
-            jsonData = new JSONObject("{'servos':[{'error':'error'}]}");
+            jsonData = new JSONObject("{'servos':[{'error':'error'}]}");                                    //Debug to prevent crashes.
         }
     }
 
+    /*
+    * Infinite Thread to update servo data
+    */
     Thread updateServos = new Thread(new Runnable() {
         @Override
         public void run() {
             try {
-                Log.w("FOCUSSED",FOCUSSED+"");
-                while (FOCUSSED) {
+                while (FOCUSED) {   // if ServoActivity is visible, update servos.
                     UpdateServos();
                     Thread.sleep(1000);
                 }
@@ -149,12 +152,16 @@ public class ServoActivity extends Activity {
         }
     });
 
+    /*
+    * Works basically the same as CreateServo class
+    * This class will edit each Servo Object with the new
+    * values from the JSON string.
+    */
     private void UpdateServos() throws JSONException {
-        Log.w("Test","test");
         JSONParser jParser = new JSONParser();                  //Parser for webserver
         JSONObject jsonData = jParser.getJSONFromUrl(url);      //For Webserver
         if (jsonData != null) {
-            JSONArray j = jsonData.optJSONArray("servos");          //TODO: get array final name.
+            JSONArray j = jsonData.optJSONArray("servos");          //array name
             int i = 0;
             for (final Servo s : servoList) {
                 if (j.length() > 0) {
@@ -177,6 +184,11 @@ public class ServoActivity extends Activity {
         }
     }
 
+    /*
+    * Visually adds the servos, with data, to the gridlayout.
+    * Add a lime green background if the servo is moving,
+    * or a red background if the servo is not moving.
+     */
     private void AddToGridView(Servo s) {
         final LinearLayout layout = new LinearLayout(this);     //Create new layout for each servo
         layout.setId(s.getId());
@@ -189,10 +201,11 @@ public class ServoActivity extends Activity {
             for (int i = 0; i < s.getAllData().length; i++) {
                 TextView textView = new TextView(this);
                 textView.setTextSize(11);
-                textView.setText(s.getAllData()[i]);
+                textView.setText(s.getAllData()[i]); //get all data from a servo
                 layout.addView(textView);
             }
         }
+        // Add them to the screen
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -207,15 +220,18 @@ public class ServoActivity extends Activity {
         layoutList.add(layout);
     }
 
+    /*
+    * Edit each of the servo layouts with the new data
+     */
     private void EditGridView(final Servo s) {
         LinearLayout ll = (LinearLayout) findViewById(s.getId());
         if (s.getAllData().length > 0 && ll != null) {
-            if (s.isMoving() == 1) { //
+            if (s.isMoving() == 1) { //red color if a servo is not moving, lime green for a moving servo
                 ll.setBackgroundColor(Color.parseColor("#99FF00"));
             } else {
                 ll.setBackgroundColor(Color.parseColor("#FF0000"));
             }
-            for (int i = 0; i < s.getAllData().length; i++) {
+            for (int i = 0; i < s.getAllData().length; i++) { //get the new servo data from the list.
                 TextView textView = (TextView) ll.getChildAt(i);
                 textView.setText(s.getAllData()[i]);
             }

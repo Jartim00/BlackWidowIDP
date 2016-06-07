@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+
+/*
+MainActivity class for starting up the App. Starts the TabClass class.
+ */
 public class MainActivity extends Activity {
     BatteryData batteryData = new BatteryData();
     @Override

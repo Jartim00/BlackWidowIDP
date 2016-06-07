@@ -19,7 +19,7 @@ public class SlopeActivity extends Activity {
     DebugHelper debugHelper = new DebugHelper();
     Thread thread;
 
-    boolean FOCUSSED;
+    boolean FOCUSED;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +35,13 @@ public class SlopeActivity extends Activity {
     @Override
     protected void onPause(){
         super.onPause();
-        FOCUSSED = false;
+        FOCUSED = false;
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        FOCUSSED = true;
+        FOCUSED = true;
         GetSlopeData_Loop();
     }
 
@@ -69,7 +69,7 @@ public class SlopeActivity extends Activity {
     private void GetSlopeData_Loop() throws IllegalThreadStateException{
         thread = new Thread() {
             public void run() {
-                while (FOCUSSED) {
+                while (FOCUSED) {
                     try {
                         //Animate(GetSpiderX(),GetSpiderY());
                         runOnUiThread(new Runnable() {
