@@ -13,13 +13,26 @@ import spidercommunication
 #import Spin_battery
 #import Controller_battery
 #gyroscope
+class FullScreenApp(object):
+    def __init__(self, master, **kwargs):
+        self.master=master
+        pad=3
+        self._geom='200x200+0+0'
+        master.geometry("{0}x{1}+0+0".format(
+            master.winfo_screenwidth()-pad, master.winfo_screenheight()-pad))
+        master.bind('<Escape>',self.toggle_geom)
+    def toggle_geom(self,event):
+        geom=self.master.winfo_geometry()
+        print(geom,self._geom)
+        self.master.geometry(self._geom)
+        self._geom=geom
 win=Tk()
 myFont = tkFont.Font(family = 'Helvetica',size = 12, weight = 'bold')
 win.title("Black Widow")
 win.geometry("550x320")
-
-app = Frame(win)
-app.grid()
+app = FullScreenApp(win)
+# app = Frame(win)
+# app.grid()
 path = "/home/pi/Documents/Controller/Black-widow.jpeg"
 path0 = "/home/pi/Documents/Controller/battery-0.png"
 path1 = "/home/pi/Documents/Controller/battery-1.png"
@@ -43,6 +56,7 @@ dans = False
 batterijsample=0
 aanval = False
 prik = False
+bt = False
 dansstate = "disabled"
 aanvalstate = "disabled"
 gyroThread = threading.Thread(target=bt_spider.synchronizeFrontLegs)
@@ -203,11 +217,11 @@ def start_stop_dans():
 def prik_uitvoer():
     global prik
     if prik:
-        bt_spider.stab()
         prik = False
         prik_button["bg"]=inactive
     else:
         prik = True
+        bt_spider.stab()
         prik_button["bg"]=active
     active_background()
 
@@ -269,8 +283,16 @@ def reset_knoppen():
         active_background()
 
 def bt_knop():
+    global bt
     try:
-        bt_spider.start()
+        if not bt:
+            bt_spider.start()
+            bt = True
+            bt_connect["bg"]=active
+        else:
+            bt_spider.shutdown()
+            bt = False
+            bt_connect["bg"]=inactive
         #succesvol
     except ServerDown as e:
         print e.value
@@ -327,7 +349,7 @@ mode_2_button.pack(side=LEFT)
 mode_3_button.pack(side=LEFT)
 mode_4_button.pack(side=LEFT)
 mode_5_button.pack(side=LEFT)
-mode_6_button.pack(side=LEFT) 
+mode_6_button.pack(side=LEFT)
 dansmode1_button.pack(side=LEFT)
 dansmode2_button.pack(side=BOTTOM)
 dansmode3_button.pack(side=RIGHT)
