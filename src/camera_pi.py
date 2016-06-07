@@ -8,7 +8,8 @@ class Camera(object):
     thread = None  # background thread that reads frames from camera
     frame = None  # current frame is stored here by background thread
     last_access = 0  # time of last client access to the camera
-
+    width = 640
+    height = 480
     def initialize(self):
         if Camera.thread is None:
             # start background frame thread
@@ -24,11 +25,17 @@ class Camera(object):
         self.initialize()
         return self.frame
 
+    def getWidth(self)
+	return self.width
+
+    def getHeight(self)
+	return self.height
+
     @classmethod
     def _thread(cls):
         with picamera.PiCamera() as camera:
             # camera setup
-            camera.resolution = (640, 480)
+            camera.resolution = (self.width, self.height)
             camera.hflip = True
             camera.vflip = True
 

@@ -12,22 +12,34 @@ from recognition import Recognition
 class Vision:
 	rec = Recognition()
 	cam = Camera()
-	lastPosition = None
+
+	#legacy code used for better angles
 	lastSize = 0
-	lastDirection = None
-	buffer = 20
+
+	#sensitivity of direction
+	buffer = 0
+
+	#used for balloon attack
 	attackPast = False
+
+	#legacy code used for refined movements
 	refinedRadius = 600000
+
+
+	attackRadius = 900000
+
+	#used to stop autonomous mode
 	running = False
-	width = 640
-	height = 480
+
+	width = cam.getWidth()
+	height = cam.getHeight()
 	
 	##Returns command to be taken in string format
 	#@param coord An array containing [X, Y] or an array containing [X,Y,Area]
 	#@param balloon boolean that represents the different actions to take 
 	def __direction(self, coord, balloon):
 		middleX = self.width / 2
-		if balloon and coord[2] >= 900000:
+		if balloon and coord[2] >= self.attackRadius:
 			return "Attack"
 		if coord[0] >= (middleX - self.buffer) and coord[0] <= (middleX + self.buffer):
 			return "Forward"
@@ -97,12 +109,13 @@ class Vision:
 	def __SpiderAction(self,command):
 		print command
 		if command == "Forward":
-			movement().vooruit()
+			movement().forward()
 		elif command == "Left":
-			movement().links()
+			movement().left()
 		elif command == "Right":
-			movement().rechts()
+			movement().right()
 		elif command == "Attack":
+			self.attackPast = True
 			pass
 		movement().rust()
 	
