@@ -21,6 +21,7 @@ class BluetoothServer(object):
 		self.visionBalloonThread = threading.Thread(target=self.visionDetection.startAutonomousBalloon)
 		self.client_sock,self.address = (None,None)
 
+	'''Starts the bluetooth server'''
 	def start(self):
 		print "started"
 		self.running = True
@@ -32,6 +33,7 @@ class BluetoothServer(object):
 		self.acceptClient()
 		self.communicate()
 
+	'''Stops the bluetooth server'''
 	def stop(self):
 		try:
 			if self.client_sock is not None:
@@ -44,6 +46,7 @@ class BluetoothServer(object):
 		self.running = False
 		print "stopped"
 
+	'''Receive message from the client'''
 	def receive(self,buf=1024,blocking=True):
 		if not blocking:
 			self.client_sock.settimeout(3.0)
@@ -55,6 +58,10 @@ class BluetoothServer(object):
 			# if blocking:
 			raise e
 
+	'''Communication between the server and client.
+	   Parses JSON and executes commands.
+	   Sends something back if needed.
+	'''
 	def communicate(self):
 		print "communicate"
 		while self.running:
@@ -94,9 +101,11 @@ class BluetoothServer(object):
 		# finally:
 		# 	if blocking:
 		# 		self.server_sock.settimeout(None)
+	'''Things that need to be stopped before doing another action.'''
 	def stopEverything(self):
 		self.stopVision()
 
+	'''Stops the balloon and line detection'''
 	def stopVision(self):
 		print "stopAutonomous"
 		self.visionDetection.stopAutonomous()
@@ -107,6 +116,8 @@ class BluetoothServer(object):
 		if self.visionBalloonThread.isAlive():
 			self.visionBalloonThread.join()
 
+	'''Parses JSON from the client and executes commands.
+	   Sends something back if needed.'''
 	def parseJSON(self,jsonData):
 		if 'mode' in jsonData:
 			#The command sets a mode
@@ -165,6 +176,7 @@ class BluetoothServer(object):
 					#rotate around the x axis
 					gyro.gyroSens(gyro_pos[0])
 
+	'''Test script for movement'''
 	def __SpiderAction(self,command):
 		print command
 		if command == "Forward":

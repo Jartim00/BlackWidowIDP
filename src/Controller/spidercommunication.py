@@ -4,7 +4,9 @@ import json
 from time import sleep
 import random
 #import Gyro
+import Joy
 
+'''Custom exception when the server is not found'''
 class ServerDown(Exception):
 
     def __init__(self,value):
@@ -23,16 +25,23 @@ class SpiderCommunication(object):
     def __del__(self):
         self.shutdown()
 
+    '''Closes the connection with the server'''
     def shutdown(self):
         print "disconnecting..."
         self.sock.close()
 
+    '''Connects with the server, if not found raises ServerDown
+       error.
+    '''
     def startBluetooth(self):
-        devices = bluetooth.discover_devices()
-        if self.bd_addr not in devices:
-            raise ServerDown("Couldn't find the server")
-        self.sock=bluetooth.BluetoothSocket( bluetooth.RFCOMM )
-        self.sock.connect((self.bd_addr,self.port))
+        # devices = bluetooth.discover_devices()
+        # if self.bd_addr not in devices:
+        #     raise ServerDown("Couldn't find the server")
+        try:
+            self.sock=bluetooth.BluetoothSocket( bluetooth.RFCOMM )
+            self.sock.connect((self.bd_addr,self.port))
+        except bluetooth.btcommon.BluetoothError:
+			raise ServerDown("Couldn't find the server")
 
     def readData(self):
         return self.sock.recv(1024)
@@ -40,6 +49,7 @@ class SpiderCommunication(object):
     def sendData(self,data):
         self.sock.send(str(json.dumps(data, separators=(',',':'))))
 
+    '''Starts the communication with the server'''
     def start(self):
         try:
             self.startBluetooth()
@@ -75,6 +85,7 @@ class SpiderCommunication(object):
         self.sendData(stab_json)
         return self.readData()
 
+    '''Sends the gyroscope position to the server.'''
     def setGyro(self,gyro_pos):
         sync_json = {
             "cmd" : "setGyro",
@@ -83,26 +94,32 @@ class SpiderCommunication(object):
         self.sendData(sync_json)
         return self.readData()
 
+    '''Keeps the spider legs synchronized with the gyroscope position
+       from the smartcontroller.
+    '''
     def synchronizeFrontLegs(self):
         self.synclegs = True
         while self.synclegs:
             #get the gyro value
             #gyropositions = [Gyro.x_gyroscoop(),Gyro.y_gyroscoop(),0]
-            randomx = random.randint(-36,35)
-            gyropositions = [randomx,1,2]
+            #randomx = random.randint(-60,60)
+            gyropositions = [Joy.read_x(),Joy.read_y(),0]
             self.setGyro(gyropositions)
-            sleep(0.5)
+            sleep(0.05)
 
+    '''Let's the spider follow a line on the ground.'''
     def autonomousLine(self):
         line_json = { "mode" : 4 }
         self.sendData(line_json)
         return self.readData()
 
+    '''Makes the spider walk to a balloon and pop it.'''
     def autonomousBalloon(self):
         balloon_json = { "mode" : 5 }
         self.sendData(balloon_json)
         return self.readData()
 
+    '''Makes the spider go into sleep/carry mode'''
     def goToSleep(self):
         sleep_json = { "mode" : 6 }
         self.sendData(sleep_json)
