@@ -69,6 +69,7 @@ class MainProgram(object):
     def startBluetoothServer(self):
         self.bluetoothServer = btserver.BluetoothServer("",1)
         self.bluetoothThread = threading.Thread(target=self.bluetoothServer.start)
+        self.bluetoothThread.daemon = True
         self.bluetoothThread.start()
 
     def updateServos(self,toUpdateServos):

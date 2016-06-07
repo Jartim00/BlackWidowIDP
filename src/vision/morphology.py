@@ -4,14 +4,18 @@ import numpy as np
 
 class Morphology:
 	
-	#frame is decoded image
-	#lower is the lower range of threshold, type in np.array
-	#upper is the upper range of threshold, type is np.array
+	## Thresholds frame in Numphy form 
+	#@param frame Decoded image in numphy form
+	#@param lower The lower range of threshold, type in np.array
+	#@param upper The upper range of threshold, type is np.array
+	#returns binary frame
 	def thresholdImage(self,frame, lower, upper):
 		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 		return cv2.inRange(hsv, lower, upper)
 
-	#cleans noise from image
+	##cleans noise from image
+	#@param frame Binary image 
+	#returns edited binary image
 	def morphFrame(self,frame):
 		kernel = np.ones((20, 20), "uint8")
 		opening = cv2.morphologyEx(frame, cv2.MORPH_OPEN, kernel)
@@ -20,7 +24,9 @@ class Morphology:
 		frame = cv2.morphologyEx(frame, cv2.MORPH_CLOSE, kernel)	
 		return frame
 
-	#fills holes in established blobs
+	##fills holes in established blobs
+	#@param frame Binary image
+	#returns edited binary image
 	def floodFill(self,frame):
 		im_floodfill = frame.copy()			 
 		h, w = frame.shape[:2]

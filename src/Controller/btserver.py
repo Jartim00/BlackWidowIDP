@@ -5,7 +5,6 @@ import json
 from vision.vision import Vision
 import threading
 from movement.vooruit import vooruit as movement
-import movement.carry as carry
 import gyro
 
 class BluetoothServer(object):
@@ -19,7 +18,6 @@ class BluetoothServer(object):
 		self.visionDetection = Vision()
 		self.visionLineThread = threading.Thread(target=self.visionDetection.startAutonomousLine)
 		self.visionBalloonThread = threading.Thread(target=self.visionDetection.startAutonomousBalloon)
-		self.client_sock,self.address = (None,None)
 
 	def start(self):
 		print "started"
@@ -33,13 +31,9 @@ class BluetoothServer(object):
 		self.communicate()
 
 	def stop(self):
-		try:
-			if self.client_sock is not None:
-				self.client_sock.shutdown(1)
-				self.client_sock.close()
-		except:
-			print "something went wrong when shutting down :("
+		self.client_sock.shutdown(1)
 		self.server_sock.shutdown(1)
+		self.client_sock.close()
 		self.server_sock.close()
 		self.running = False
 		print "stopped"
@@ -151,7 +145,6 @@ class BluetoothServer(object):
 				self.stopEverything()
 				# go to sleep
 				print "go to sleep"
-				carry.carry()
 		elif 'cmd' in jsonData:
 			cmd = jsonData['cmd']
 			if cmd == 'batteryStatus':

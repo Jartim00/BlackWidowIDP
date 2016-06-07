@@ -31,28 +31,31 @@ def speed(servo) :
 		spd = "----"
 	return spd
 
+def volt(servo) :
+	#speed is a bit tricky at times
+	try:
+		volt = ax.readVoltage(servo)
+		volt = str(volt/10) + "." + str(volt%10)
+	except:
+		volt = "----"
+	return volt	
+
 def readValues(delay=0.25) :
 	#print table
+	list = ax.learnServos(10,64) #min-ID, max-ID, verbose=False
 	while screenRunning :
 		try:
-			os.system('clear')
-			print "     | pos  | temp | spd  | volt | load "
-			print "========================================"
-			list = ax.learnServos(10,64) #min-ID, max-ID, verbose=False
-			for i in range(0, len(list)) :
-				servo = list[i]	
-				print prN(servo), "|", prN(ax.readPosition(servo)), "|", prN(ax.readTemperature(servo)), "|", prN(speed(servo)), "|", prN(ax.readVoltage(servo)), "|", prN(ax.readLoad(servo))
 			sleep(delay)
-		except KeyboardInterrupt :
 			os.system('clear')
-			print "Exited"
 			print "     | pos  | temp | spd  | volt | load "
 			print "========================================"
-			list = ax.learnServos(10,64) #min-ID, max-ID, verbose=False
 			for i in range(0, len(list)) :
 				servo = list[i]	
-				print prN(servo), "|", prN(ax.readPosition(servo)), "|", prN(ax.readTemperature(servo)), "|", prN(speed(servo)), "|", prN(ax.readVoltage(servo)), "|", prN(ax.readLoad(servo))
-			print "========================================"
+				print prN(servo), "|", prN(ax.readPosition(servo)), "|", prN(ax.readTemperature(servo)), "|", prN(speed(servo)), "|", volt(servo), "|", prN(ax.readLoad(servo))
+				if servo % 10 == 3 :
+					print "" #extra newline
+		except KeyboardInterrupt :
+			print " Exited"
 			sys.exit(0)
 
 try :

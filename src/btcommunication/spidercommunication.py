@@ -1,6 +1,10 @@
 #!/usr/bin/python
 import bluetooth
 import json
+from time import sleep
+import random
+#import Gyro
+import Joy
 
 class ServerDown(Exception):
 
@@ -15,6 +19,7 @@ class SpiderCommunication(object):
     def __init__(self,bd_addr,port):
         self.bd_addr = bd_addr
         self.port = port
+        self.synclegs = False
 
     def __del__(self):
         self.shutdown()
@@ -24,11 +29,14 @@ class SpiderCommunication(object):
         self.sock.close()
 
     def startBluetooth(self):
-        devices = bluetooth.discover_devices()
-        if self.bd_addr not in devices:
-            raise ServerDown("Couldn't find the server")
-        self.sock=bluetooth.BluetoothSocket( bluetooth.RFCOMM )
-        self.sock.connect((self.bd_addr,self.port))
+        # devices = bluetooth.discover_devices()
+        # if self.bd_addr not in devices:
+        #     raise ServerDown("Couldn't find the server")
+        try:
+            self.sock=bluetooth.BluetoothSocket( bluetooth.RFCOMM )
+            self.sock.connect((self.bd_addr,self.port))
+        except bluetooth.btcommon.BluetoothError:
+			raise ServerDown("Couldn't find the server")
 
     def readData(self):
         return self.sock.recv(1024)
@@ -71,13 +79,23 @@ class SpiderCommunication(object):
         self.sendData(stab_json)
         return self.readData()
 
-    def synchronizeFrontLegs(self,gyroscope):
+    def setGyro(self,gyro_pos):
         sync_json = {
             "cmd" : "setGyro",
-            "gyro" : gyroscope
+            "gyro" : gyro_pos
         }
         self.sendData(sync_json)
         return self.readData()
+
+    def synchronizeFrontLegs(self):
+        self.synclegs = True
+        while self.synclegs:
+            #get the gyro value
+            #gyropositions = [Gyro.x_gyroscoop(),Gyro.y_gyroscoop(),0]
+            #randomx = random.randint(-60,60)
+            gyropositions = [Joy.read_x(),Joy.read_y(),0]
+            self.setGyro(gyropositions)
+            sleep(0.05)
 
     def autonomousLine(self):
         line_json = { "mode" : 4 }
