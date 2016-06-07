@@ -73,12 +73,12 @@ class Vision:
 		while(self.running):
 			'''
 			timeNow = datetime.now()
-			#timePast = (timePrevious - timedelta(timeNow)) / 1000
-			#timePrevious = timeNow
-			#if self.lastSize <= self.refinedRadius:
-			#if timePast <= 5000 and self.lastDirection == "Forward" and lastSize <= refinedRadius:
-			#	__SpiderAction("Forward")
-			#	continue'''
+			timePast = (timePrevious - timedelta(timeNow)) / 1000
+			timePrevious = timeNow
+			if self.lastSize <= self.refinedRadius:
+			if timePast <= 5000 and self.lastDirection == "Forward" and lastSize <= refinedRadius:
+				__SpiderAction("Forward")
+				continue'''
 
 			frame =  self.cam.get_frame()
 			coord = self.__targetBalloon(frame)
@@ -116,6 +116,7 @@ class Vision:
 			movement().right()
 		elif command == "Attack":
 			self.attackPast = True
+			'''Attack function does not excist yet'''
 			pass
 		movement().rust()
 	
