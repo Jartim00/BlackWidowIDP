@@ -91,7 +91,7 @@ def main_loop():
     win.after(delay,main_loop)
     batterij_foto["image"] = imgselect(1)
     batterij_controller["image"] = imgselect(2)
-    
+
 def mode_1(): #Voortbewegen (default)
     global lastrunning
     global running
@@ -107,7 +107,7 @@ def mode_1(): #Voortbewegen (default)
     buttons[running]["bg"]=active
     active_background()
     reset_knoppen()
-    
+
 def mode_2(): #Dansmode
     global lastrunning
     global running
@@ -119,7 +119,7 @@ def mode_2(): #Dansmode
     buttons[running]["bg"]=active
     active_background()
     reset_knoppen()
-    
+
 def mode_3(): #Aanvalmode
     global lastrunning
     global running
@@ -175,7 +175,7 @@ def mode_6(): #Draagmode
     global lastrunning
     global running
     global delay
-    
+
     lastrunning=running
     running=6
     delay=1000
@@ -322,16 +322,16 @@ main_loop()
 
 '''
 #Poisite knoppen
-mode_1_button.pack(side=LEFT) 
+mode_1_button.pack(side=LEFT)
 mode_2_button.pack(side=LEFT)
-mode_3_button.pack(side=LEFT) 
+mode_3_button.pack(side=LEFT)
 mode_4_button.pack(side=LEFT)
 mode_5_button.pack(side=LEFT)
 mode_6_button.pack(side=LEFT) 
-dansmode1_button.pack(side=LEFT) 
-dansmode2_button.pack(side=BOTTOM) 
-dansmode3_button.pack(side=RIGHT) 
-prik_button.pack(side=TOP) 
+dansmode1_button.pack(side=LEFT)
+dansmode2_button.pack(side=BOTTOM)
+dansmode3_button.pack(side=RIGHT)
+prik_button.pack(side=TOP)
 '''
 '''
 t2 = threading.Thread(target=while_jemoeder())
