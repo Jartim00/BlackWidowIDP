@@ -30,6 +30,10 @@ public class ActivityLogActivity extends Activity {
         LoadList();
     }
 
+    /*
+    * Loads the activity list every time a request is made.
+    * Uses the DebugHelper class to get the list.
+    */
     private void LoadList(){
         try {
             listView = (ListView) findViewById(R.id.debug_log);

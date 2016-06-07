@@ -16,9 +16,9 @@ import java.net.SocketAddress;
  */
 public class TabClass extends TabActivity {
 
+    //Global variables
     BatteryData b_data = new BatteryData();
     Thread thread;
-
     TabHost tabHost;
     ImageView connectionView;
 
@@ -58,7 +58,11 @@ public class TabClass extends TabActivity {
         UpdateBatteryStatus();
     }
 
-
+    /*
+     * Update method for battery status and connection status.
+     * Class has a infinite loop in a thread.
+     * TODO: connection status always returns false, rewrite ConnectionAvailable class
+     * */
     private void UpdateBatteryStatus(){
         thread = new Thread() {
             public void run() {
@@ -85,6 +89,13 @@ public class TabClass extends TabActivity {
         thread.start();
     }
 
+    /*
+    * (Not working yet)
+    * Class will check if there is a valid connection between the app and
+    * the web server.
+    * input: None
+    * output: boolean
+    */
     private boolean ConnectionAvailable(){
         boolean exists = false;
         try {

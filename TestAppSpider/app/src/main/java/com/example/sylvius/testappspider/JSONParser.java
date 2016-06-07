@@ -18,6 +18,8 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Sylvius on 25-4-2016.
+ * JSONParser.
+ * Source: http://stackoverflow.com/questions/19605984/how-to-parse-url-with-json-object-android
  */
 public class JSONParser {
 
@@ -48,6 +50,7 @@ public class JSONParser {
             e.printStackTrace();
         }
 
+        //reading json string
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     is, "iso-8859-1"), 8);
