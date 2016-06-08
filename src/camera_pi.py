@@ -25,17 +25,17 @@ class Camera(object):
         self.initialize()
         return self.frame
 
-    def getWidth(self)
-	return self.width
+    def getWidth(self):
+        return Camera.width
 
-    def getHeight(self)
-	return self.height
+    def getHeight(self):
+        return Camera.height
 
     @classmethod
     def _thread(cls):
         with picamera.PiCamera() as camera:
             # camera setup
-            camera.resolution = (self.width, self.height)
+            camera.resolution = (cls.width, cls.height)
             camera.hflip = True
             camera.vflip = True
 
