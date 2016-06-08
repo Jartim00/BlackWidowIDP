@@ -136,7 +136,7 @@ class RestAPI(object):
 
     def start(self):
     	if __name__ == '__main__':
-            self.app.run(host='0.0.0.0',debug=False)#threaded=True to enable multithreading
+            self.app.run(host='0.0.0.0',debug=False,threaded=True)# to enable multithreading
 if __name__ == '__main__':
     mainprogram = MainProgram()
     mainprogram.start()
