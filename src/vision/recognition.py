@@ -35,7 +35,7 @@ class Recognition:
 		mask = self.morph.morphFrame(thresholded)
 
 		#mask = cv2.GaussianBlur(mask,(5,5),0)
-		#mask = self.morph.floodFill(mask)		
+		mask = self.morph.floodFill(mask)		
 
 		return self.__detectLine(mask)
 
