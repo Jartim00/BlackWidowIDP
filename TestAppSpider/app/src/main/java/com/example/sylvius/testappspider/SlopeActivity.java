@@ -6,6 +6,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
 /**
  * Created by Sylvius on 9-5-2016.
  */
@@ -15,6 +26,9 @@ public class SlopeActivity extends Activity {
     LinearLayout Backward;
     LinearLayout Left;
     LinearLayout Right;
+
+    String serverAddress = "10.1.1.1";
+    int port = 1337;
 
     DebugHelper debugHelper = new DebugHelper();
     Thread thread;
@@ -69,22 +83,42 @@ public class SlopeActivity extends Activity {
     private void GetSlopeData_Loop() throws IllegalThreadStateException{
         thread = new Thread() {
             public void run() {
+                float x = 0;
+                float y = 0;
                 while (FOCUSED) {
                     try {
+                        JSONObject jsonData = new JSONObject(SocketListener());                                                  //For Webserver
+                        if (jsonData != null) {
+                            JSONArray j = jsonData.optJSONArray("gyro");                                                  //"servos" = jsonArray name
+                            if (j.length() > 0) {
+                                for (int i = 0; i < j.length(); i++) {
+                                    x = Float.parseFloat(j.getJSONObject(i).getString("X"));
+                                    y = Float.parseFloat(j.getJSONObject(i).getString("Y"));
+                                }
+                            }
+                        } else {
+                            jsonData = new JSONObject("{'servos':[{'error':'error'}]}");                                    //Debug to prevent crashes.
+                        }
                         //Animate(GetSpiderX(),GetSpiderY());
+                        final float finalX = x;
+                        final float finalY = y;
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Rotate(GetSpiderRotX(), GetSpiderRotY());
-                                if(IsMovingForward()){Forward.setVisibility(View.VISIBLE);}
-                                if(IsMovingBackward()){Backward.setVisibility(View.VISIBLE);}
-                                if(IsMovingLeft()){Left.setVisibility(View.VISIBLE);}
-                                if(IsMovingRight()){Right.setVisibility(View.VISIBLE);}
+                                Rotate(finalX, finalY);
+//                                if(IsMovingForward()){Forward.setVisibility(View.VISIBLE);} else {Forward.setVisibility(View.INVISIBLE)}
+//                                if(IsMovingBackward()){Backward.setVisibility(View.VISIBLE);} else {Forward.setVisibility(View.INVISIBLE)}
+//                                if(IsMovingLeft()){Left.setVisibility(View.VISIBLE);} else {Forward.setVisibility(View.INVISIBLE)}
+//                                if(IsMovingRight()){Right.setVisibility(View.VISIBLE);} else {Forward.setVisibility(View.INVISIBLE)}
                             }
                         });
-                        Thread.sleep(6);
+                        Thread.sleep(100);
                     } catch (InterruptedException e) {
 
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -92,12 +126,20 @@ public class SlopeActivity extends Activity {
         thread.start();
     }
 
-    private float GetSpiderX(){return 0f;} //Don't use this one
-    private float GetSpiderY(){return 0f;} //Nor this one
-    private float GetSpiderRotX(){return -1f;}  //Use this one instead
-    private float GetSpiderRotY(){return 0.1f;} //Add this one
-    private boolean IsMovingForward(){return true;} //Add real value
-    private boolean IsMovingBackward(){return false;}
-    private boolean IsMovingRight(){return true;}
-    private boolean IsMovingLeft(){return false;}
+    private String SocketListener() throws IOException {
+        Socket s = new Socket(serverAddress, port);
+        BufferedReader input =
+                new BufferedReader(new InputStreamReader(s.getInputStream()));
+        String answer = input.readLine();
+        return answer;
+    }
+//
+//    private float GetSpiderX(){return 0f;} //Don't use this one
+//    private float GetSpiderY(){return 0f;} //Nor this one
+//    private float GetSpiderRotX(){return -1f;}  //Use this one instead
+//    private float GetSpiderRotY(){return 0.1f;} //Add this one
+//    private boolean IsMovingForward(){return true;} //Add real value
+//    private boolean IsMovingBackward(){return false;}
+//    private boolean IsMovingRight(){return true;}
+//    private boolean IsMovingLeft(){return false;}
 }
