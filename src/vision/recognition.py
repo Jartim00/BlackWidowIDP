@@ -69,7 +69,6 @@ class Recognition:
 
 		if self.count >= self.framesRequired:
 			return self.lastPosition
-
 		return None
 	
 	##houghCircle can only detect circles at 3 meters max, unless resolution is increased. 
