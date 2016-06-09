@@ -21,6 +21,9 @@ import java.net.Socket;
  * Created by Sylvius on 9-5-2016.
  */
 public class SlopeActivity extends Activity {
+    //SocketConnection connection
+    SocketConnection socket = new SocketConnection();
+
     ImageView img_animation;
     LinearLayout Forward;
     LinearLayout Backward;
@@ -59,16 +62,6 @@ public class SlopeActivity extends Activity {
         GetSlopeData_Loop();
     }
 
-    private void Animate(final float xx, final float yy){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                img_animation.setX(img_animation.getX() + xx);
-                img_animation.setY(img_animation.getY() + yy);
-            }
-        });
-    }
-
     //Rotates the Image according to the Gyroscope data
     private  void Rotate(final float x, final float y){
         runOnUiThread(new Runnable() {
@@ -83,33 +76,23 @@ public class SlopeActivity extends Activity {
     private void GetSlopeData_Loop() throws IllegalThreadStateException{
         thread = new Thread() {
             public void run() {
-                float x = 0;
+                float x = 0; //Assign x and y to 0
                 float y = 0;
                 while (FOCUSED) {
                     try {
-                        JSONObject jsonData = new JSONObject(SocketListener());                                                  //For Webserver
-                        if (jsonData != null) {
-                            JSONArray j = jsonData.optJSONArray("gyro");                                                  //"servos" = jsonArray name
-                            if (j.length() > 0) {
-                                for (int i = 0; i < j.length(); i++) {
-                                    x = Float.parseFloat(j.getJSONObject(i).getString("X"));
-                                    y = Float.parseFloat(j.getJSONObject(i).getString("Y"));
-                                }
+                        JSONArray j = socket.ParseGyroJSON();                            //Get JSONArray from SocketConnection class
+                        if (j.length() > 0) {
+                            for (int i = 0; i < j.length(); i++) {
+                                x = Float.parseFloat(j.getJSONObject(i).getString("X")); //Set x and y to the data from JSON string
+                                y = Float.parseFloat(j.getJSONObject(i).getString("Y"));
                             }
-                        } else {
-                            jsonData = new JSONObject("{'servos':[{'error':'error'}]}");                                    //Debug to prevent crashes.
                         }
-                        //Animate(GetSpiderX(),GetSpiderY());
-                        final float finalX = x;
+                        final float finalX = x; //Temporary store variables in a final variable
                         final float finalY = y;
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 Rotate(finalX, finalY);
-//                                if(IsMovingForward()){Forward.setVisibility(View.VISIBLE);} else {Forward.setVisibility(View.INVISIBLE)}
-//                                if(IsMovingBackward()){Backward.setVisibility(View.VISIBLE);} else {Forward.setVisibility(View.INVISIBLE)}
-//                                if(IsMovingLeft()){Left.setVisibility(View.VISIBLE);} else {Forward.setVisibility(View.INVISIBLE)}
-//                                if(IsMovingRight()){Right.setVisibility(View.VISIBLE);} else {Forward.setVisibility(View.INVISIBLE)}
                             }
                         });
                         Thread.sleep(100);
@@ -125,21 +108,4 @@ public class SlopeActivity extends Activity {
         };
         thread.start();
     }
-
-    private String SocketListener() throws IOException {
-        Socket s = new Socket(serverAddress, port);
-        BufferedReader input =
-                new BufferedReader(new InputStreamReader(s.getInputStream()));
-        String answer = input.readLine();
-        return answer;
-    }
-//
-//    private float GetSpiderX(){return 0f;} //Don't use this one
-//    private float GetSpiderY(){return 0f;} //Nor this one
-//    private float GetSpiderRotX(){return -1f;}  //Use this one instead
-//    private float GetSpiderRotY(){return 0.1f;} //Add this one
-//    private boolean IsMovingForward(){return true;} //Add real value
-//    private boolean IsMovingBackward(){return false;}
-//    private boolean IsMovingRight(){return true;}
-//    private boolean IsMovingLeft(){return false;}
 }

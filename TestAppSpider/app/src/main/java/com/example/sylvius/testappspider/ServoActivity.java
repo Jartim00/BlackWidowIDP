@@ -3,7 +3,6 @@ package com.example.sylvius.testappspider;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
@@ -13,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +21,10 @@ import java.util.List;
  * Created by Sylvius on 9-5-2016.
  */
 public class ServoActivity extends Activity {
+
+    //SocketConnection connection class
+    SocketConnection socketConnection = new SocketConnection();
+
     //Global variables
     Servo servo = new Servo();
     DebugHelper debugHelper = new DebugHelper();
@@ -63,11 +67,13 @@ public class ServoActivity extends Activity {
                     try {
                         while (FOCUSED) {
                             UpdateServos();
-                            Thread.sleep(1000);
+                            Thread.sleep(100);
                         }
                     } catch (JSONException e1) {
                         e1.printStackTrace();
                     } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
@@ -88,11 +94,13 @@ public class ServoActivity extends Activity {
             try {
                 CreateServos();
             } catch (JSONException e) {
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     });
 
-    //Adding tags to retrieve data from jsondata
+    //Servo data
     String TAG_ID = "id";
     String TAG_POSITION = "position";
     String TAG_LOAD = "load";
@@ -105,31 +113,26 @@ public class ServoActivity extends Activity {
     * of the servos in the JSON string.
     * Then a call to AddToGridView will be made to visually add them on the screen.
     */
-    private void CreateServos() throws JSONException {
-        JSONParser jParser = new JSONParser();                                                              //Parser for webserver
-        JSONObject jsonData = jParser.getJSONFromUrl(url);                                                  //For Webserver
-        if (jsonData != null) {
-            JSONArray j = jsonData.optJSONArray("servos");                                                  //"servos" = jsonArray name
-            if (j.length() > 0) {
-                for (int i = 0; i < j.length(); i++) {
-                    try {
-                        Servo servo = new Servo(                                                            // Create a new servo Object
-                                j.getJSONObject(i).getInt(TAG_ID),                                          // ID OR i if no ID is supplied.
-                                Float.parseFloat(j.getJSONObject(i).getString(TAG_POSITION)),               // Get Position value
-                                Float.parseFloat(j.getJSONObject(i).getString(TAG_LOAD)),                   // Get Load value
-                                Float.parseFloat(j.getJSONObject(i).getString(TAG_TEMPERATURE)),            // Get Temperature value
-                                Float.parseFloat(j.getJSONObject(i).getString(TAG_VOLTAGE)),                // Get Voltage value
-                                j.getJSONObject(i).getInt(TAG_MOVING)                                       // IsMoving 1 or 0
-                        );
-                        servoList.add(servo);                                                               //Add servo to the List
-                        AddToGridView(servo);                                                               //add servo to the view
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+    private void CreateServos() throws JSONException, IOException {
+        JSONArray j = socketConnection.ParseServoJSON();                                               //Get JSONArray from SocketConnection error
+        if (j.length() > 0) {
+            for (int i = 0; i < j.length(); i++) {
+                try {
+                    JSONObject jObject = j.getJSONObject(i);
+                    Servo servo = new Servo(                                                 // Create a new servo Object
+                            jObject.getInt(TAG_ID),                                          // ID OR i if no ID is supplied.
+                            Float.parseFloat(jObject.getString(TAG_POSITION)),               // Get Position value
+                            Float.parseFloat(jObject.getString(TAG_LOAD)),                   // Get Load value
+                            Float.parseFloat(jObject.getString(TAG_TEMPERATURE)),            // Get Temperature value
+                            Float.parseFloat(jObject.getString(TAG_VOLTAGE)),                // Get Voltage value
+                            jObject.getInt(TAG_MOVING)                                       // IsMoving 1 or 0
+                    );
+                    servoList.add(servo);                                                    //Add servo to the List
+                    AddToGridView(servo);                                                    //add servo to the view
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
-        } else {
-            jsonData = new JSONObject("{'servos':[{'error':'error'}]}");                                    //Debug to prevent crashes.
         }
     }
 
@@ -142,11 +145,13 @@ public class ServoActivity extends Activity {
             try {
                 while (FOCUSED) {   // if ServoActivity is visible, update servos.
                     UpdateServos();
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -157,30 +162,25 @@ public class ServoActivity extends Activity {
     * This class will edit each Servo Object with the new
     * values from the JSON string.
     */
-    private void UpdateServos() throws JSONException {
-        JSONParser jParser = new JSONParser();                  //Parser for webserver
-        JSONObject jsonData = jParser.getJSONFromUrl(url);      //For Webserver
-        if (jsonData != null) {
-            JSONArray j = jsonData.optJSONArray("servos");          //array name
-            int i = 0;
-            for (final Servo s : servoList) {
-                if (j.length() > 0) {
-                    s.setPosition(Float.parseFloat(j.getJSONObject(i).getString(TAG_POSITION)));    //PresentPosL
-                    s.setLoad(Float.parseFloat(j.getJSONObject(i).getString(TAG_LOAD)));
-                    s.setVoltage(Float.parseFloat(j.getJSONObject(i).getString(TAG_VOLTAGE)));                                     //PresentVoltage
-                    s.setTemperature(Float.parseFloat(j.getJSONObject(i).getString(TAG_TEMPERATURE)));                                //Temperature
-                    s.setMoving(j.getJSONObject(i).getInt(TAG_MOVING));                                                               //IsMoving
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            EditGridView(s);
-                        }
-                    });
-                }
-                i++;
+    private void UpdateServos() throws JSONException, IOException {
+        int i = 0;
+        JSONArray j = socketConnection.ParseServoJSON();
+        for (final Servo s : servoList) {
+            if (j.length() > 0) {
+                JSONObject jOject = j.getJSONObject(i);
+                s.setPosition(Float.parseFloat(jOject.getString(TAG_POSITION)));        //Get Position
+                s.setLoad(Float.parseFloat(jOject.getString(TAG_LOAD)));                //Get Load
+                s.setVoltage(Float.parseFloat(jOject.getString(TAG_VOLTAGE)));          //Get Voltage
+                s.setTemperature(Float.parseFloat(jOject.getString(TAG_TEMPERATURE)));  //Get Temperature
+                s.setMoving(jOject.getInt(TAG_MOVING));                                 //Get Moving boolean
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EditGridView(s);
+                    }
+                });
             }
-        } else {
-            jsonData = new JSONObject("{'servos':[{'error':'error'}]}");
+            i++;
         }
     }
 
@@ -222,7 +222,7 @@ public class ServoActivity extends Activity {
 
     /*
     * Edit each of the servo layouts with the new data
-     */
+    */
     private void EditGridView(final Servo s) {
         LinearLayout ll = (LinearLayout) findViewById(s.getId());
         if (s.getAllData().length > 0 && ll != null) {

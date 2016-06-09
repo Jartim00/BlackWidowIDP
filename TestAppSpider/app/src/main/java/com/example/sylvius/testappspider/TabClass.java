@@ -100,7 +100,7 @@ public class TabClass extends TabActivity {
         boolean exists = false;
         try {
             SocketAddress sockaddr = new InetSocketAddress("10.1.1.1", 5000);
-            // Create an unbound socket
+            // Create an unbound socketConnection
             Socket sock = new Socket();
 
             // This method will block no more than timeoutMs.
