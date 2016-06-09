@@ -145,6 +145,37 @@ class Recognition:
 					x,y,w,h = cv2.boundingRect(cnt)
 		return [x + self.bufferX, y + self.bufferY]
 
+	##Detects line with a blob analyses and returns coordinates of center of found blob
+	#@param croppedImage Binary image used to find line, use smaller resolution for efficienty
+	#Returns the upperleft X and Y Coordinates of the line
+	def __detectLineBlob(self,croppedImage):
+		#contours = cv2.findContours(croppedImage,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)[0]
+		im2, contours, hierarchy = cv2.findContours(croppedImage,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+		#image, contours, hierarchy = cv2.findContours(croppedImage,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+	    	max_area = 0
+		best_cnt = None
+		if len(contours) == 0:
+			return None
+
+    		for cnt in contours:
+        		area = cv2.contourArea(cnt)
+			M = cv2.moments(cnt)
+			if M["m00"] != 0:
+				cy = int(M['m01']/M['m00'])
+				if area > max_area and cy >= middleThree:
+					max_area = area
+            				best_cnt = cnt
+		if best_cnt is None:
+			return None
+	    	M = cv2.moments(best_cnt)
+		cx, cy = 0, 0
+		if M["m00"] != 0:
+		    cx = int(M["m10"] / M["m00"])
+		    cy = int(M["m01"] / M["m00"])
+		else:
+    			cx, cy = 0, 0
+		return [cx, cy]
+
 
 	##crops frame in much smaller resolution and returns the newly created frame
 	#@param frame full sized frame that needs to be cropped
