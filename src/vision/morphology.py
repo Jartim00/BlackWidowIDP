@@ -25,6 +25,14 @@ class Morphology:
 		frame = cv2.morphologyEx(frame, cv2.MORPH_CLOSE, kernel)	
 		return frame
 
+	def morphFrame_Small(self,frame):
+		kernel = np.ones((8, 8), "uint8")
+		opening = cv2.morphologyEx(frame, cv2.MORPH_OPEN, kernel)
+
+		kernel = np.ones((8, 8), "uint8")
+		frame = cv2.morphologyEx(frame, cv2.MORPH_CLOSE, kernel)	
+		return frame
+
 	##fills holes in established blobs
 	#@param frame Binary image
 	#returns edited binary image

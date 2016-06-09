@@ -10,6 +10,7 @@ from ax import Ax12
 #import vision.vision
 import btcommunication.btserver as btserver
 ax = Ax12()
+
 class MainProgram(object):
     servos = []
     def __init__(self):
@@ -45,7 +46,7 @@ class MainProgram(object):
     #     if func is None:
     #         raise RuntimeError('Not running with the Werkzeug Server')
     #     func()
-
+    '''Creates servo objects for REST API'''
     def createServos(self,numLegs,servosPerLeg):
         if not 1 <= servosPerLeg <= 9:
             return
@@ -56,6 +57,7 @@ class MainProgram(object):
                 servoId = legNum + servoNum
                 self.servos.append(Servo(servoId))'''
 
+    '''Update thread for getting servo info'''
     def startUpdateThread(self):
         print "starting update thread..."
         threading.Thread(target=self.updateServos,args=(self.servos,)).start()
@@ -72,6 +74,7 @@ class MainProgram(object):
         self.bluetoothThread.daemon = True
         self.bluetoothThread.start()
 
+    '''Updates all servo info'''
     def updateServos(self,toUpdateServos):
         while self.running:
            try:
@@ -85,6 +88,7 @@ class MainProgram(object):
            except:
                print "Timeout error in update servo thread..."
 
+'''Camera frames for livestream'''
 def gen(camera):
     """Video streaming generator function."""
     while True:
@@ -92,16 +96,22 @@ def gen(camera):
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
+'''
+    REST API for getting servo information and a live stream.
+    Build with Flask web server.
+'''
 class RestAPI(object):
     app = Flask(__name__)
     def __init__(self,mainprogram):
         self.mainprogram = mainprogram
 
+    '''Index page for browsers'''
     @app.route('/')
     def index():
         """Video streaming home page."""
         return render_template('index.html')
 
+    '''REST API'''
     @app.route('/api')
     def api():
         infoJSON = {"servos":[]}
@@ -117,6 +127,7 @@ class RestAPI(object):
             })
         return str(infoJSON) #str(json.dumps(infoJSON, separators=(',',':'))#getJSON()
 
+    '''Live stream'''
     @app.route('/video_feed')
     def video_feed():
         """Video streaming route. Put this in the src attribute of an img tag."""
@@ -125,7 +136,7 @@ class RestAPI(object):
 
     def start(self):
     	if __name__ == '__main__':
-            self.app.run(host='0.0.0.0',debug=False)#threaded=True to enable multithreading
+            self.app.run(host='0.0.0.0',debug=False,threaded=True)# to enable multithreading
 if __name__ == '__main__':
     mainprogram = MainProgram()
     mainprogram.start()

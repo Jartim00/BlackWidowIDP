@@ -32,10 +32,10 @@ class Recognition:
 		upper_white = np.array([180, 255, 255])
 		thresholded = self.morph.thresholdImage(frame, lower_white, upper_white)
 
-		mask = self.morph.morphFrame(thresholded)
+		mask = self.morph.morphFrame_Small(thresholded)
 
-		#mask = cv2.GaussianBlur(mask,(5,5),0)
-		#mask = self.morph.floodFill(mask)		
+		mask = cv2.GaussianBlur(mask,(5,5),0)
+		mask = self.morph.floodFill(mask)		
 
 		return self.__detectLine(mask)
 
