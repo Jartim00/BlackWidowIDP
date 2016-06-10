@@ -7,6 +7,7 @@ import os
 
 class movement:
     ax = Ax12()
+    speed = 350
     ##Places a hexapod leg in rest position
     #@param leg Integer representing leg id ranges between 1 to 6
     def rest(self, leg) :
@@ -240,8 +241,157 @@ class movement:
         ax.action()
         sleep(0.05)
 
-    def turnLeft():
-        pass
+    def leftTurn():
+    	#poot omhoog
+    	ax.moveSpeedRW(12, 750, speed)
+    	ax.moveSpeedRW(13, 880, speed)
+    	ax.moveSpeedRW(32, 750, speed)
+    	ax.moveSpeedRW(33, 880, speed)
+    	ax.moveSpeedRW(52, 750, speed)
+    	ax.moveSpeedRW(53, 880, speed)
+    	ax.action()
+    	sleep(0.05)
+
+    	#draai
+    	ax.moveSpeedRW(11, 300, speed)
+    	ax.moveSpeedRW(31, 300, speed)
+    	ax.moveSpeedRW(51, 350, speed)
+    	ax.action()
+    	sleep(0.05)
+
+		#poot omlaag
+		ax.moveSpeedRW(12, 620, speed)
+		ax.moveSpeedRW(32, 620, speed)
+		ax.moveSpeedRW(52, 620, speed)
+		ax.action()
+		sleep(0.05)
+
+		#poot omhoog
+		ax.moveSpeedRW(22, 750, speed)
+		ax.moveSpeedRW(23, 880, speed)
+		ax.moveSpeedRW(42, 750, speed)
+		ax.moveSpeedRW(43, 880, speed)
+		ax.moveSpeedRW(62, 750, speed)
+		ax.moveSpeedRW(63, 880, speed)
+		ax.action()
+		sleep(0.05)
+
+		#draai lichaam
+		ax.moveSpeedRW(11, 512, speed)
+		ax.moveSpeedRW(31, 512, speed)
+		ax.moveSpeedRW(51, 512, speed)
+		ax.action()
+		sleep(0.05)
+
+		ax.moveSpeedRW(21, 350, speed)
+		ax.moveSpeedRW(41, 300, speed)
+		ax.moveSpeedRW(61, 300, speed)
+		ax.action()
+		sleep(0.05)
+
+		#poot omlaag
+		ax.moveSpeedRW(22, 620, speed)
+		ax.moveSpeedRW(42, 620, speed)
+		ax.moveSpeedRW(62, 620, speed)
+		ax.action()
+		sleep(0.05)
+
+		#poot omhoog
+		ax.moveSpeedRW(12, 750, speed)
+		ax.moveSpeedRW(13, 880, speed)
+		ax.moveSpeedRW(32, 750, speed)
+		ax.moveSpeedRW(33, 880, speed)
+		ax.moveSpeedRW(52, 750, speed)
+		ax.moveSpeedRW(53, 880, speed)
+		ax.action()
+		sleep(0.05)
+
+		#draai lichaam
+		ax.moveSpeedRW(21, 512, speed)
+		ax.moveSpeedRW(41, 512, speed)
+		ax.moveSpeedRW(61, 512, speed)
+		ax.action()
+		sleep(0.05)
+
+		ax.moveSpeedRW(11, 300, speed)
+		ax.moveSpeedRW(31, 300, speed)
+		ax.moveSpeedRW(51, 350, speed)
+		ax.action()
+		sleep(0.05)
 
     def turnRigh():
-        pass
+        ax.moveSpeedRW(12, 750, speed)
+    	ax.moveSpeedRW(13, 880, speed)
+    	ax.moveSpeedRW(32, 750, speed)
+    	ax.moveSpeedRW(33, 880, speed)
+    	ax.moveSpeedRW(52, 750, speed)
+    	ax.moveSpeedRW(53, 880, speed)
+    	ax.action()
+    	sleep(0.05)
+
+    	#draai
+    	ax.moveSpeedRW(11, 670, speed)
+    	ax.moveSpeedRW(31, 670, speed)
+    	ax.moveSpeedRW(51, 600, speed)
+    	ax.action()
+    	sleep(0.05)
+
+       #poot omlaag
+		ax.moveSpeedRW(12, 620, speed)
+		ax.moveSpeedRW(32, 620, speed)
+		ax.moveSpeedRW(52, 620, speed)
+		ax.action()
+		sleep(0.05)
+
+		#poot omhoog
+		ax.moveSpeedRW(22, 750, speed)
+		ax.moveSpeedRW(23, 880, speed)
+		ax.moveSpeedRW(42, 750, speed)
+		ax.moveSpeedRW(43, 880, speed)
+		ax.moveSpeedRW(62, 750, speed)
+		ax.moveSpeedRW(63, 880, speed)
+		ax.action()
+		sleep(0.05)
+
+		#draai lichaam
+		ax.moveSpeedRW(11, 512, speed)
+		ax.moveSpeedRW(31, 512, speed)
+		ax.moveSpeedRW(51, 512, speed)
+		ax.action()
+		sleep(0.05)
+
+		ax.moveSpeedRW(21, 600, speed)
+		ax.moveSpeedRW(41, 670, speed)
+		ax.moveSpeedRW(61, 670, speed)
+		ax.action()
+		sleep(0.05)
+
+		#poot omlaag
+		ax.moveSpeedRW(22, 620, speed)
+		ax.moveSpeedRW(42, 620, speed)
+		ax.moveSpeedRW(62, 620, speed)
+		ax.action()
+		sleep(0.05)
+
+		#poot omhoog
+		ax.moveSpeedRW(12, 750, speed)
+		ax.moveSpeedRW(13, 880, speed)
+		ax.moveSpeedRW(32, 750, speed)
+		ax.moveSpeedRW(33, 880, speed)
+		ax.moveSpeedRW(52, 750, speed)
+		ax.moveSpeedRW(53, 880, speed)
+		ax.action()
+		sleep(0.05)
+
+		#draai lichaam
+		ax.moveSpeedRW(21, 512, speed)
+		ax.moveSpeedRW(41, 512, speed)
+		ax.moveSpeedRW(61, 512, speed)
+		ax.action()
+		sleep(0.05)
+
+		ax.moveSpeedRW(11, 300, speed)
+		ax.moveSpeedRW(31, 300, speed)
+		ax.moveSpeedRW(51, 350, speed)
+		ax.action()
+		sleep(0.05)
