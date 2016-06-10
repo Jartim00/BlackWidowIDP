@@ -33,7 +33,6 @@ public class SocketConnection {
             BufferedReader input =
                     new BufferedReader(new InputStreamReader(s.getInputStream()));
             String answer = input.readLine();
-            Log.w("KEKLE", answer);
             return answer;
         } catch (Exception ex){
             ex.printStackTrace();
@@ -48,6 +47,15 @@ public class SocketConnection {
     public JSONArray ParseGyroJSON() throws JSONException, IOException {
         return ParseJSON("gyro");
     }
+
+    public JSONArray ParseMovementJSON() throws JSONException, IOException {
+        return ParseJSON("movement");
+    }
+
+    public JSONArray ParseBatteryJSON() throws JSONException, IOException {
+        return ParseJSON("battery");
+    }
+
 
     private JSONArray ParseJSON(String arrayName) throws IOException, JSONException {
         try {

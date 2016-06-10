@@ -95,7 +95,6 @@ public class TabClass extends TabActivity {
     }
 
     /*
-    * (Not working yet)
     * Class will check if there is a valid connection between the app and
     * the web server.
     * input: None
@@ -108,6 +107,7 @@ public class TabClass extends TabActivity {
             Socket s = new java.net.Socket(serverAddress, port);
             return true;
         } catch (Exception ex){
+            ex.printStackTrace();
             return false;
         }
     }

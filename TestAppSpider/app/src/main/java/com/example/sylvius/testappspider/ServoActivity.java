@@ -3,10 +3,17 @@ package com.example.sylvius.testappspider;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +38,7 @@ public class ServoActivity extends Activity {
     GridLayout gridView;
     List<LinearLayout> layoutList = new ArrayList<LinearLayout>() {};
     List<Servo> servoList = new ArrayList<Servo>();
+    BarChart barChart;
     boolean FOCUSED;
 
     //{'servos': [{'load': {'H': 3, 'L': 2}, 'punch': {'H': 4, 'L': 3}, 'moving': 0, 'voltage': 50, 'position': {'H': 2, 'L': 1}, 'speed': {'H': 24, 'L': 33}, 'id': 11, 'temperature': 30}, {'load': {'H': 23, 'L': 23}, 'punch': {'H': 4, 'L': 3}, 'moving': 0, 'voltage': 50, 'position': {'H': 2, 'L': 1}, 'speed': {'H': 24, 'L': 33}, 'id': 12, 'temperature': 30}]}
@@ -41,6 +49,7 @@ public class ServoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.servoview_layout);
         gridView = (GridLayout) findViewById(R.id.gridView);
+        barChart = (BarChart) findViewById(R.id.chart);
         Start.start();
     }
 
@@ -172,12 +181,12 @@ public class ServoActivity extends Activity {
                 JSONArray j = socketConnection.ParseServoJSON();
                 for (final Servo s : servoList) {
                     if (j.length() > 0) {
-                        JSONObject jOject = j.getJSONObject(i);
-                        s.setPosition(Float.parseFloat(jOject.getString(TAG_POSITION)));        //Get Position
-                        s.setLoad(Float.parseFloat(jOject.getString(TAG_LOAD)));                //Get Load
-                        s.setVoltage(Float.parseFloat(jOject.getString(TAG_VOLTAGE)));          //Get Voltage
-                        s.setTemperature(Float.parseFloat(jOject.getString(TAG_TEMPERATURE)));  //Get Temperature
-                        s.setMoving(jOject.getInt(TAG_MOVING));                                 //Get Moving boolean
+                        JSONObject jObject = j.getJSONObject(i);
+                        s.setPosition(Float.parseFloat(jObject.getString(TAG_POSITION)));        //Get Position
+                        s.setLoad(Float.parseFloat(jObject.getString(TAG_LOAD)));                //Get Load
+                        s.setVoltage(Float.parseFloat(jObject.getString(TAG_VOLTAGE)));          //Get Voltage
+                        s.setTemperature(Float.parseFloat(jObject.getString(TAG_TEMPERATURE)));  //Get Temperature
+                        s.setMoving(jObject.getInt(TAG_MOVING));                                 //Get Moving boolean
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -191,6 +200,12 @@ public class ServoActivity extends Activity {
         } catch (Exception ex){
             ex.printStackTrace();
         }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                DrawGraph();
+            }
+        });
     }
 
     /*
@@ -244,6 +259,55 @@ public class ServoActivity extends Activity {
                 TextView textView = (TextView) ll.getChildAt(i);
                 textView.setText(s.getAllData()[i]);
             }
+        }
+    }
+
+
+    private void DrawGraph(){ //float Position, float Load, float Temperature, float Voltage, int isMoving
+        try {
+            ArrayList<BarEntry> position = new ArrayList<>();
+            ArrayList<BarEntry> load = new ArrayList<>();
+            ArrayList<BarEntry> temperature = new ArrayList<>();
+            ArrayList<BarEntry> voltage = new ArrayList<>();
+
+            int count = 1;
+            for(Servo s : servoList){
+                position.add(new BarEntry(s.getPosition(), count));
+                load.add(new BarEntry(s.getLoad(), count));
+                temperature.add(new BarEntry(s.getTemperature(), count));
+                voltage.add(new BarEntry(s.getVoltage(), count));
+                count++;
+            }
+
+            BarDataSet pos_set = new BarDataSet(position, "Position");
+            pos_set.setColor(Color.RED);
+
+            BarDataSet load_set = new BarDataSet(load, "Load");
+            load_set.setColor(Color.BLUE);
+
+            BarDataSet temp_set = new BarDataSet(temperature, "Temperature");
+            temp_set.setColor(Color.GREEN);
+
+            BarDataSet volt_set = new BarDataSet(voltage, "Voltage");
+            volt_set.setColor(Color.YELLOW);
+
+            ArrayList<String> labels = new ArrayList<String>();
+            for (int i = 1; i < 19; i++) {
+                labels.add("Servo" + i);
+            }
+
+            ArrayList<BarDataSet> dataSets = new ArrayList<>();  // combined all dataset into an arraylist
+            dataSets.add(pos_set);
+            dataSets.add(load_set);
+            dataSets.add(temp_set);
+            dataSets.add(volt_set);
+
+            BarData data = new BarData(labels, dataSets); // initialize the Bardata with argument labels and dataSet
+            barChart.setData(data); // set the data and list of lables into chart
+            barChart.setDescription("Servos");  // set the description
+
+        } catch (Exception ex){
+
         }
     }
 }
