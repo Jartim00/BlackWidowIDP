@@ -23,7 +23,7 @@ import java.util.List;
 public class ServoActivity extends Activity {
 
     //SocketConnection connection class
-    SocketConnection socketConnection = new SocketConnection();
+    SocketConnection socketConnection;
 
     //Global variables
     Servo servo = new Servo();
@@ -67,7 +67,7 @@ public class ServoActivity extends Activity {
                     try {
                         while (FOCUSED) {
                             UpdateServos();
-                            Thread.sleep(100);
+                            Thread.sleep(500);
                         }
                     } catch (JSONException e1) {
                         e1.printStackTrace();
@@ -114,23 +114,26 @@ public class ServoActivity extends Activity {
     * Then a call to AddToGridView will be made to visually add them on the screen.
     */
     private void CreateServos() throws JSONException, IOException {
-        JSONArray j = socketConnection.ParseServoJSON();                                               //Get JSONArray from SocketConnection error
-        if (j.length() > 0) {
-            for (int i = 0; i < j.length(); i++) {
-                try {
-                    JSONObject jObject = j.getJSONObject(i);
-                    Servo servo = new Servo(                                                 // Create a new servo Object
-                            jObject.getInt(TAG_ID),                                          // ID OR i if no ID is supplied.
-                            Float.parseFloat(jObject.getString(TAG_POSITION)),               // Get Position value
-                            Float.parseFloat(jObject.getString(TAG_LOAD)),                   // Get Load value
-                            Float.parseFloat(jObject.getString(TAG_TEMPERATURE)),            // Get Temperature value
-                            Float.parseFloat(jObject.getString(TAG_VOLTAGE)),                // Get Voltage value
-                            jObject.getInt(TAG_MOVING)                                       // IsMoving 1 or 0
-                    );
-                    servoList.add(servo);                                                    //Add servo to the List
-                    AddToGridView(servo);                                                    //add servo to the view
-                } catch (JSONException e) {
-                    e.printStackTrace();
+        socketConnection = new SocketConnection();
+        if(socketConnection.ParseServoJSON() != null) {
+            JSONArray j = socketConnection.ParseServoJSON();                                               //Get JSONArray from SocketConnection error
+            if (j.length() > 0) {
+                for (int i = 0; i < j.length(); i++) {
+                    try {
+                        JSONObject jObject = j.getJSONObject(i);
+                        Servo servo = new Servo(                                                 // Create a new servo Object
+                                jObject.getInt(TAG_ID),                                          // ID OR i if no ID is supplied.
+                                Float.parseFloat(jObject.getString(TAG_POSITION)),               // Get Position value
+                                Float.parseFloat(jObject.getString(TAG_LOAD)),                   // Get Load value
+                                Float.parseFloat(jObject.getString(TAG_TEMPERATURE)),            // Get Temperature value
+                                Float.parseFloat(jObject.getString(TAG_VOLTAGE)),                // Get Voltage value
+                                jObject.getInt(TAG_MOVING)                                       // IsMoving 1 or 0
+                        );
+                        servoList.add(servo);                                                    //Add servo to the List
+                        AddToGridView(servo);                                                    //add servo to the view
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -145,7 +148,7 @@ public class ServoActivity extends Activity {
             try {
                 while (FOCUSED) {   // if ServoActivity is visible, update servos.
                     UpdateServos();
-                    Thread.sleep(100);
+                    Thread.sleep(500);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -163,24 +166,30 @@ public class ServoActivity extends Activity {
     * values from the JSON string.
     */
     private void UpdateServos() throws JSONException, IOException {
-        int i = 0;
-        JSONArray j = socketConnection.ParseServoJSON();
-        for (final Servo s : servoList) {
-            if (j.length() > 0) {
-                JSONObject jOject = j.getJSONObject(i);
-                s.setPosition(Float.parseFloat(jOject.getString(TAG_POSITION)));        //Get Position
-                s.setLoad(Float.parseFloat(jOject.getString(TAG_LOAD)));                //Get Load
-                s.setVoltage(Float.parseFloat(jOject.getString(TAG_VOLTAGE)));          //Get Voltage
-                s.setTemperature(Float.parseFloat(jOject.getString(TAG_TEMPERATURE)));  //Get Temperature
-                s.setMoving(jOject.getInt(TAG_MOVING));                                 //Get Moving boolean
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        EditGridView(s);
+        try {
+            if (socketConnection.ParseServoJSON() != null) {
+                int i = 0;
+                JSONArray j = socketConnection.ParseServoJSON();
+                for (final Servo s : servoList) {
+                    if (j.length() > 0) {
+                        JSONObject jOject = j.getJSONObject(i);
+                        s.setPosition(Float.parseFloat(jOject.getString(TAG_POSITION)));        //Get Position
+                        s.setLoad(Float.parseFloat(jOject.getString(TAG_LOAD)));                //Get Load
+                        s.setVoltage(Float.parseFloat(jOject.getString(TAG_VOLTAGE)));          //Get Voltage
+                        s.setTemperature(Float.parseFloat(jOject.getString(TAG_TEMPERATURE)));  //Get Temperature
+                        s.setMoving(jOject.getInt(TAG_MOVING));                                 //Get Moving boolean
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                EditGridView(s);
+                            }
+                        });
                     }
-                });
+                    i++;
+                }
             }
-            i++;
+        } catch (Exception ex){
+            ex.printStackTrace();
         }
     }
 

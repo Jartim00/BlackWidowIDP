@@ -22,16 +22,13 @@ import java.net.Socket;
  */
 public class SlopeActivity extends Activity {
     //SocketConnection connection
-    SocketConnection socket = new SocketConnection();
+    SocketConnection socket;
 
     ImageView img_animation;
     LinearLayout Forward;
     LinearLayout Backward;
     LinearLayout Left;
     LinearLayout Right;
-
-    String serverAddress = "10.1.1.1";
-    int port = 1337;
 
     DebugHelper debugHelper = new DebugHelper();
     Thread thread;
@@ -80,11 +77,14 @@ public class SlopeActivity extends Activity {
                 float y = 0;
                 while (FOCUSED) {
                     try {
-                        JSONArray j = socket.ParseGyroJSON();                            //Get JSONArray from SocketConnection class
-                        if (j.length() > 0) {
-                            for (int i = 0; i < j.length(); i++) {
-                                x = Float.parseFloat(j.getJSONObject(i).getString("X")); //Set x and y to the data from JSON string
-                                y = Float.parseFloat(j.getJSONObject(i).getString("Y"));
+                        socket = new SocketConnection();
+                        if(socket.ParseGyroJSON() != null) {
+                            JSONArray j = socket.ParseGyroJSON();                            //Get JSONArray from SocketConnection class
+                            if (j.length() > 0) {
+                                for (int i = 0; i < j.length(); i++) {
+                                    x = Float.parseFloat(j.getJSONObject(i).getString("X")); //Set x and y to the data from JSON string
+                                    y = Float.parseFloat(j.getJSONObject(i).getString("Y"));
+                                }
                             }
                         }
                         final float finalX = x; //Temporary store variables in a final variable

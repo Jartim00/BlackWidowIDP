@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -73,10 +74,14 @@ public class TabClass extends TabActivity {
                             public void run() {
                                 TextView tv = (TextView) findViewById(R.id.battery_health);
                                 tv.setText(b_data.GetBatteryPercentage());
-                                if(ConnectionAvailable()) {
-                                    connectionView.setImageResource(R.mipmap.img_connection);
-                                } else {
-                                    connectionView.setImageResource(R.mipmap.img_noconnection);
+                                try {
+                                    if(ConnectionAvailable()) {
+                                        connectionView.setImageResource(R.mipmap.img_connection);
+                                    } else {
+                                        connectionView.setImageResource(R.mipmap.img_noconnection);
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
                             }
                         });
@@ -96,21 +101,14 @@ public class TabClass extends TabActivity {
     * input: None
     * output: boolean
     */
-    private boolean ConnectionAvailable(){
-        boolean exists = false;
+    String serverAddress = "10.1.1.1";
+    int port = 1337;
+    private boolean ConnectionAvailable() throws IOException {
         try {
-            SocketAddress sockaddr = new InetSocketAddress("10.1.1.1", 5000);
-            // Create an unbound socketConnection
-            Socket sock = new Socket();
-
-            // This method will block no more than timeoutMs.
-            // If the timeout occurs, SocketTimeoutException is thrown.
-            int timeoutMs = 2000;   // 2 seconds
-            sock.connect(sockaddr, timeoutMs);
-            exists = true;
-        }catch(Exception e){
-
+            Socket s = new java.net.Socket(serverAddress, port);
+            return true;
+        } catch (Exception ex){
+            return false;
         }
-        return exists;
     }
 }
