@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView"
+        android:background="#00ffffff"
+        android:contextClickable="false"
+        android:fillViewport="false">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp" />
+
+            <GridLayout
+                android:useDefaultMargins="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/gridView"
+                android:background="#e0e0e0"
+                android:columnOrderPreserved="false"
+                android:columnCount="3"
+                android:rowCount="6"
+                android:showDividers="middle"
+                android:alignmentMode="alignMargins">
+
+            </GridLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
