@@ -105,7 +105,7 @@ public class TabClass extends TabActivity {
     private boolean ConnectionAvailable() throws IOException {
         try {
             Socket s = new java.net.Socket(serverAddress, port);
-            return true;
+            return true ? s.isConnected();
         } catch (Exception ex){
             ex.printStackTrace();
             return false;
