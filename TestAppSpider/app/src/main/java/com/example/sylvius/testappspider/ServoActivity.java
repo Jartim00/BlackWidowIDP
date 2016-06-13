@@ -262,14 +262,18 @@ public class ServoActivity extends Activity {
         }
     }
 
-
+    /*
+    * Creates a BarChart with values from every servo.
+    * */
     private void DrawGraph(){ //float Position, float Load, float Temperature, float Voltage, int isMoving
         try {
+            //Create new array for each value
             ArrayList<BarEntry> position = new ArrayList<>();
             ArrayList<BarEntry> load = new ArrayList<>();
             ArrayList<BarEntry> temperature = new ArrayList<>();
             ArrayList<BarEntry> voltage = new ArrayList<>();
 
+            //For each servo add values to the arraylist.
             int count = 1;
             for(Servo s : servoList){
                 position.add(new BarEntry(s.getPosition(), count));
@@ -279,6 +283,7 @@ public class ServoActivity extends Activity {
                 count++;
             }
 
+            //Initializing visual setting for each bar, also creates the legend.
             BarDataSet pos_set = new BarDataSet(position, "Position");
             pos_set.setColor(Color.RED);
 
@@ -291,6 +296,7 @@ public class ServoActivity extends Activity {
             BarDataSet volt_set = new BarDataSet(voltage, "Voltage");
             volt_set.setColor(Color.YELLOW);
 
+            //Add labels to organize data for every servo
             ArrayList<String> labels = new ArrayList<String>();
             for (int i = 1; i < 19; i++) {
                 labels.add("Servo" + i);
@@ -307,7 +313,7 @@ public class ServoActivity extends Activity {
             barChart.setDescription("Servos");  // set the description
 
         } catch (Exception ex){
-
+            //No data available.
         }
     }
 }

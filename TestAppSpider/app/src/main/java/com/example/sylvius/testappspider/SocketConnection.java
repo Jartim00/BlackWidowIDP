@@ -1,7 +1,5 @@
 package com.example.sylvius.testappspider;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,6 +18,9 @@ public class SocketConnection {
     int port = 1337;
     Socket s;
 
+    /*
+    * Opens the socket connection when a new instance of this class is created
+    */
     public SocketConnection() {
         try {
             s = new Socket(serverAddress, port);
@@ -28,6 +29,10 @@ public class SocketConnection {
         }
     }
 
+    /*
+    * Catches incoming Socket messages
+    * Returns the message as a String
+    */
     private String SocketListener() {
         try {
             BufferedReader input =
@@ -40,23 +45,35 @@ public class SocketConnection {
         }
     }
 
+    //Public class to be called when getting servo data
+    //returns data as a JSON array
     public JSONArray ParseServoJSON() throws JSONException, IOException {
         return ParseJSON("servos");
     }
 
+    //Public class to be called when getting gyro data
+    //returns data as a JSON array
     public JSONArray ParseGyroJSON() throws JSONException, IOException {
         return ParseJSON("gyro");
     }
 
+    //Public class to be called when getting movement (controller input) data
+    //returns data as a JSON array
     public JSONArray ParseMovementJSON() throws JSONException, IOException {
         return ParseJSON("movement");
     }
 
+    //Public class to be called when getting battery data
+    //returns data as a JSON array
     public JSONArray ParseBatteryJSON() throws JSONException, IOException {
         return ParseJSON("battery");
     }
 
-
+    /*
+    * Class for Parsing JSON input
+    * Input: Arrayname as String
+    * Output: JSON data as JSON array
+    */
     private JSONArray ParseJSON(String arrayName) throws IOException, JSONException {
         try {
             JSONObject jsonData = new JSONObject(SocketListener());             //For Webserver
