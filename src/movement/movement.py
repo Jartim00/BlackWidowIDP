@@ -241,6 +241,7 @@ class movement:
         ax.action()
         sleep(0.05)
 
+	#turn per 45 degrees
     def leftTurn():
     	#poot omhoog
     	ax.moveSpeedRW(12, 750, speed)
@@ -253,9 +254,9 @@ class movement:
     	sleep(0.05)
 
     	#draai
-    	ax.moveSpeedRW(11, 300, speed)
-    	ax.moveSpeedRW(31, 300, speed)
-    	ax.moveSpeedRW(51, 350, speed)
+    	ax.moveSpeedRW(11, 358, speed)
+    	ax.moveSpeedRW(31, 358, speed)
+    	ax.moveSpeedRW(51, 400, speed)
     	ax.action()
     	sleep(0.05)
 
@@ -283,9 +284,9 @@ class movement:
 		ax.action()
 		sleep(0.05)
 
-		ax.moveSpeedRW(21, 350, speed)
-		ax.moveSpeedRW(41, 300, speed)
-		ax.moveSpeedRW(61, 300, speed)
+		ax.moveSpeedRW(21, 400, speed)
+		ax.moveSpeedRW(41, 358, speed)
+		ax.moveSpeedRW(61, 358, speed)
 		ax.action()
 		sleep(0.05)
 
@@ -313,12 +314,13 @@ class movement:
 		ax.action()
 		sleep(0.05)
 
-		ax.moveSpeedRW(11, 300, speed)
-		ax.moveSpeedRW(31, 300, speed)
-		ax.moveSpeedRW(51, 350, speed)
+		ax.moveSpeedRW(11, 358, speed)
+		ax.moveSpeedRW(31, 358, speed)
+		ax.moveSpeedRW(51, 400, speed)
 		ax.action()
 		sleep(0.05)
 
+	#turn per 45 degrees
     def turnRigh():
         ax.moveSpeedRW(12, 750, speed)
     	ax.moveSpeedRW(13, 880, speed)
@@ -330,8 +332,8 @@ class movement:
     	sleep(0.05)
 
     	#draai
-    	ax.moveSpeedRW(11, 670, speed)
-    	ax.moveSpeedRW(31, 670, speed)
+    	ax.moveSpeedRW(11, 666, speed)
+    	ax.moveSpeedRW(31, 666, speed)
     	ax.moveSpeedRW(51, 600, speed)
     	ax.action()
     	sleep(0.05)
@@ -361,8 +363,8 @@ class movement:
 		sleep(0.05)
 
 		ax.moveSpeedRW(21, 600, speed)
-		ax.moveSpeedRW(41, 670, speed)
-		ax.moveSpeedRW(61, 670, speed)
+		ax.moveSpeedRW(41, 666, speed)
+		ax.moveSpeedRW(61, 666, speed)
 		ax.action()
 		sleep(0.05)
 
@@ -390,8 +392,8 @@ class movement:
 		ax.action()
 		sleep(0.05)
 
-		ax.moveSpeedRW(11, 300, speed)
-		ax.moveSpeedRW(31, 300, speed)
-		ax.moveSpeedRW(51, 350, speed)
+		ax.moveSpeedRW(11, 666, speed)
+		ax.moveSpeedRW(31, 666, speed)
+		ax.moveSpeedRW(51, 600, speed)
 		ax.action()
 		sleep(0.05)
