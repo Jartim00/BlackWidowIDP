@@ -1,3 +1,0 @@
-[submodule "OpenCV/opencv"]
-	path = OpenCV/opencv
-	url = https://github.com/Itseez/opencv.git

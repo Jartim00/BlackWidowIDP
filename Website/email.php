@@ -1,2 +1,0 @@
-<?phpfunction email($filename, $message) {$msg = "Hallo Beheerder, Er is zojuist een nieuwsbericht geupload. De tekst luidt: '".$message."'  De foto is genaamd: '".$filename."'.  Gegroet,  Ernst Mail.";//	$msg = wordwrap($msg,70,"\n",false); //break any lines longer than 70 characters, but not inside a word.		$to = "info@black-widow.nl";	$subject = "Nieuwsbericht!";	$msg;	$headers = "From: noreply@black-widow.nl" . "\r\n" .
-			   "Reply-To: webmaster@example.com";		mail($to, $subject, $msg, $headers);	}?>
