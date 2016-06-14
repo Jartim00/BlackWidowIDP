@@ -260,65 +260,68 @@ class movement:
     	ax.action()
     	sleep(0.05)
 
-		#poot omlaag
-		ax.moveSpeedRW(12, 620, speed)
-		ax.moveSpeedRW(32, 620, speed)
-		ax.moveSpeedRW(52, 620, speed)
-		ax.action()
-		sleep(0.05)
+	#poot omlaag
+	ax.moveSpeedRW(12, 620, speed)
+	ax.moveSpeedRW(32, 620, speed)
+	ax.moveSpeedRW(52, 620, speed)
+	ax.action()
+	sleep(0.05)
 
-		#poot omhoog
-		ax.moveSpeedRW(22, 750, speed)
-		ax.moveSpeedRW(23, 880, speed)
-		ax.moveSpeedRW(42, 750, speed)
-		ax.moveSpeedRW(43, 880, speed)
-		ax.moveSpeedRW(62, 750, speed)
-		ax.moveSpeedRW(63, 880, speed)
-		ax.action()
-		sleep(0.05)
+	#poot omhoog
+	ax.moveSpeedRW(22, 750, speed)
+	ax.moveSpeedRW(23, 880, speed)
+	ax.moveSpeedRW(42, 750, speed)
+	ax.moveSpeedRW(43, 880, speed)
+	ax.moveSpeedRW(62, 750, speed)
+	ax.moveSpeedRW(63, 880, speed)
+	ax.action()
+	sleep(0.05)
 
-		#draai lichaam
-		ax.moveSpeedRW(11, 512, speed)
-		ax.moveSpeedRW(31, 512, speed)
-		ax.moveSpeedRW(51, 512, speed)
-		ax.action()
-		sleep(0.05)
+	#draai lichaam
+	ax.moveSpeedRW(11, 512, speed)
+	ax.moveSpeedRW(31, 512, speed)
+	ax.moveSpeedRW(51, 512, speed)
+	ax.action()
+	sleep(0.05)
 
-		ax.moveSpeedRW(21, 400, speed)
-		ax.moveSpeedRW(41, 358, speed)
-		ax.moveSpeedRW(61, 358, speed)
-		ax.action()
-		sleep(0.05)
+	ax.moveSpeedRW(21, 400, speed)
+	ax.moveSpeedRW(41, 358, speed)
+	ax.moveSpeedRW(61, 358, speed)
+	ax.action()
+	sleep(0.05)
 
-		#poot omlaag
-		ax.moveSpeedRW(22, 620, speed)
-		ax.moveSpeedRW(42, 620, speed)
-		ax.moveSpeedRW(62, 620, speed)
-		ax.action()
-		sleep(0.05)
+	#poot omlaag
+	ax.moveSpeedRW(22, 620, speed)
+	ax.moveSpeedRW(42, 620, speed)
+	ax.moveSpeedRW(62, 620, speed)
+	ax.action()
+	sleep(0.05)
 
-		#poot omhoog
-		ax.moveSpeedRW(12, 750, speed)
-		ax.moveSpeedRW(13, 880, speed)
-		ax.moveSpeedRW(32, 750, speed)
-		ax.moveSpeedRW(33, 880, speed)
-		ax.moveSpeedRW(52, 750, speed)
-		ax.moveSpeedRW(53, 880, speed)
-		ax.action()
-		sleep(0.05)
+	#poot omhoog
+	ax.moveSpeedRW(12, 750, speed)
+	ax.moveSpeedRW(13, 880, speed)
+	ax.moveSpeedRW(32, 750, speed)
+	ax.moveSpeedRW(33, 880, speed)
+	ax.moveSpeedRW(52, 750, speed)
+	ax.moveSpeedRW(53, 880, speed)
+	ax.action()
+	sleep(0.05)
 
-		#draai lichaam
-		ax.moveSpeedRW(21, 512, speed)
-		ax.moveSpeedRW(41, 512, speed)
-		ax.moveSpeedRW(61, 512, speed)
-		ax.action()
-		sleep(0.05)
+	#draai lichaam
+	ax.moveSpeedRW(21, 512, speed)
+	ax.moveSpeedRW(41, 512, speed)
+	ax.moveSpeedRW(61, 512, speed)
+	ax.action()
+	sleep(0.05)
 
-		ax.moveSpeedRW(11, 358, speed)
-		ax.moveSpeedRW(31, 358, speed)
-		ax.moveSpeedRW(51, 400, speed)
-		ax.action()
-		sleep(0.05)
+	ax.moveSpeedRW(11, 358, speed)
+	ax.moveSpeedRW(31, 358, speed)
+	ax.moveSpeedRW(51, 400, speed)
+	ax.action()
+	sleep(0.05)
+
+	for x in range(1, 7):
+		self.rest(x) 
 
 	#turn per 45 degrees
     def turnRigh():
@@ -339,61 +342,64 @@ class movement:
     	sleep(0.05)
 
        #poot omlaag
-		ax.moveSpeedRW(12, 620, speed)
-		ax.moveSpeedRW(32, 620, speed)
-		ax.moveSpeedRW(52, 620, speed)
-		ax.action()
-		sleep(0.05)
+	ax.moveSpeedRW(12, 620, speed)
+	ax.moveSpeedRW(32, 620, speed)
+	ax.moveSpeedRW(52, 620, speed)
+	ax.action()
+	sleep(0.05)
 
-		#poot omhoog
-		ax.moveSpeedRW(22, 750, speed)
-		ax.moveSpeedRW(23, 880, speed)
-		ax.moveSpeedRW(42, 750, speed)
-		ax.moveSpeedRW(43, 880, speed)
-		ax.moveSpeedRW(62, 750, speed)
-		ax.moveSpeedRW(63, 880, speed)
-		ax.action()
-		sleep(0.05)
+	#poot omhoog
+	ax.moveSpeedRW(22, 750, speed)
+	ax.moveSpeedRW(23, 880, speed)
+	ax.moveSpeedRW(42, 750, speed)
+	ax.moveSpeedRW(43, 880, speed)
+	ax.moveSpeedRW(62, 750, speed)
+	ax.moveSpeedRW(63, 880, speed)
+	ax.action()
+	sleep(0.05)
 
-		#draai lichaam
-		ax.moveSpeedRW(11, 512, speed)
-		ax.moveSpeedRW(31, 512, speed)
-		ax.moveSpeedRW(51, 512, speed)
-		ax.action()
-		sleep(0.05)
+	#draai lichaam
+	ax.moveSpeedRW(11, 512, speed)
+	ax.moveSpeedRW(31, 512, speed)
+	ax.moveSpeedRW(51, 512, speed)
+	ax.action()
+	sleep(0.05)
 
-		ax.moveSpeedRW(21, 600, speed)
-		ax.moveSpeedRW(41, 666, speed)
-		ax.moveSpeedRW(61, 666, speed)
-		ax.action()
-		sleep(0.05)
+	ax.moveSpeedRW(21, 600, speed)
+	ax.moveSpeedRW(41, 666, speed)
+	ax.moveSpeedRW(61, 666, speed)
+	ax.action()
+	sleep(0.05)
 
-		#poot omlaag
-		ax.moveSpeedRW(22, 620, speed)
-		ax.moveSpeedRW(42, 620, speed)
-		ax.moveSpeedRW(62, 620, speed)
-		ax.action()
-		sleep(0.05)
+	#poot omlaag
+	ax.moveSpeedRW(22, 620, speed)
+	ax.moveSpeedRW(42, 620, speed)
+	ax.moveSpeedRW(62, 620, speed)
+	ax.action()
+	sleep(0.05)
 
-		#poot omhoog
-		ax.moveSpeedRW(12, 750, speed)
-		ax.moveSpeedRW(13, 880, speed)
-		ax.moveSpeedRW(32, 750, speed)
-		ax.moveSpeedRW(33, 880, speed)
-		ax.moveSpeedRW(52, 750, speed)
-		ax.moveSpeedRW(53, 880, speed)
-		ax.action()
-		sleep(0.05)
+	#poot omhoog
+	ax.moveSpeedRW(12, 750, speed)
+	ax.moveSpeedRW(13, 880, speed)
+	ax.moveSpeedRW(32, 750, speed)
+	ax.moveSpeedRW(33, 880, speed)
+	ax.moveSpeedRW(52, 750, speed)
+	ax.moveSpeedRW(53, 880, speed)
+	ax.action()
+	sleep(0.05)
 
-		#draai lichaam
-		ax.moveSpeedRW(21, 512, speed)
-		ax.moveSpeedRW(41, 512, speed)
-		ax.moveSpeedRW(61, 512, speed)
-		ax.action()
-		sleep(0.05)
+	#draai lichaam
+	ax.moveSpeedRW(21, 512, speed)
+	ax.moveSpeedRW(41, 512, speed)
+	ax.moveSpeedRW(61, 512, speed)
+	ax.action()
+	sleep(0.05)
 
-		ax.moveSpeedRW(11, 666, speed)
-		ax.moveSpeedRW(31, 666, speed)
-		ax.moveSpeedRW(51, 600, speed)
-		ax.action()
-		sleep(0.05)
+	ax.moveSpeedRW(11, 666, speed)
+	ax.moveSpeedRW(31, 666, speed)
+	ax.moveSpeedRW(51, 600, speed)
+	ax.action()
+	sleep(0.05)
+	
+	for x in range(1, 7):
+		self.rest(x)
