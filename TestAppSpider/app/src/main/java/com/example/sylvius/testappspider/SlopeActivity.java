@@ -44,6 +44,7 @@ public class SlopeActivity extends Activity {
         Backward = (LinearLayout) findViewById(R.id.Backward);
         Left = (LinearLayout) findViewById(R.id.Left);
         Right = (LinearLayout) findViewById(R.id.Right);
+        socket = new SocketConnection();
     }
 
     @Override
@@ -77,14 +78,15 @@ public class SlopeActivity extends Activity {
                 float y = 0;
                 while (FOCUSED) {
                     try {
-                        socket = new SocketConnection();
                         if(socket.ParseGyroJSON() != null) {
-                            JSONArray j = socket.ParseGyroJSON();                            //Get JSONArray from SocketConnection class
+                            JSONArray j = socket.ParseGyroJSON();//Get JSONArray from SocketConnection class
                             if (j.length() > 0) {
+                                float[] values = new float[2];
                                 for (int i = 0; i < j.length(); i++) {
-                                    x = Float.parseFloat(j.getJSONObject(i).getString("X")); //Set x and y to the data from JSON string
-                                    y = Float.parseFloat(j.getJSONObject(i).getString("Y"));
+                                    values[i] = Float.parseFloat(j.getString(i));
                                 }
+                                x = values[0];
+                                y = values[1];
                             }
                         }
                         final float finalX = x; //Temporary store variables in a final variable
