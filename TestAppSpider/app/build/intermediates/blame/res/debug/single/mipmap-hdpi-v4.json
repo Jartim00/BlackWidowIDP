@@ -1,0 +1,42 @@
+[
+    {
+        "merged": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi-v4\\img_up.png",
+        "source": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\src\\main\\res\\mipmap-hdpi\\img_up.png"
+    },
+    {
+        "merged": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi-v4\\grid.png",
+        "source": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\src\\main\\res\\mipmap-hdpi\\grid.png"
+    },
+    {
+        "merged": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi-v4\\ic_launcher.png",
+        "source": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi-v4\\spider_icon.png",
+        "source": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\src\\main\\res\\mipmap-hdpi\\spider_icon.png"
+    },
+    {
+        "merged": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi-v4\\battery_icon.png",
+        "source": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\src\\main\\res\\mipmap-hdpi\\battery_icon.png"
+    },
+    {
+        "merged": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi-v4\\img_connection.png",
+        "source": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\src\\main\\res\\mipmap-hdpi\\img_connection.png"
+    },
+    {
+        "merged": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi-v4\\img_left.png",
+        "source": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\src\\main\\res\\mipmap-hdpi\\img_left.png"
+    },
+    {
+        "merged": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi-v4\\img_back.png",
+        "source": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\src\\main\\res\\mipmap-hdpi\\img_back.png"
+    },
+    {
+        "merged": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi-v4\\img_noconnection.png",
+        "source": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\src\\main\\res\\mipmap-hdpi\\img_noconnection.png"
+    },
+    {
+        "merged": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi-v4\\img_right.png",
+        "source": "C:\\Users\\Sylvius\\Documents\\Gitprojects\\BlackWidowIDP\\TestAppSpider\\app\\src\\main\\res\\mipmap-hdpi\\img_right.png"
+    }
+]

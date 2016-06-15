@@ -1,0 +1,105 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:2:1-28:12
+	package
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:3:5-48
+		INJECTED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:2:11-69
+	android:versionCode
+		INJECTED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml
+uses-permission#android.permission.INTERNET
+ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:4:5-66
+	android:name
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:4:22-64
+application
+ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:5:5-26:19
+MERGED from [com.android.support:appcompat-v7:23.3.0] C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-vector-drawable:23.3.0] C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\AndroidManifest.xml:7:5-20
+MERGED from [com.android.support:support-v4:23.3.0] C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:animated-vector-drawable:23.3.0] C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.3.0\AndroidManifest.xml:7:5-20
+MERGED from [com.android.support:support-vector-drawable:23.3.0] C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\AndroidManifest.xml:7:5-20
+MERGED from [com.android.support:support-v4:23.3.0] C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:support-v4:23.3.0] C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\AndroidManifest.xml:22:5-20
+	android:label
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:8:9-41
+	android:supportsRtl
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:10:9-35
+	android:hardwareAccelerated
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:9:9-43
+	android:allowBackup
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:6:9-35
+	android:icon
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:7:9-43
+	android:theme
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:11:9-40
+activity#com.example.sylvius.testappspider.MainActivity
+ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:12:9-20:20
+	android:launchMode
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:14:13-50
+	android:configChanges
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:13:13-59
+	android:name
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:12:19-47
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:15:13-19:29
+action#android.intent.action.MAIN
+ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:16:17-69
+	android:name
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:16:25-66
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:18:17-77
+	android:name
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:18:27-74
+activity#com.example.sylvius.testappspider.ServoActivity
+ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:21:9-88
+	android:launchMode
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:21:49-86
+	android:name
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:21:19-48
+activity#com.example.sylvius.testappspider.VideoViewActivity
+ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:22:9-92
+	android:launchMode
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:22:53-90
+	android:name
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:22:19-52
+activity#com.example.sylvius.testappspider.SlopeActivity
+ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:23:9-88
+	android:launchMode
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:23:49-86
+	android:name
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:23:19-48
+activity#com.example.sylvius.testappspider.ActivityLogActivity
+ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:24:9-94
+	android:launchMode
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:24:55-92
+	android:name
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:24:19-54
+activity#com.example.sylvius.testappspider.TabClass
+ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:25:9-83
+	android:launchMode
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:25:44-81
+	android:name
+		ADDED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml:25:19-43
+uses-sdk
+INJECTED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+MERGED from [com.android.support:appcompat-v7:23.3.0] C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\AndroidManifest.xml:21:5-23:78
+MERGED from [com.android.support:support-vector-drawable:23.3.0] C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\AndroidManifest.xml:5:5-43
+MERGED from [com.android.support:support-v4:23.3.0] C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:animated-vector-drawable:23.3.0] C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.3.0\AndroidManifest.xml:5:5-44
+MERGED from [com.android.support:support-vector-drawable:23.3.0] C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\AndroidManifest.xml:5:5-43
+MERGED from [com.android.support:support-v4:23.3.0] C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:support-v4:23.3.0] C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\AndroidManifest.xml:20:5-43
+	tools:overrideLibrary
+		ADDED from [com.android.support:appcompat-v7:23.3.0] C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\AndroidManifest.xml:23:9-75
+	android:targetSdkVersion
+		INJECTED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Sylvius\Documents\Gitprojects\BlackWidowIDP\TestAppSpider\app\src\main\AndroidManifest.xml
