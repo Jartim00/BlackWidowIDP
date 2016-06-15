@@ -5,13 +5,17 @@ import json
 from servo import Servo
 from time import sleep
 
+## App Server for sending diagnostic data
 class AppServer(object):
+    #  @param host The host address to bind to. Leave empty for letting in anyone
+    #  @param port The port for the server
     def __init__(self,host,port):
         self.HOST = host                 # Symbolic name meaning all available interfaces
         self.PORT = port              # Arbitrary non-privileged port
         self.clients = []
         self.servos = []
 
+    ## Starts the socket and accepts clients
     def start(self):
         self.running = True
         #start server
@@ -23,10 +27,13 @@ class AppServer(object):
         while self.running:
             self.acceptClient(s)
 
+    ## Disconnects the clients and stops the server
     def stop(self):
         self.disconnectClients()
         self.running = False
 
+    ## Accepts a client
+    #  @param serverSocket The socket for accepting the client.
     def acceptClient(self,serverSocket):
         conn, addr = serverSocket.accept()
         # worker = threading.Thread(target=self.communicate,args=(conn,))
@@ -38,11 +45,14 @@ class AppServer(object):
         print 'Connected by', addr
         # worker.start()
 
+    ## Closes all client sockets
     def disconnectClients(self):
         for client in self.clients:
             conn = client['conn']
             conn.close()
 
+    ## Sends a JSON message to all clients.
+    #  @param appJSON a JSON string
     def sendJSONToAll(self,appJSON):
         for client in self.clients:
             conn = client['conn']

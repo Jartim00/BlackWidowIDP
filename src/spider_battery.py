@@ -36,6 +36,8 @@ def gem5():
             return (waarde1+waarde2+waarde3+waarde4+waarde5)/5
     else:
         return 1200
+
+# Returns the battery status from 0 through 4
 def read():
     global gem_sample
     gem_sample=gem5()

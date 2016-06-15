@@ -7,9 +7,14 @@ import threading
 import movement.movement as movement
 import movement.carry as carry
 import gyro
-import spider_battery
 mv = movement.Movement()
+
+## Bluetooth server for communication with the controller.
 class BluetoothServer(object):
+
+	#  @param bind_address The hexapod bluetooth address. Leave empty for letting anyone in.
+	#  @param port The port for the socket
+	#  @param mainprogram The mainprogram for setting main variables and calling main functions
 	def __init__(self,bind_address,port,mainprogram):
 		print "init"
 		self.bind_address = bind_address
@@ -23,7 +28,7 @@ class BluetoothServer(object):
 		self.visionBalloonThread = threading.Thread(target=self.visionDetection.startAutonomousBalloon)
 		self.client_sock,self.address = (None,None)
 
-	'''Starts the bluetooth server'''
+	## Starts the bluetooth server
 	def start(self):
 		print "started"
 		self.running = True
@@ -35,7 +40,7 @@ class BluetoothServer(object):
 		self.acceptClient()
 		self.communicate()
 
-	'''Stops the bluetooth server'''
+	## Stops the bluetooth server
 	def stop(self):
 		try:
 			if self.client_sock is not None:
@@ -48,7 +53,7 @@ class BluetoothServer(object):
 		self.running = False
 		print "stopped"
 
-	'''Receive message from the client'''
+	## Receive message from the client
 	def receive(self,buf=1024,blocking=True):
 		if not blocking:
 			self.client_sock.settimeout(3.0)
@@ -60,6 +65,8 @@ class BluetoothServer(object):
 			# if blocking:
 			raise e
 
+	## Sends a string to the client
+	#  @param msg The string to send
 	def send(self, msg):
 		try:
 			#send
@@ -68,10 +75,9 @@ class BluetoothServer(object):
 			# if blocking:
 			raise e
 
-	'''Communication between the server and client.
-	   Parses JSON and executes commands.
-	   Sends something back if needed.
-	'''
+	## Communication between the server and client.
+	#  Parses JSON and executes commands.
+	#  Sends something back if needed.
 	def communicate(self):
 		print "communicate"
 		while self.running:
@@ -95,6 +101,9 @@ class BluetoothServer(object):
 				print "Parsing JSON went wrong...", e
 				#self.client_sock.send("-1")
 
+	## Accepts a client.
+	#  @param blocking when True, the function will wait till accepting a client.
+	#  When False, the socket will wait 3 seconds.
 	def acceptClient(self, blocking=True):
 		if not blocking:
 			self.server_sock.settimeout(3.0)
@@ -107,11 +116,12 @@ class BluetoothServer(object):
 		# finally:
 		# 	if blocking:
 		# 		self.server_sock.settimeout(None)
-	'''Things that need to be stopped before doing another action.'''
+
+	## Things that need to be stopped before doing another action.
 	def stopEverything(self):
 		self.stopVision()
 
-	'''Stops the balloon and line detection'''
+	## Stops the balloon and line detection
 	def stopVision(self):
 		print "stopAutonomous"
 		self.visionDetection.stopAutonomous()
@@ -122,6 +132,8 @@ class BluetoothServer(object):
 		if self.visionBalloonThread.isAlive():
 			self.visionBalloonThread.join()
 
+	## Returns  a JSON string with the battery status
+	#  @param batteryStatus the battery status from 0 through 4
 	def getBatteryJSON(self,batteryStatus):
 		battery_json = {
 			'cmd': 'setBattery',
@@ -129,8 +141,8 @@ class BluetoothServer(object):
 		}
 		return json.dumps(battery_json, separators=(',',':'))
 
-	'''Parses JSON from the client and executes commands.
-	   Sends something back if needed.'''
+	## Parses JSON from the client and executes commands.
+	#  Sends something back if needed.
 	def parseJSON(self,jsonData):
 		if 'mode' in jsonData:
 			#The command sets a mode
@@ -195,4 +207,4 @@ class BluetoothServer(object):
 					#rotate around the x axis
 					if len(gyro_pos) == 3:
 						self.mainprogram.setControllerGyroPos(gyro_pos)
-						gyro.gyroSens(gyro_pos[0])
+						#gyro.gyroSens(gyro_pos[0]) #TODO
