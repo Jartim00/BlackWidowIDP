@@ -1,4 +1,6 @@
 #!/usr/bin/python
+##calculates speed based on gyro sensor value between -60 and 60
+#@param z Float representing x-value of the gyro-sensor
 def omrek(z):			#input: x-waarde
 	a = 400.0/60.0
 	if z >= 60:
@@ -11,6 +13,8 @@ def omrek(z):			#input: x-waarde
 	print omrek
 	return omrek
 
+##calculates angle based on y-value of the gyro sensor
+#@param b Float representing y-value of the gyro-sensor
 def angleCalc(b):		#input: y-waarde
 	startPos = 511.0	
 	c=300/1024.0
@@ -18,11 +22,16 @@ def angleCalc(b):		#input: y-waarde
 	print angle
 	return angle
 
+
+##connects the 2 previous methods so they can be used in the main class
+#@param a Float representing x-value of the gyro-sensor
+#@param b Float representing y-value of the gyro-sensor
 def beweging(a,b):
-	omrek(a)
-	angleCalc(b)
+	angleCalc(a)
+	omrek(b)
 	
 	
-beweging(60,60)
+	
+
 
 
