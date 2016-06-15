@@ -64,6 +64,7 @@ class Movement:
     #@param leg Integer representing leg id ranges between 1 to 6
     #@param angle_modifier Float representing angle modifier used to change walking angle
     #@param gate_mod Float representing distance between body and length in millimeters
+    #@param speed int representing speed between 0 and 1023
     def stapvooruit(self, leg, angle_modifier, gate_mod,speed):
     	#print "Loss loss loss"
     	offset = 71
@@ -111,6 +112,7 @@ class Movement:
     #@param leg Integer representing leg id ranges between 1 to 6
     #@param angle_modifier Float representing angle modifier used to change walking angle
     #@param gate_mod Float representing distance between body and length in millimeters
+    #@param speed int representing speed between 0 and 1023
     def stapzuruck(self, leg,angle_modifier,gate_mod,speed):
     	#print "zuruck"
     	offset = 71
@@ -161,6 +163,7 @@ class Movement:
     #@param moveAngleLeft Float representing angle modifier used to change walking angle to the left side
     #@param moveAngleRight Float representing angle modifier used to change walking angle to the right side
     #@param gate_mod Float representing distance between body and length in millimeters
+    #@param speed int representing speed between 0 and 1023
     def moveBackward(self,moveAngleLeft, moveAngleRight,gate_mod,speed):
 	Movement.isMoving = True
         for x in range(2, 7, 2):
@@ -209,6 +212,7 @@ class Movement:
     #@param moveAngleLeft Float representing angle modifier used to change walking angle to the left side
     #@param moveAngleRight Float representing angle modifier used to change walking angle to the right side
     #@param gate_mod Float representing distance between body and length in millimeters
+    #@param speed int representing speed between 0 and 1023
     def moveForward(self,moveAngleLeft, moveAngleRight, gate_mod,speed):
 	Movement.isMoving = True
         for x in range(2, 7, 2):
@@ -250,6 +254,7 @@ class Movement:
 	Movement.isMoving = False
 
 	#turn per 45 degrees
+	##moves the hexapod to the right in a certain angle in degrees #hardcoded!
     def turnLeft(self):
 	Movement.isMoving = True
 	speed = 300
@@ -334,6 +339,7 @@ class Movement:
 	#	self.rest(x)
 
 	#turn per 45 degrees
+	##moves the hexapod to the right in a certain angle in degrees #hardcoded!
     def turnRight(self):
     	Movement.isMoving = True
     	speed = 300
@@ -417,7 +423,9 @@ class Movement:
     	#for x in range(1, 7):
     	#	self.rest(x)
 
-
+    ##Moves the hexapod forward using joystick-input
+    #@param x Float representing x-input from joystick
+    #@param y Float representing y-input from joystick
     def movementController(self,x,y):
         print "before check"
     	if Movement.isMoving:
@@ -445,8 +453,6 @@ class Movement:
 		print "turnleft"
 		self.turnLeft()
 
-
-
     	"""if y >= 10:
 	    print "forward"
     	    if x >= 10:
@@ -472,11 +478,11 @@ class Movement:
 		print "left"
                 self.turnLeft()"""
 
-#try:
-#	while True:
-#		Movement().movementController(11.0,0.0)
-#		#sleep(1)
-#except KeyboardInterrupt:
-#	for x in range(1, 7):
-#    	    Movement().rest(x)
-#            ax.action()
+"""try:
+	while True:
+		Movement().movementController(5.0,30.0)
+		#sleep(1)
+except KeyboardInterrupt:
+	for x in range(1, 7):
+    	    Movement().rest(x)
+#            ax.action()"""
