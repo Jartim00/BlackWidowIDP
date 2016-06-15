@@ -4,15 +4,17 @@ import subprocess
 import json
 from vision.vision import Vision
 import threading
-from movement.vooruit import vooruit as movement
+import movement.movement as movement
 import movement.carry as carry
 import gyro
-
+import spider_battery
+mv = movement.Movement()
 class BluetoothServer(object):
-	def __init__(self,bind_address,port):
+	def __init__(self,bind_address,port,mainprogram):
 		print "init"
 		self.bind_address = bind_address
 		self.port = port
+		self.mainprogram = mainprogram
 		self.server_sock = bluetooth.BluetoothSocket( bluetooth.RFCOMM )
 		self.running = False
 		#make threads
@@ -58,6 +60,14 @@ class BluetoothServer(object):
 			# if blocking:
 			raise e
 
+	def send(self, msg):
+		try:
+			#send
+			self.client_sock.send(msg)
+		except bluetooth.btcommon.BluetoothError as e:
+			# if blocking:
+			raise e
+
 	'''Communication between the server and client.
 	   Parses JSON and executes commands.
 	   Sends something back if needed.
@@ -65,29 +75,25 @@ class BluetoothServer(object):
 	def communicate(self):
 		print "communicate"
 		while self.running:
-			print "SELF.RUNNING : ",self.running
 			data = ""
 			try:
-				print "receiving..."
 				data = self.receive(1024,False)
 				if data is None or data == "":
 					continue
-				print "end receive..."
 			except bluetooth.btcommon.BluetoothError as e:
 				print "connection reset"
 				#if lost connection, accept connecion for reconnect
 				#set timeout
 				self.acceptClient(False)
 				continue
-			print "received [%s]" % data
 			try:
 				jsonData = json.loads(data)
 				self.parseJSON(jsonData)
-			except:
+				#self.client_sock.send(statuscode)#TODO
+			except Exception,e :
 				#send something back if something goes wrong
-				print "SOMETHING WENT WRONG"
-			print "sending..."
-			self.client_sock.send(data)
+				print "Parsing JSON went wrong...", e
+				#self.client_sock.send("-1")
 
 	def acceptClient(self, blocking=True):
 		if not blocking:
@@ -116,6 +122,13 @@ class BluetoothServer(object):
 		if self.visionBalloonThread.isAlive():
 			self.visionBalloonThread.join()
 
+	def getBatteryJSON(self,batteryStatus):
+		battery_json = {
+			'cmd': 'setBattery',
+			'battery_status' : batteryStatus
+		}
+		return json.dumps(battery_json, separators=(',',':'))
+
 	'''Parses JSON from the client and executes commands.
 	   Sends something back if needed.'''
 	def parseJSON(self,jsonData):
@@ -124,27 +137,26 @@ class BluetoothServer(object):
 			mode = jsonData['mode']
 			if mode == 1:
 				#move mode
-				if 'joy_x' in jsonData and 'joy_y' in jsonData:
-					joy_x = jsonData['joy_x']
-					joy_y = jsonData['joy_y']
-					#call the move function
-					if joy_x > 0 and joy_y == 0:
-						self.__SpiderAction('Right')
-					elif joy_x < 0 and joy_y == 0:
-						self.__SpiderAction('Left')
-					elif joy_y > 0 and joy_x == 0:
-						self.__SpiderAction('Forward')
-					print "move"
+				if 'joy_pos' in jsonData:
+					joy_pos = jsonData['joy_pos']
+					if len(joy_pos) == 2:
+						joy_x = joy_pos[0]
+						joy_y = joy_pos[1]
+						self.mainprogram.setJoyPos(joy_pos)
+						#call the move function
+						mv.movementController(joy_x,joy_y)
 			elif mode == 2:
 				if 'danceId' in jsonData:
 					danceId = jsonData['danceId']
 					self.stopEverything()
 					#call the dance function
+					#TODO
 					print "dance"
 			elif mode == 3:
 				#stop everything???
 				self.stopEverything()
 				#call the stab function
+				#TODO
 				print "stab"
 			elif mode == 4:
 				#call the autonomousLine function
@@ -162,27 +174,25 @@ class BluetoothServer(object):
 				self.stopEverything()
 				# go to sleep
 				print "go to sleep"
-				carry.carry()
+				for x in range(1,7):
+					mv.rest(x)
+				#TODO testen
 		elif 'cmd' in jsonData:
 			cmd = jsonData['cmd']
 			if cmd == 'batteryStatus':
 				#get batteryStatus and send it back
-				print "batteryStatus"
+				batteryStatus = self.mainprogram.getBatteryStatus()
+				battery_json = self.getBatteryJSON(batteryStatus)
+				try:
+					self.send(battery_json)
+				except Exception, e:
+					print "Sending battery failed: ",e
 			elif cmd == 'setGyro':
 				if 'gyro' in jsonData:
 					#gyro position
 					gyro_pos = jsonData['gyro'];
 					print "set gyro position"
 					#rotate around the x axis
-					gyro.gyroSens(gyro_pos[0])
-
-	'''Test script for movement'''
-	def __SpiderAction(self,command):
-		print command
-		if command == "Forward":
-			movement().vooruit()
-		elif command == "Left":
-			movement().links()
-		elif command == "Right":
-			movement().rechts()
-		movement().rust()
+					if len(gyro_pos) == 3:
+						self.mainprogram.setControllerGyroPos(gyro_pos)
+						gyro.gyroSens(gyro_pos[0])

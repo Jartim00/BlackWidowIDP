@@ -8,25 +8,28 @@ from servo import Servo
 from time import sleep
 from ax import Ax12
 #import vision.vision
-import btcommunication.btserver as btserver
+import communication.btserver as btserver
+import communication.appserver as appserver
+import spider_battery
+import gyro
 ax = Ax12()
 
 class MainProgram(object):
     servos = []
     def __init__(self):
-        print "Main...."
         self.createServos(6,3)
-        print "Main end..."
+        self.joyPos = [0,0] #x,y
+        self.gyroPos = [0,0,0] #x,y,z
 
     def start(self):
         self.running = True
-        self.startUpdateThread()
         self.startRESTAPI()
         self.startBluetoothServer()
+        self.startAppServer()
+        self.startUpdateThread()
         #continuous updates
         while self.running:
             try:
-                print "another loop..."
                 sleep(1)
             except KeyboardInterrupt:
                 print "exiting mainprogram..."
@@ -36,6 +39,7 @@ class MainProgram(object):
     def shutdown(self):
         self.running = False
         self.bluetoothServer.stop()
+        self.appServer.stop()
         #shutdown flask
         #self.apiserver.terminate()
         #self.apiserver.join()
@@ -57,10 +61,11 @@ class MainProgram(object):
                 servoId = legNum + servoNum
                 self.servos.append(Servo(servoId))'''
 
-    '''Update thread for getting servo info'''
+    '''Update thread for getting api info'''
     def startUpdateThread(self):
         print "starting update thread..."
-        threading.Thread(target=self.updateServos,args=(self.servos,)).start()
+        threading.Thread(target=self.fastAPIUpdates,args=(self.servos,)).start()
+        threading.Thread(target=self.slowAPIUpdates).start()
 
     def startRESTAPI(self):
         restapi = RestAPI(self)
@@ -69,24 +74,84 @@ class MainProgram(object):
         self.apiserver.start()
 
     def startBluetoothServer(self):
-        self.bluetoothServer = btserver.BluetoothServer("",1)
+        self.bluetoothServer = btserver.BluetoothServer("",1,self)
         self.bluetoothThread = threading.Thread(target=self.bluetoothServer.start)
         self.bluetoothThread.daemon = True
         self.bluetoothThread.start()
 
-    '''Updates all servo info'''
+    def startAppServer(self):
+        self.appServer = appserver.AppServer("",1337)
+        # self.appServer.setServos(self.servos)
+        self.appServerThread = threading.Thread(target=self.appServer.start)
+        self.appServerThread.start()
+
+    def getBatteryStatus(self):
+        return spider_battery.read()
+
+    def getGyroPos(self):
+        return [gyro.x_gyroscope(),gyro.y_gyroscope()]
+
+    def getControllerGyroPos(self):
+        return self.gyroPos
+
+    def setControllerGyroPos(self,gyroPos):
+        self.gyroPos = gyroPos
+
+    def getJoyPos(self):
+        return self.joyPos
+
+    def setJoyPos(self,joyPos):
+        self.joyPos = joyPos
+
+    def getFastAPIJSON(self):
+        infoJSON = {"servos":[],
+                    "gyro":self.getGyroPos(),
+                    "joy_pos":self.getJoyPos()
+                    }
+        for servo in self.servos:
+            infoJSON["servos"].append(
+            {
+                "id":servo.getId(),
+                "temperature": servo.getTemperature(),
+                "load": servo.getLoad(),
+                "voltage": servo.getVoltage(),
+                "position":servo.getPosition(),
+                "moving": servo.getMovingStatus()
+            })
+        return json.dumps(infoJSON, separators=(',',':'))
+
+    def getSlowAPIJSON(self):
+        infoJSON = {"spiderBattery":self.getBatteryStatus(),#TODO
+                    "controllerBattery":4#TODO
+                    }
+        return json.dumps(infoJSON, separators=(',',':'))
+
     def updateServos(self,toUpdateServos):
+       for servo in toUpdateServos:
+           try:
+               servo.updateVariables()
+           except ax.timeoutError:
+               print "error...."
+
+    '''Updates api info'''
+    def fastAPIUpdates(self,toUpdateServos):
         while self.running:
            try:
-               print "updating servos..."
-               for servo in toUpdateServos:
-                   try:
-                       servo.updateVariables()
-                   except ax.timeoutError:
-                       print "error...."
-               sleep(1)
-           except:
-               print "Timeout error in update servo thread..."
+               self.updateServos(toUpdateServos)
+               #send data to apps
+               self.appServer.sendJSONToAll(self.getFastAPIJSON())
+               sleep(0.5)
+           except Exception, e:
+               print "Timeout error in update API thread...", e
+
+    def slowAPIUpdates(self):
+        while self.running:
+           try:
+               #send data to apps
+               self.appServer.sendJSONToAll(self.getSlowAPIJSON())
+               sleep(5)
+           except Exception, e:
+               print "Error in update slow API thread...", e
 
 '''Camera frames for livestream'''
 def gen(camera):

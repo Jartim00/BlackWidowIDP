@@ -43,7 +43,7 @@ def accel_yout_scaled():
 def accel_zout_scaled():
     return read_word_2c(0x3f) / 16384.0
 
-def x_gyroscoop():
+def x_gyroscope():
     if get_x_rotation(accel_xout_scaled(), accel_yout_scaled(), accel_zout_scaled()) <= -60:
         return -60
     if get_x_rotation(accel_xout_scaled(), accel_yout_scaled(), accel_zout_scaled()) >= 60:
@@ -51,15 +51,21 @@ def x_gyroscoop():
     else:
         return (int)(get_x_rotation(accel_xout_scaled(), accel_yout_scaled(), accel_zout_scaled()))
 
-def y_gyroscoop():
+def y_gyroscope():
     return (int)(get_y_rotation(accel_xout_scaled(), accel_yout_scaled(), accel_zout_scaled()))
 
-def z_gyroscoop():
+def z_gyroscope():
     pass
- 	
+
 bus = smbus.SMBus(1) # or bus = smbus.SMBus(1) for Revision 2 boards
-address = 0x68       # This is the address value read via the i2cdetect command
+address = 0x69       # This is the address value read via the i2cdetect command
 
 
 # Now wake the 6050 up as it starts in sleep mode
 bus.write_byte_data(address, power_mgmt_1, 0)
+
+'''while True:
+    print x_gyroscope()
+    print y_gyroscope()
+    time.sleep(0.5)
+'''

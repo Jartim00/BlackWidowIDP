@@ -3,8 +3,9 @@ import bluetooth
 import json
 from time import sleep
 import random
-#import Gyro
+import Gyro
 import Joy
+import threading
 
 '''Custom exception when the server is not found'''
 class ServerDown(Exception):
@@ -21,6 +22,7 @@ class SpiderCommunication(object):
         self.bd_addr = bd_addr
         self.port = port
         self.synclegs = False
+        self.move = False
 
     def __del__(self):
         self.shutdown()
@@ -57,18 +59,30 @@ class SpiderCommunication(object):
             raise e
 
     def getBatteryStatus(self):
-        battery_json = { "cmd" : "batteryStatus" }
-        self.sendData(battery_json)
-        return self.readData()
+        get_battery_json = { "cmd" : "batteryStatus" }
+        self.sendData(get_battery_json)
+        try:
+            battery_json = json.loads(self.readData())
+            if 'cmd' in battery_json:
+                cmd = battery_json['cmd']
+                if cmd == 'setBattery':
+                    return battery_json['battery_status']
+        except Exception, e:
+            print "error in read battery status: ", e
+            raise e
 
-    def move(self,joy_x,joy_y):
-        move_json = {
-                "mode" : 1,
-                "joy_x" : joy_x,
-                "joy_y" : joy_y
+    def moveSpid(self):
+        print "in move function..."
+        self.move = True
+        while self.move:
+            print "moving json....."
+            joy_pos = [Joy.read_x(),Joy.read_y()] #TODO
+            move_json = {
+                    "mode" : 1,
+                    "joy_pos" : joy_pos
             }
-        self.sendData(move_json)
-        return self.readData()
+            self.sendData(move_json)
+            sleep(0.05)
 
     def dance(self,dance_id):
         dance_json = {
@@ -76,23 +90,21 @@ class SpiderCommunication(object):
                 "danceId" : dance_id
         }
         self.sendData(dance_json)
-        return self.readData()
 
     def stab(self):
         stab_json = {
             "mode" : 3
         }
         self.sendData(stab_json)
-        return self.readData()
 
     '''Sends the gyroscope position to the server.'''
     def setGyro(self,gyro_pos):
+        print "gyro does work tough"
         sync_json = {
             "cmd" : "setGyro",
             "gyro" : gyro_pos
         }
         self.sendData(sync_json)
-        return self.readData()
 
     '''Keeps the spider legs synchronized with the gyroscope position
        from the smartcontroller.
@@ -103,7 +115,7 @@ class SpiderCommunication(object):
             #get the gyro value
             #gyropositions = [Gyro.x_gyroscoop(),Gyro.y_gyroscoop(),0]
             #randomx = random.randint(-60,60)
-            gyropositions = [Joy.read_x(),Joy.read_y(),0]
+            gyropositions = [Gyro.x_gyroscope(),Gyro.y_gyroscope(),0]
             self.setGyro(gyropositions)
             sleep(0.05)
 
@@ -111,19 +123,16 @@ class SpiderCommunication(object):
     def autonomousLine(self):
         line_json = { "mode" : 4 }
         self.sendData(line_json)
-        return self.readData()
 
     '''Makes the spider walk to a balloon and pop it.'''
     def autonomousBalloon(self):
         balloon_json = { "mode" : 5 }
         self.sendData(balloon_json)
-        return self.readData()
 
     '''Makes the spider go into sleep/carry mode'''
     def goToSleep(self):
         sleep_json = { "mode" : 6 }
         self.sendData(sleep_json)
-        return self.readData()
 
 def main():
     spiderCommunication = SpiderCommunication("00:1A:7D:DA:71:06",1)

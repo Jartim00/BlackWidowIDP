@@ -19,7 +19,7 @@ def gem5():
     waarde4=waarde3
     waarde3=waarde2
     waarde2=waarde1
-    waarde1=adc.read_adc(2,gain=2/3)
+    waarde1=adc.read_adc(0,gain=2/3)
     if(waarde1>1200):
         if(waarde5==leeg):
             if(waarde4==leeg):
@@ -52,7 +52,7 @@ def read():
         return 1
 
 
-'''    
+'''
 while True:
     print read()
     time.sleep(0.5)
