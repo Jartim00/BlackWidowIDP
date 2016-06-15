@@ -44,7 +44,7 @@ public class SlopeActivity extends Activity {
         Backward = (LinearLayout) findViewById(R.id.Backward);
         Left = (LinearLayout) findViewById(R.id.Left);
         Right = (LinearLayout) findViewById(R.id.Right);
-        socket = new SocketConnection();
+        connection.start();
     }
 
     @Override
@@ -58,15 +58,22 @@ public class SlopeActivity extends Activity {
         super.onResume();
         FOCUSED = true;
         GetSlopeData_Loop();
+        GetControllerData();
     }
+
+    Thread connection = new Thread(){
+        public void run() {
+            socket = new SocketConnection();
+        }
+    };
 
     //Rotates the Image according to the Gyroscope data
     private  void Rotate(final float x, final float y){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                img_animation.setRotationX(img_animation.getRotationX() + x);
-                img_animation.setRotationY(img_animation.getRotationY() + y);
+                img_animation.setRotationX(x);
+                img_animation.setRotationY(y);
             }
         });
     }
@@ -78,16 +85,14 @@ public class SlopeActivity extends Activity {
                 float y = 0;
                 while (FOCUSED) {
                     try {
-                        if(socket.ParseGyroJSON() != null) {
-                            JSONArray j = socket.ParseGyroJSON();//Get JSONArray from SocketConnection class
-                            if (j.length() > 0) {
-                                float[] values = new float[2];
-                                for (int i = 0; i < j.length(); i++) {
-                                    values[i] = Float.parseFloat(j.getString(i));
-                                }
-                                x = values[0];
-                                y = values[1];
+                        JSONArray j = socket.ParseGyroJSON();//Get JSONArray from SocketConnection class
+                        if (j.length() > 0) {
+                            float[] values = new float[j.length()];
+                            for (int i = 0; i < j.length(); i++) {
+                                values[i] = Float.parseFloat(j.getString(i));
                             }
+                            x = values[0];
+                            y = values[1];
                         }
                         final float finalX = x; //Temporary store variables in a final variable
                         final float finalY = y;
@@ -104,10 +109,68 @@ public class SlopeActivity extends Activity {
                         e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
+                    } catch (Exception ex){
+
                     }
                 }
             }
         };
         thread.start();
+    }
+
+    private void GetControllerData() throws IllegalThreadStateException{
+        thread = new Thread() {
+            public void run() {
+                float x = 0; //Assign x and y to 0
+                float y = 0;
+                while (FOCUSED) {
+                    try {
+                        JSONArray j = socket.ParseMovementJSON();//Get JSONArray from SocketConnection class
+                        if (j.length() > 0) {
+                            float[] values = new float[j.length()];
+                            for (int i = 0; i < j.length(); i++) {
+                                values[i] = Float.parseFloat(j.getString(i));
+                            }
+                            x = values[0];
+                            y = values[1];
+                        }
+                        final float finalX = x; //Temporary store variables in a final variable
+                        final float finalY = y;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SetMovementNeutral();
+                                if(finalX > 5){
+                                    Right.setVisibility(View.VISIBLE);
+                                } if(finalX < 5) {
+                                    Left.setVisibility(View.VISIBLE);
+                                } if(finalY > 5) {
+                                    Forward.setVisibility(View.VISIBLE);
+                                } if(finalY < 5) {
+                                    Backward.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        });
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (Exception ex){
+
+                    }
+                }
+            }
+        };
+        thread.start();
+    }
+
+    private void SetMovementNeutral(){
+        Right.setVisibility(View.INVISIBLE);
+        Left.setVisibility(View.INVISIBLE);
+        Forward.setVisibility(View.INVISIBLE);
+        Backward.setVisibility(View.INVISIBLE);
     }
 }

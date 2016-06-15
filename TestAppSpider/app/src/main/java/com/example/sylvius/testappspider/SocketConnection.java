@@ -1,5 +1,7 @@
 package com.example.sylvius.testappspider;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,13 +62,13 @@ public class SocketConnection {
     //Public class to be called when getting movement (controller input) data
     //returns data as a JSON array
     public JSONArray ParseMovementJSON() throws JSONException, IOException {
-        return ParseJSON("movement");
+        return ParseJSON("joy_pos");
     }
 
     //Public class to be called when getting battery data
     //returns data as a JSON array
     public JSONArray ParseBatteryJSON() throws JSONException, IOException {
-        return ParseJSON("battery");
+        return ParseJSON("spiderBattery");
     }
 
     /*

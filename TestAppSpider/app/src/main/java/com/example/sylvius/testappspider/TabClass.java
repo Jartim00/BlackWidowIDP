@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -16,12 +18,14 @@ import java.net.SocketAddress;
  * Created by Sylvius on 9-5-2016.
  */
 public class TabClass extends TabActivity {
-
     //Global variables
     BatteryData b_data = new BatteryData();
     Thread thread;
     TabHost tabHost;
     ImageView connectionView;
+    boolean CONNECTED = false;
+    SocketConnection s;
+    String battery;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +61,14 @@ public class TabClass extends TabActivity {
         tabHost.addTab(tab3);
         tabHost.addTab(tab4);
         UpdateBatteryStatus();
+        tr.start();
     }
+
+    Thread tr = new Thread(){
+        public void run(){
+           s  = new SocketConnection();
+        }
+    };
 
     /*
      * Update method for battery status and connection status.
@@ -69,19 +80,28 @@ public class TabClass extends TabActivity {
             public void run() {
                 while (true) {
                     try {
+                        try {
+                            JSONArray j = s.ParseBatteryJSON();//Get JSONArray from SocketConnection class
+                            float[] values = new float[j.length()];
+                            if (j.length() > 0) {
+                                CONNECTED = true;
+                                for (int i = 0; i < j.length(); i++) {
+                                    values[i] = Float.parseFloat(j.getString(i));
+                                }
+                                battery = values[0]+ "";
+                            }
+                        } catch (Exception ex){
+                            CONNECTED = false;
+                        }
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 TextView tv = (TextView) findViewById(R.id.battery_health);
-                                tv.setText(b_data.GetBatteryPercentage());
-                                try {
-                                    if(ConnectionAvailable()) {
-                                        connectionView.setImageResource(R.mipmap.img_connection);
-                                    } else {
-                                        connectionView.setImageResource(R.mipmap.img_noconnection);
-                                    }
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                                tv.setText(battery);
+                                if(CONNECTED) {
+                                    connectionView.setImageResource(R.mipmap.img_connection);
+                                } else {
+                                    connectionView.setImageResource(R.mipmap.img_noconnection);
                                 }
                             }
                         });
@@ -100,15 +120,25 @@ public class TabClass extends TabActivity {
     * input: None
     * output: boolean
     */
-    String serverAddress = "10.1.1.1";
-    int port = 1337;
-    private boolean ConnectionAvailable() throws IOException {
-        try {
-            Socket s = new java.net.Socket(serverAddress, port);
-            return true;
-        } catch (Exception ex){
-            ex.printStackTrace();
-            return false;
-        }
+
+    private void ConnectionAvailable() {
+        Thread connection = new Thread() {
+            public void run() {
+                    try {
+                        JSONArray j = s.ParseBatteryJSON();//Get JSONArray from SocketConnection class
+                        float[] values = new float[j.length()];
+                        if (j.length() > 0) {
+                            CONNECTED = true;
+                            for (int i = 0; i < j.length(); i++) {
+                                values[i] = Float.parseFloat(j.getString(i));
+                            }
+                            battery = values[0]+ "";
+                        }
+                    } catch (Exception ex){
+                        CONNECTED = false;
+                    }
+            }
+        };
+        connection.start();
     }
 }
