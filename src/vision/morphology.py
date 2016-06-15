@@ -8,7 +8,7 @@ class Morphology:
 	#@param frame Decoded image in numphy form
 	#@param lower The lower range of threshold, type in np.array
 	#@param upper The upper range of threshold, type is np.array
-	#returns binary frame
+	#@param Returns binary frame
 	def thresholdImage(self,frame, lower, upper):
 		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 		return cv2.inRange(hsv, lower, upper)
@@ -16,7 +16,7 @@ class Morphology:
 	##cleans noise from image, using opening and closing operation.
 	#note that these operation are costly on the raspberry pi
 	#@param frame Binary image 
-	#returns edited binary image
+	#@param Returns edited binary image
 	def morphFrame(self,frame):
 		kernel = np.ones((20, 20), "uint8")
 		opening = cv2.morphologyEx(frame, cv2.MORPH_OPEN, kernel)
@@ -25,9 +25,21 @@ class Morphology:
 		frame = cv2.morphologyEx(frame, cv2.MORPH_CLOSE, kernel)	
 		return frame
 
+	##cleans noise from image, using smaller opening and a smaller  closing operation.
+	#note that these operation are costly on the raspberry pi
+	#@param frame Binary image 
+	#@param Returns edited binary image
+	def morphFrame_Small(self,frame):
+		kernel = np.ones((8, 8), "uint8")
+		opening = cv2.morphologyEx(frame, cv2.MORPH_OPEN, kernel)
+
+		kernel = np.ones((8, 8), "uint8")
+		frame = cv2.morphologyEx(frame, cv2.MORPH_CLOSE, kernel)	
+		return frame
+
 	##fills holes in established blobs
 	#@param frame Binary image
-	#returns edited binary image
+	#@param Returns edited binary image
 	def floodFill(self,frame):
 		im_floodfill = frame.copy()			 
 		h, w = frame.shape[:2]

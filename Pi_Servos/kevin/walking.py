@@ -16,7 +16,7 @@ class Foot :
 		self.legNr = legNr
 		self.lights(True)
 		
-	def __repr__(self) :
+	def __repr__(self) : #self print function
 		uhoh = ""
 		if self.legNr == 0 :
 			uhoh = " (uhoh, no leg number assigned. RED FLAG!)"
@@ -38,36 +38,18 @@ class Foot :
 	
 	def time(self, id, loc) :
 		cur = ax.readPosition(id)
-		dx = abs(loc - cur) #get the distance to move
+		dx = int(abs(loc - cur)) #get the distance to move
 		if debug2: print "Calculating step time from " + str(cur) + " to " + str(loc) + " is " + str(dx)
-		return int(dx) #int(1024 * (dx/180))
+		if dx < 0 : return 0
+		elif dx > 1023 : return 1023
+		else : return dx #int(1024 * (dx/180)) # TODO : tijd goed?
 	
-	#self: this class. Not needed in call
-	#id : servo ID
-	#loc: end location
-	#spd: speed to use (not used yet, is computed)
 	def moveSpeedRW(self, id, loc) :
 		loc = self.step(id, loc) #check if valid location
-		spd = self.time(id, loc) #make valid time
-		if debug2: print "checking move arguments"
-		if (
-#			id in ax.learnServos(10,64) #valid servo number
-#			and loc in range (1024) #valid destination
-			#and 
-#			spd in range (1024) #valid speed
-		True
-		) : 
-			if debug2: print "Sending command to servo " + str(id)
-			ax.moveSpeedRW(id, loc, spd) 
-			if debug : print "Servo: " + str(id) + " to loc: " + str(loc) + " at spd: " + str(spd)
-		else :
-			print "ERROR! moveSpeed(id=" + str(id) + ", loc=" + str(int(loc)) + ", spd=" + str(spd) + ")"
-			if not id in ax.learnServos(10,64) :
-				print "wrong ID!"
-			if not loc in range(1024) :
-				print "wrong location!"
-			if not spd in range(1024) :
-				print "wrong speed!"
+		spd = self.time(id, loc) #make valid time 
+
+		ax.moveSpeedRW(id, loc, spd) 
+		if debug : print "Servo: " + str(id) + " to loc: " + str(loc) + " at spd: " + str(spd)
 		sleep(0.05)
 
 	def rest(self) :
@@ -95,7 +77,6 @@ class Foot :
 		self.moveSpeedRW(10*self.legNr+1, loc[0])
 		self.moveSpeedRW(10*self.legNr+2, loc[1])
 		self.moveSpeedRW(10*self.legNr+3, loc[2])
-		ax.action() # TODO do this here?
 		
 	#part 1b: van achter naar midden, door de lucht.
 	def stepOne(self):
@@ -112,7 +93,7 @@ class Foot :
 			loc[0] = 0
 		elif self.legNr == 6 :
 			loc[0] = 0
-		loc[1] = 40.68 + 5	#-10
+		loc[1] = 40.68 + 5
 		
 		self.moveSpeedRW(10*self.legNr+1, loc[0])
 		self.moveSpeedRW(10*self.legNr+2, loc[1]) 
@@ -122,29 +103,29 @@ class Foot :
 		loc = [0,0,0]
 		if self.legNr == 1 : 
 			loc[0] = 9.73
-			loc[1] = 42.37
-			loc[2] = 137.17
+			loc[1] = 34.86
+			loc[2] = 103.62
 		elif self.legNr == 3 :
 			loc[0] = 45 
-			loc[1] = 42.37
-			loc[2] = 137.17
+			loc[1] = 34.86
+			loc[2] = 103.62
 		elif self.legNr == 5 :
 			loc[0] = -30
-			loc[1] = 40.68 - 1.81
-			loc[2] = 120 + 8.49
+			loc[1] = 31.38
+			loc[2] = 95.56
 		elif self.legNr == 2 :
 			loc[0] = -30
-			loc[1] = 40.68 - 1.81
-			loc[2] = 120 + 8.49
+			loc[1] = 31.38
+			loc[2] = 95.56
 		elif self.legNr == 4 :
 			loc[0] = 9.73 
-			loc[1] = 42.37
-			loc[2] = 137.17
+			loc[1] = 34.86
+			loc[2] = 103.62
 		elif self.legNr == 6 :
 			loc[0] = 45
-			loc[1] = 42.37
-			loc[2] = 137.17
-		#loc[1] = 40.68 + 5 #10
+			loc[1] = 34.86
+			loc[2] = 103.62
+		#loc[1] = 40.68 + 5 #10 # TODO
 	
 		self.moveSpeedRW(10*self.legNr+1, loc[0])
 		self.moveSpeedRW(10*self.legNr+2, loc[1]) 
@@ -155,31 +136,31 @@ class Foot :
 		loc = [0,0,0]
 		if self.legNr == 1 : 		
 			loc[0] = 0
-			loc[1] = 42.37
+			loc[1] = 42.37-5
 			loc[2] = 137.17
 		elif self.legNr == 2 :
 			loc[0] = 0
-			loc[1] = 40.68 - 1.81
+			loc[1] = 40.68 - 1.81 -5 
 			loc[2] = 120 + 8.49
 		elif self.legNr == 3 :
 			loc[0] = 0
-			loc[1] = 42.37
+			loc[1] = 42.37-5
 			loc[2] = 137.17
 		elif self.legNr == 4 :
 			loc[0] = 0
-			loc[1] = 42.37
+			loc[1] = 42.37-5
 			loc[2] = 137.17
 		elif self.legNr == 5 :
 			loc[0] = 0
-			loc[1] = 40.68 - 1.81
+			loc[1] = 40.68 - 1.81-5
 			loc[2] = 120 + 8.49
 		elif self.legNr == 6 :
 			loc[0] = 0
-			loc[1] = 42.37
+			loc[1] = 42.37-5
 			loc[2] = 137.17
 		
-		#self.moveSpeedRW(10*self.legNr+2, loc[1]) 
-		#self.moveSpeedRW(10*self.legNr+3, loc[2]) 		
+		#self.moveSpeedRW(10*self.legNr+2, loc[1]) # TODO
+		#self.moveSpeedRW(10*self.legNr+3, loc[2]) # TODO	
 		self.moveSpeedRW(10*self.legNr+1, loc[0])	
 	
 	#part 2b: van het midden naar achteren, over de grond.
@@ -209,6 +190,7 @@ class Foot :
 			loc[0] = -9.73
 			loc[1] = 34.86
 			loc[2] = 103.62
+			
 		self.moveSpeedRW(10*self.legNr+1, loc[0])
 		self.moveSpeedRW(10*self.legNr+2, loc[1]) 
 		self.moveSpeedRW(10*self.legNr+3, loc[2]) 
@@ -220,29 +202,25 @@ def walking(steps) :
 	else :
 		if debug : print "Going a little cube around :P" #een blokje om gaan :P
 		
-		delay = 0.25
+		delay = 0.2
 		while steps :
 			for leg in feet:
-				if(True) : leg.stepFour() #leg.legNr%2 == 0
-				else : leg.stepTwo()
+				leg.stepFour()
 			ax.action()
 			sleep(delay)
 			
 			for leg in feet:
-				if(True) : leg.stepOne()
-				else : leg.stepThree()
+				leg.stepOne()
 			ax.action()
 			sleep(delay)
 			
 			for leg in feet:
-				if(True) : leg.stepTwo()
-				else : leg.stepFour()
+				leg.stepTwo()
 			ax.action()
 			sleep(delay)
 			
 			for leg in feet:
-				if(True) : leg.stepThree()
-				else : leg.stepOne()
+				leg.stepThree()
 			ax.action()
 			sleep(delay)
 			
@@ -265,18 +243,12 @@ try :
 			only = "Only "
 			exit = True
 	print only + str(len(feet)) + " legs initialized. Now to conquer the world."
-#	if exit == True : exit()
-	
-#	for leg in feet:
-#		leg.moveSpeedRW(10*leg.legNr+1, 0)
-#		leg.moveSpeedRW(10*leg.legNr+2, 90)
-#		leg.moveSpeedRW(10*leg.legNr+3, -45)
-#	ax.action()
-#	sleep(0.5)
-	
+#	if exit == True : exit() #if less than 6 legs, kill the program. # TODO
+		
 	for leg in feet: 
 		leg.rest()
 	ax.action()
+	#voeten klaarzetten
 
 	steps = 10
 #	steps = input("How many steps?")
@@ -285,7 +257,7 @@ try :
 	walking(steps)
 	for leg in feet:
 		leg.rest()
-	ax.action()
+		ax.action() # TODO one leg at a time or all at once? (2 tabs or one?)
 	
 except KeyboardInterrupt :
 	for leg in feet :

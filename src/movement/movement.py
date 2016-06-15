@@ -407,6 +407,7 @@ class Movement:
     	ax.action()
     	sleep(0.05)
 
+    	#draai
     	ax.moveSpeedRW(11, 666, speed)
     	ax.moveSpeedRW(31, 666, speed)
     	ax.moveSpeedRW(51, 600, speed)
@@ -443,7 +444,7 @@ class Movement:
 		#	self.moveBackward(0,x/10,0,int(speedcalc.speed(y)))
 		print "turnleft"
 		self.turnLeft()
-	
+
 
 
     	"""if y >= 10:
@@ -470,7 +471,7 @@ class Movement:
             elif x <= -10:
 		print "left"
                 self.turnLeft()"""
-	    
+
 #try:
 #	while True:
 #		Movement().movementController(11.0,0.0)
