@@ -413,6 +413,7 @@ class Movement:
     	ax.action()
     	sleep(0.05)
 
+    	#draai
     	ax.moveSpeedRW(11, 666, speed)
     	ax.moveSpeedRW(31, 666, speed)
     	ax.moveSpeedRW(51, 600, speed)
@@ -421,8 +422,6 @@ class Movement:
     	Movement.isMoving = False
     	#for x in range(1, 7):
     	#	self.rest(x)
-
-    
 
     ##Moves the hexapod forward using joystick-input
     #@param x Float representing x-input from joystick
@@ -453,8 +452,6 @@ class Movement:
 		#	self.moveBackward(0,x/10,0,int(speedcalc.speed(y)))
 		print "turnleft"
 		self.turnLeft()
-	
-
 
     	"""if y >= 10:
 	    print "forward"
@@ -480,7 +477,7 @@ class Movement:
             elif x <= -10:
 		print "left"
                 self.turnLeft()"""
-	    
+
 """try:
 	while True:
 		Movement().movementController(5.0,30.0)
