@@ -10,10 +10,9 @@ class Recognition:
 	framesRequired = 3
 	count = 0
 	
-	#used to create subsection of frame
-	cropHeight = 30
-	bufferX = 10
-	bufferY = 100
+	cropHeight = 30 #used to create subsection of frame
+	bufferX = 10 #used to create subsection of frame
+	bufferY = 100 #used to create subsection of frame
 
 	##Resets all internal values used within the Recognition class
 	def resetValues(self):
@@ -22,7 +21,7 @@ class Recognition:
 
 	##Edits frame into a smaller section, thresholds and detects a white line.
 	#@param frame decoded frame.
-	#returns array containing X and Y of line, returns none if no line was found.
+	#@param returns array containing X and Y of line, returns none if no line was found.
 	def targetLine(self, frame):
 		if frame is None:
 			 return None
@@ -41,7 +40,7 @@ class Recognition:
 
 	##Thresholds frame on red and edits the frame to remove noise and detects the largest red blob.
 	#@param frame decoded frame.
-	#returns array containing X, Y and Area of detected blob, returns none if no blob was detected
+	#@param returns array containing X, Y and Area of detected blob, returns none if no blob was detected
 	def targetBalloon(self, frame):
 		if frame is None:
 			 return None
@@ -74,7 +73,7 @@ class Recognition:
 	##houghCircle can only detect circles at 3 meters max, unless resolution is increased. 
 	#However greater resolution can solve this, but this increases computation time
 	#@param mask binary mask where detection is performed
-	#Returns X, Y coordinates of centre of circle, returns none if no circle was found
+	#@param Returns X, Y coordinates of centre of circle, returns none if no circle was found
 	def __detectCircleHough(self,frame):
 		radius = 0
 	 	circles = cv2.HoughCircles(frame,cv.CV_HOUGH_GRADIENT,2.5,50,param1=80,param2=70,minRadius=0, maxRadius=3000)
@@ -90,7 +89,7 @@ class Recognition:
 
 	##detects blob with the greatest area and returns X,Y and area of this blob
 	#@param mask binary mask where detection is performed
-	#Returns X, Y coordinates and area of this blob, returns None if no blob was detected
+	#@Param Returns X, Y coordinates and area of this blob, returns None if no blob was detected
 	def __detectCircleBlob(self,mask):
 		#contours = cv2.findContours(mask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)[0]
 		image, contours, hierarchy = cv2.findContours(mask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)		
@@ -123,7 +122,7 @@ class Recognition:
 	
 	##Detects line with a rectangle and returns coordinates
 	#@param croppedImage Binary image used to find line, use smaller resolution for efficienty
-	#Returns the upperleft X and Y Coordinates of the line
+	#@param Returns the upperleft X and Y Coordinates of the line
 	def __detectLine(self,croppedImage):
 		#contours = cv2.findContours(croppedImage,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)[0]
 		im2, contours, hierarchy = cv2.findContours(croppedImage,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
@@ -146,7 +145,7 @@ class Recognition:
 
 	##Detects line with a blob analyses and returns coordinates of center of found blob
 	#@param croppedImage Binary image used to find line, use smaller resolution for efficienty
-	#Returns the upperleft X and Y Coordinates of the line
+	#@param Returns the upperleft X and Y Coordinates of the line
 	def __detectLineBlob(self,croppedImage):
 		#contours = cv2.findContours(croppedImage,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)[0]
 		im2, contours, hierarchy = cv2.findContours(croppedImage,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
@@ -178,7 +177,7 @@ class Recognition:
 
 	##crops frame in much smaller resolution and returns the newly created frame
 	#@param frame full sized frame that needs to be cropped
-	#returns a portion of the supplied frame
+	#@param returns a portion of the supplied frame
 	def __cropFrame(self, frame):
 		rows, cols = frame.shape[:2]
 		x2 = cols - self.bufferX
