@@ -14,4 +14,3 @@ for legNr in range (1,7) :
 	ax.moveSpeed(10*legNr+2, int(512 + (90/_FACTOR)), 512)
 	ax.moveSpeed(10*legNr+3, int(512 - (45/_FACTOR)), 512)
 	ax.action()
-	sleep(0.2)
