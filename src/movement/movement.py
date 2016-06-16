@@ -5,6 +5,7 @@ from time import sleep
 from kinematic import Kinematic
 import os
 import speedcalc
+sCalc = Speedcalculation()
 ax = Ax12()
 bx = Kinematic()
 
@@ -75,23 +76,25 @@ class Movement:
     		#loc = IK().calc_angles(0, 84.24478972, offset)
     		loc = bx.calc_angles(119.1401242, 84.24478972 + gate_mod, offset)
     	elif leg == 2 :
-    		angle = 25 + angle_modifier
+    		angle = 25
     		loc = bx.calc_angles(0, 103.1783 + gate_mod, offset)
     		#loc = IK().calc_angles(119.1401242, 103.1783, offset)
     	elif leg == 3 :
-    		angle = 45 + angle_modifier
+    		angle = 45
     		loc = bx.calc_angles(0, 84.24478972 + gate_mod, offset)
     		#loc = IK().calc_angles( 119.1401242, 84.24478972, offset)
     	elif leg == 4 :
-    		angle = -45 + angle_modifier
+    		angle = -45
     		loc = bx.calc_angles(0, 84.24478972 + gate_mod, offset)
     		#loc = IK().calc_angles( 119.1401242, 84.24478972, offset)
     	elif leg == 5 :
-    		angle = -25 + angle_modifier
+    		angle = -25
     		loc = bx.calc_angles(0, 103.1783 + gate_mod, offset)
     		#loc = IK().calc_angles(119.1401242, 103.1783, offset)
     	elif leg == 6 :
     		angle = -9.73 + angle_modifier
+            print "angle mod forward:",angle_modifier
+            print "angle product forward:",angle
     		#loc = IK().calc_angles(0, 84.24478972, offset)
     		loc = bx.calc_angles(119.1401242, 84.24478972 + gate_mod, offset)
     	#ready positions
@@ -113,21 +116,23 @@ class Movement:
     #@param angle_modifier Float representing angle modifier used to change walking angle
     #@param gate_mod Float representing distance between body and length in millimeters
     #@param speed int representing speed between 0 and 1023
-    def stapzuruck(self, leg,angle_modifier,gate_mod,speed):
+    def stapzuruck(self, leg, angle_modifier, gate_mod, speed):
     	#print "zuruck"
     	offset = 71
     	angle = 0
     	loc = [0,0]
     	if leg == 1 :
-    		angle = -45 + angle_modifier
+    		angle = -45
     		loc = bx.calc_angles(0, 84.24478972 + gate_mod, offset)
     		#loc = IK().calc_angles( 119.1401242, 84.24478972, offset)
     	elif leg == 2 :
-    		angle = -25 + angle_modifier
+    		angle = -25
     		loc = bx.calc_angles(0, 103.1783 + gate_mod, offset)
     		#loc = IK().calc_angles(119.1401242, 103.1783, offset)
     	elif leg == 3 :
     		angle = -9.73 + angle_modifier
+            print "angle mod backward:",angle_modifier
+            print "angle product backward:",angle
     		#loc = IK().calc_angles(0, 84.24478972, offset)
     		loc = bx.calc_angles(119.1401242, 84.24478972 + gate_mod, offset)
     	elif leg == 4 :
@@ -135,11 +140,11 @@ class Movement:
     		#loc = IK().calc_angles(0, 84.24478972, offset)
     		loc = bx.calc_angles(119.1401242, 84.24478972 + gate_mod, offset)
     	elif leg == 5 :
-    		angle = 25 + angle_modifier
+    		angle = 25
     		loc = bx.calc_angles(0, 103.1783 + gate_mod, offset)
     		#loc = IK().calc_angles(119.1401242, 103.1783, offset)
     	elif leg == 6 :
-    		angle = 45 + angle_modifier
+    		angle = 45
     		loc = bx.calc_angles(0, 84.24478972 + gate_mod, offset)
     		#loc = IK().calc_angles( 119.1401242, 84.24478972, offset)
     	#ready positions
@@ -164,15 +169,14 @@ class Movement:
     #@param moveAngleRight Float representing angle modifier used to change walking angle to the right side
     #@param gate_mod Float representing distance between body and length in millimeters
     #@param speed int representing speed between 0 and 1023
-    def moveBackward(self,moveAngleLeft, moveAngleRight,gate_mod,speed):
-	Movement.isMoving = True
+    def moveBackward(self, moveAngleLeft, moveAngleRight, gate_mod, speed):
+       Movement.isMoving = True
         for x in range(2, 7, 2):
             self.raiselegs(x)
         ax.action()
         sleep(0.05)
         for x in range(2, 7, 2):
-            #stapvooruit(x,moveAngleLeft)#, 8.0
-            self.stapzuruck(x, moveAngleLeft, gate_mod,speed)
+            self.stapzuruck(x, moveAngleLeft, gate_mod, speed)
         ax.action()
         sleep(0.05)
         for x in range(2, 7, 2):
@@ -184,13 +188,11 @@ class Movement:
         ax.action()
         sleep(0.05)
         for x in range(2, 7, 2):
-            #stapzuruck(x)
-            self.stapvooruit(x,0, gate_mod,speed)
+            self.stapvooruit(x, moveAngleRight, gate_mod, speed)
         ax.action()
         sleep(0.05)
         for x in range(1, 7, 2):
-            #stapvooruit(x, moveAngleRight*-1)#, -8.0
-            self.stapzuruck(x, moveAngleRight*-1, gate_mod,speed)
+            self.stapzuruck(x, moveAngleRight, gate_mod, speed)
         ax.action()
         sleep(0.05)
         for x in range(1, 7, 2):
@@ -202,8 +204,7 @@ class Movement:
         ax.action()
         sleep(0.05)
         for x in range(1, 7, 2):
-            #stapzuruck(x)
-            self.stapvooruit(x, 0,gate_mod,speed)
+            self.stapvooruit(x, moveAngleLeft, gate_mod, speed)
         ax.action()
         sleep(1)
 	Movement.isMoving = False
@@ -213,14 +214,14 @@ class Movement:
     #@param moveAngleRight Float representing angle modifier used to change walking angle to the right side
     #@param gate_mod Float representing distance between body and length in millimeters
     #@param speed int representing speed between 0 and 1023
-    def moveForward(self,moveAngleLeft, moveAngleRight, gate_mod,speed):
-	Movement.isMoving = True
+    def moveForward(self, moveAngleLeft, moveAngleRight, gate_mod, speed):
+        Movement.isMoving = True
         for x in range(2, 7, 2):
             self.raiselegs(x)
         ax.action()
         sleep(0.05)
         for x in range(2, 7, 2):
-            self.stapvooruit(x,moveAngleLeft, gate_mod, speed)#, 8.0
+            self.stapvooruit(x, moveAngleLeft, gate_mod, speed)#, 8.0
         ax.action()
         sleep(0.05)
         for x in range(2, 7, 2):
@@ -232,11 +233,11 @@ class Movement:
         ax.action()
         sleep(0.05)
         for x in range(2, 7, 2):
-            self.stapzuruck(x,0,gate_mod,speed)
+            self.stapzuruck(x, moveAngleRight, gate_mod, speed)
         ax.action()
         sleep(0.05)
         for x in range(1, 7, 2):
-            self.stapvooruit(x, moveAngleRight*-1, gate_mod,speed)#, -8.0
+            self.stapvooruit(x, moveAngleLeft, gate_mod, speed)#, -8.0
         ax.action()
         sleep(0.05)
         for x in range(1, 7, 2):
@@ -248,7 +249,7 @@ class Movement:
         ax.action()
         sleep(0.05)
         for x in range(1, 7, 2):
-            self.stapzuruck(x,0, gate_mod,speed)
+            self.stapzuruck(x, moveAngleRight, gate_mod, speed)
         ax.action()
         sleep(1)
 	Movement.isMoving = False
@@ -256,8 +257,8 @@ class Movement:
 	#turn per 45 degrees
 	##moves the hexapod to the right in a certain angle in degrees #hardcoded!
     def turnLeft(self):
-	Movement.isMoving = True
-	speed = 300
+    	Movement.isMoving = True
+    	speed = 300
     	#poot omhoog
     	ax.moveSpeedRW(12, 750, speed)
     	ax.moveSpeedRW(13, 880, speed)
@@ -275,68 +276,68 @@ class Movement:
     	ax.action()
     	sleep(0.05)
 
-	#poot omlaag
-	ax.moveSpeedRW(12, 620, speed)
-	ax.moveSpeedRW(32, 620, speed)
-	ax.moveSpeedRW(52, 620, speed)
-	ax.action()
-	sleep(0.05)
+    	#poot omlaag
+    	ax.moveSpeedRW(12, 620, speed)
+    	ax.moveSpeedRW(32, 620, speed)
+    	ax.moveSpeedRW(52, 620, speed)
+    	ax.action()
+    	sleep(0.05)
 
-	#poot omhoog
-	ax.moveSpeedRW(22, 750, speed)
-	ax.moveSpeedRW(23, 880, speed)
-	ax.moveSpeedRW(42, 750, speed)
-	ax.moveSpeedRW(43, 880, speed)
-	ax.moveSpeedRW(62, 750, speed)
-	ax.moveSpeedRW(63, 880, speed)
-	ax.action()
-	sleep(0.05)
+    	#poot omhoog
+    	ax.moveSpeedRW(22, 750, speed)
+    	ax.moveSpeedRW(23, 880, speed)
+    	ax.moveSpeedRW(42, 750, speed)
+    	ax.moveSpeedRW(43, 880, speed)
+    	ax.moveSpeedRW(62, 750, speed)
+    	ax.moveSpeedRW(63, 880, speed)
+    	ax.action()
+    	sleep(0.05)
 
-	#draai lichaam
-	ax.moveSpeedRW(11, 512, speed)
-	ax.moveSpeedRW(31, 512, speed)
-	ax.moveSpeedRW(51, 512, speed)
-	ax.action()
-	sleep(0.05)
+    	#draai lichaam
+    	ax.moveSpeedRW(11, 512, speed)
+    	ax.moveSpeedRW(31, 512, speed)
+    	ax.moveSpeedRW(51, 512, speed)
+    	ax.action()
+    	sleep(0.05)
 
-	ax.moveSpeedRW(21, 400, speed)
-	ax.moveSpeedRW(41, 358, speed)
-	ax.moveSpeedRW(61, 358, speed)
-	ax.action()
-	sleep(0.05)
+    	ax.moveSpeedRW(21, 400, speed)
+    	ax.moveSpeedRW(41, 358, speed)
+    	ax.moveSpeedRW(61, 358, speed)
+    	ax.action()
+    	sleep(0.05)
 
-	#poot omlaag
-	ax.moveSpeedRW(22, 620, speed)
-	ax.moveSpeedRW(42, 620, speed)
-	ax.moveSpeedRW(62, 620, speed)
-	ax.action()
-	sleep(0.05)
+    	#poot omlaag
+    	ax.moveSpeedRW(22, 620, speed)
+    	ax.moveSpeedRW(42, 620, speed)
+    	ax.moveSpeedRW(62, 620, speed)
+    	ax.action()
+    	sleep(0.05)
 
-	#poot omhoog
-	ax.moveSpeedRW(12, 750, speed)
-	ax.moveSpeedRW(13, 880, speed)
-	ax.moveSpeedRW(32, 750, speed)
-	ax.moveSpeedRW(33, 880, speed)
-	ax.moveSpeedRW(52, 750, speed)
-	ax.moveSpeedRW(53, 880, speed)
-	ax.action()
-	sleep(0.05)
+    	#poot omhoog
+    	ax.moveSpeedRW(12, 750, speed)
+    	ax.moveSpeedRW(13, 880, speed)
+    	ax.moveSpeedRW(32, 750, speed)
+    	ax.moveSpeedRW(33, 880, speed)
+    	ax.moveSpeedRW(52, 750, speed)
+    	ax.moveSpeedRW(53, 880, speed)
+    	ax.action()
+    	sleep(0.05)
 
-	#draai lichaam
-	ax.moveSpeedRW(21, 512, speed)
-	ax.moveSpeedRW(41, 512, speed)
-	ax.moveSpeedRW(61, 512, speed)
-	ax.action()
-	sleep(0.05)
+    	#draai lichaam
+    	ax.moveSpeedRW(21, 512, speed)
+    	ax.moveSpeedRW(41, 512, speed)
+    	ax.moveSpeedRW(61, 512, speed)
+    	ax.action()
+    	sleep(0.05)
 
-	ax.moveSpeedRW(11, 358, speed)
-	ax.moveSpeedRW(31, 358, speed)
-	ax.moveSpeedRW(51, 400, speed)
-	ax.action()
-	sleep(1)
-	Movement.isMoving = False
-	#for x in range(1, 7):
-	#	self.rest(x)
+    	ax.moveSpeedRW(11, 358, speed)
+    	ax.moveSpeedRW(31, 358, speed)
+    	ax.moveSpeedRW(51, 400, speed)
+    	ax.action()
+    	sleep(1)
+    	Movement.isMoving = False
+
+
 
 	#turn per 45 degrees
 	##moves the hexapod to the right in a certain angle in degrees #hardcoded!
@@ -423,6 +424,9 @@ class Movement:
     	#for x in range(1, 7):
     	#	self.rest(x)
 
+    def calculateDOF(rotationAngle):
+        return (45 - 9.73) / 60.0 * rotationAngle
+
     ##Moves the hexapod forward using joystick-input
     #@param x Float representing x-input from joystick
     #@param y Float representing y-input from joystick
@@ -431,28 +435,29 @@ class Movement:
     	if Movement.isMoving:
     		return
         print "let's start moving"
-	if x < 10 and x > -10:
-		if y > 10:
-			print "vooruit"
-			self.moveForward(0,0,-20,int(speedcalc.speed(y)))
-		elif y < 10:
-			print "achteruit"
-			self.moveBackward(0,0,-20,int(speedcalc.speed(y)))
-	elif x <= -10:
-		#if y >= 0:
-		#	self.moveForward(x/10,0,0,int(speedcalc.speed(y)))
-		#else:
-		#	self.moveBackward(x/10,0,0,int(speedcalc.speed(y)))
-		print "turnright"
-		self.turnRight()
-	elif x >= 10:
-		#if y >= 0:
-		#	self.moveForward(0,x/10,0,int(speedcalc.speed(y)))
-		#else:
-		#	self.moveBackward(0,x/10,0,int(speedcalc.speed(y)))
-		print "turnleft"
-		self.turnLeft()
-
+        angle_mod = self.calculateDOF(x)
+        angle_mod_inverted = angle_mod *-1
+    	if x < 10 and x > -10:
+    		if y > 10:
+    			print "vooruit"
+    			self.moveForward(0,0,0,int(sCalc.speed(x,y)))
+    		elif y < 10:
+    			print "achteruit"
+    			self.moveBackward(0,0,0,int(sCalc.speed(x,y)))
+    	elif x <= -10 and x >= -50:#move angle to left
+    		if y >= 0:
+    			self.moveForward(angle_mod, angle_mod_inverted, 0, int(sCalc.speed(x,y)))
+    		else:
+    			self.moveBackward(angle_mod, angle_mod_inverted, 0, int(sCalc.speed(x,y)))
+    	elif x >= 10 and x >= 50:#move angle to right
+    		if y >= 0:
+    			self.moveForward(angle_mod_inverted, angle_mod, 0, int(sCalc.speed(x,y)))
+    		else:
+    			self.moveBackward(angle_mod_inverted, angle_mod, 0, int(sCalc.speed(x,y)))
+        elif x <= -50 and x >= -60:
+            self.turnLeft()
+        elif x >= 50 and x >= 60:
+            self.turnRight()
     	"""if y >= 10:
 	    print "forward"
     	    if x >= 10:
