@@ -170,7 +170,7 @@ class Movement:
     #@param gate_mod Float representing distance between body and length in millimeters
     #@param speed int representing speed between 0 and 1023
     def moveBackward(self, moveAngleLeft, moveAngleRight, gate_mod, speed):
-       Movement.isMoving = True
+        Movement.isMoving = True
         for x in range(2, 7, 2):
             self.raiselegs(x)
         ax.action()

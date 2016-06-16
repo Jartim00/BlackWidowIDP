@@ -2,7 +2,7 @@ import time
 import io
 import threading
 import picamera
-
+from PIL import Image
 
 class Camera(object):
     thread = None  # background thread that reads frames from camera
@@ -36,8 +36,8 @@ class Camera(object):
         with picamera.PiCamera() as camera:
             # camera setup
             camera.resolution = (cls.width, cls.height)
-            camera.hflip = True
-            camera.vflip = True
+            #camera.hflip = True
+            #camera.vflip = True
 
             # let camera warm up
             camera.start_preview()
