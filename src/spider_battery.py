@@ -19,7 +19,7 @@ def gem5():
     waarde4=waarde3
     waarde3=waarde2
     waarde2=waarde1
-    waarde1=adc.read_adc(2,gain=2/3)
+    waarde1=adc.read_adc(0,gain=2/3)
     if(waarde1>1200):
         if(waarde5==leeg):
             if(waarde4==leeg):
@@ -36,6 +36,8 @@ def gem5():
             return (waarde1+waarde2+waarde3+waarde4+waarde5)/5
     else:
         return 1200
+
+# Returns the battery status from 0 through 4
 def read():
     global gem_sample
     gem_sample=gem5()
@@ -52,7 +54,7 @@ def read():
         return 1
 
 
-'''    
+'''
 while True:
     print read()
     time.sleep(0.5)
