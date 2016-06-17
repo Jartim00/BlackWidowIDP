@@ -275,9 +275,9 @@ class Movement:
     	sleep(0.05)
 
     	#draai
-    	ax.moveSpeedRW(11, 358, speed)
-    	ax.moveSpeedRW(31, 358, speed)
-    	ax.moveSpeedRW(51, 400, speed)
+    	ax.moveSpeedRW(11, 463, speed)
+    	ax.moveSpeedRW(31, 463, speed)
+    	ax.moveSpeedRW(51, 478, speed)
     	ax.action()
     	sleep(0.05)
 
@@ -305,9 +305,9 @@ class Movement:
     	ax.action()
     	sleep(0.05)
 
-    	ax.moveSpeedRW(21, 400, speed)
-    	ax.moveSpeedRW(41, 358, speed)
-    	ax.moveSpeedRW(61, 358, speed)
+    	ax.moveSpeedRW(21, 478, speed)
+    	ax.moveSpeedRW(41, 463, speed)
+    	ax.moveSpeedRW(61, 463, speed)
     	ax.action()
     	sleep(0.05)
 
@@ -335,9 +335,9 @@ class Movement:
     	ax.action()
     	sleep(0.05)
 
-    	ax.moveSpeedRW(11, 358, speed)
-    	ax.moveSpeedRW(31, 358, speed)
-    	ax.moveSpeedRW(51, 400, speed)
+    	ax.moveSpeedRW(11, 463, speed)
+    	ax.moveSpeedRW(31, 463, speed)
+    	ax.moveSpeedRW(51, 478, speed)
     	ax.action()
     	sleep(1)
     	Movement.isMoving = False
@@ -359,9 +359,9 @@ class Movement:
         sleep(0.05)
 
         #draai
-        ax.moveSpeedRW(11, 666, speed)
-        ax.moveSpeedRW(31, 666, speed)
-        ax.moveSpeedRW(51, 600, speed)
+        ax.moveSpeedRW(11, 561, speed)
+        ax.moveSpeedRW(31, 561, speed)
+        ax.moveSpeedRW(51, 546, speed)
         ax.action()
         sleep(0.05)
 
@@ -389,9 +389,9 @@ class Movement:
     	ax.action()
     	sleep(0.05)
 
-    	ax.moveSpeedRW(21, 600, speed)
-    	ax.moveSpeedRW(41, 666, speed)
-    	ax.moveSpeedRW(61, 666, speed)
+    	ax.moveSpeedRW(21, 546, speed)
+    	ax.moveSpeedRW(41, 561, speed)
+    	ax.moveSpeedRW(61, 561, speed)
     	ax.action()
     	sleep(0.05)
 
@@ -420,9 +420,9 @@ class Movement:
     	sleep(0.05)
 
     	#draai
-    	ax.moveSpeedRW(11, 666, speed)
-    	ax.moveSpeedRW(31, 666, speed)
-    	ax.moveSpeedRW(51, 600, speed)
+    	ax.moveSpeedRW(11, 561, speed)
+    	ax.moveSpeedRW(31, 561, speed)
+    	ax.moveSpeedRW(51, 546, speed)
     	ax.action()
     	sleep(1)
     	Movement.isMoving = False
