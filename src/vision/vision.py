@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import cv2
 import numpy as np
-from movement.vooruit import vooruit as movement
+from movement.movement import Movement
 from multiprocessing import Process, Queue
 from recognition import Recognition
 from datetime import datetime, timedelta
@@ -10,6 +10,7 @@ from recognition import Recognition
 
 
 class Vision:
+	mov = Movement()
 	rec = Recognition()
 	cam = Camera()
 
@@ -106,11 +107,11 @@ class Vision:
 	def __SpiderAction(self,command):
 		print command
 		if command == "Forward":
-			movement().forward()
+			mov.movementController(0,60)
 		elif command == "Left":
-			movement().left()
+			mov.movementController(-60,0)
 		elif command == "Right":
-			movement().right()
+			mov.movementController(60,0)
 		elif command == "Attack":
 			self.attackPast = True
 			'''Attack function does not excist yet'''
