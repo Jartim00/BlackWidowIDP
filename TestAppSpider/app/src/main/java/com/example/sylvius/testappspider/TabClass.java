@@ -23,9 +23,7 @@ public class TabClass extends TabActivity {
     Thread thread;
     TabHost tabHost;
     ImageView connectionView;
-    boolean CONNECTED = false;
     SocketConnection s;
-    String battery;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,72 +71,46 @@ public class TabClass extends TabActivity {
     /*
      * Update method for battery status and connection status.
      * Class has a infinite loop in a thread.
-     * TODO: connection status always returns false, rewrite ConnectionAvailable class
      * */
     private void UpdateBatteryStatus(){
         thread = new Thread() {
             public void run() {
                 while (true) {
+                    String battery = "";
+                    boolean CONNECTED = false;
                     try {
                         try {
                             JSONArray j = s.ParseBatteryJSON();//Get JSONArray from SocketConnection class
-                            float[] values = new float[j.length()];
                             if (j.length() > 0) {
                                 CONNECTED = true;
                                 for (int i = 0; i < j.length(); i++) {
-                                    values[i] = Float.parseFloat(j.getString(i));
+                                    battery = j.getString(i);
                                 }
-                                battery = values[0]+ "";
                             }
                         } catch (Exception ex){
                             CONNECTED = false;
+                            ex.printStackTrace();
                         }
+                        final String finalBattery = battery;
+                        final boolean finalCONNECTED = CONNECTED;
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 TextView tv = (TextView) findViewById(R.id.battery_health);
-                                tv.setText(battery);
-                                if(CONNECTED) {
+                                tv.setText(finalBattery);
+                                if(finalCONNECTED) {
                                     connectionView.setImageResource(R.mipmap.img_connection);
                                 } else {
                                     connectionView.setImageResource(R.mipmap.img_noconnection);
                                 }
                             }
                         });
-                        Thread.sleep(5000);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                     }
                 }
             }
         };
         thread.start();
-    }
-
-    /*
-    * Class will check if there is a valid connection between the app and
-    * the web server.
-    * input: None
-    * output: boolean
-    */
-
-    private void ConnectionAvailable() {
-        Thread connection = new Thread() {
-            public void run() {
-                    try {
-                        JSONArray j = s.ParseBatteryJSON();//Get JSONArray from SocketConnection class
-                        float[] values = new float[j.length()];
-                        if (j.length() > 0) {
-                            CONNECTED = true;
-                            for (int i = 0; i < j.length(); i++) {
-                                values[i] = Float.parseFloat(j.getString(i));
-                            }
-                            battery = values[0]+ "";
-                        }
-                    } catch (Exception ex){
-                        CONNECTED = false;
-                    }
-            }
-        };
-        connection.start();
     }
 }

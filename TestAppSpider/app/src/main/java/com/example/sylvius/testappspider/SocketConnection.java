@@ -40,6 +40,7 @@ public class SocketConnection {
             BufferedReader input =
                     new BufferedReader(new InputStreamReader(s.getInputStream()));
             String answer = input.readLine();
+            Log.w("string", answer);
             return answer;
         } catch (Exception ex){
             ex.printStackTrace();
