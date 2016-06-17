@@ -13,30 +13,27 @@ class Vision:
 	rec = Recognition()
 	cam = Camera()
 
-	#legacy code used for better angles
-	lastSize = 0
+	lastSize = 0#legacy code used for better angles
 
-	#sensitivity of direction
-	buffer = 0
+	buffer = 0#sensitivity of direction
 
-	#used for balloon attack
-	attackPast = False
+	attackPast = False#used for balloon attack
 
-	#legacy code used for refined movements
-	refinedRadius = 600000
+	refinedRadius = 600000#legacy code used for refined movements
 
 
 	attackRadius = 900000
 
-	#used to stop autonomous mode
-	running = False
+	
+	running = False#used to stop autonomous mode
 
 	width = cam.getWidth()
 	height = cam.getHeight()
 	
 	##Returns command to be taken in string format
 	#@param coord An array containing [X, Y] or an array containing [X,Y,Area]
-	#@param balloon boolean that represents the different actions to take 
+	#@param balloon boolean that represents the different actions to take
+	#@param Returns string command, Attack, Forward, Left, Right 
 	def __direction(self, coord, balloon):
 		middleX = self.width / 2
 		if balloon and coord[2] >= self.attackRadius:
@@ -122,21 +119,21 @@ class Vision:
 	
 	##decodes frame and returns x y coordinates of line
 	#@param frame raw jpeg image captured from a camera
-	#Returns X and Y coordinate of line in array form [X,Y]
+	#@param Returns X and Y coordinate of line in array form [X,Y]
 	def __detectLine(self, frame):
 		frame = self.__decodeFrame(frame)
 		return self.rec.targetLine(frame)
 	
 	#decodes frame and returns x y coordinates and area of balloon 
 	#@param frame raw jpeg image captured from a camera
-	#Returns X and Y coordinate and the area of balloon in array form [X,Y, Area]
+	#@param Returns X and Y coordinate and the area of balloon in array form [X,Y, Area]
 	def __targetBalloon(self, frame):
 		frame = self.__decodeFrame(frame)
 		return self.rec.targetBalloon(frame)
 
 	##decodes frame from string to a Numphy array
 	#@param frame raw jpeg image captured from a camera
-	#Returns image in numphpy array format
+	#@param Returns image in numphpy array format
 	def __decodeFrame(self, frame):
 		data = np.fromstring(frame, dtype=np.uint8)
 		return cv2.imdecode(data,1)
