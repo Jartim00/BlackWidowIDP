@@ -49,7 +49,10 @@ class SpiderCommunication(object):
         return self.sock.recv(1024)
 
     def sendData(self,data):
-        self.sock.send(str(json.dumps(data, separators=(',',':'))))
+        try:
+            self.sock.send(str(json.dumps(data, separators=(',',':'))))
+        except Exception, e:
+            print "error sending data: ",e
 
     '''Starts the communication with the server'''
     def start(self):
@@ -91,9 +94,15 @@ class SpiderCommunication(object):
         }
         self.sendData(dance_json)
 
+    def attackMode(self):
+        attack_json = {
+            "mode" : 3
+        }
+        self.sendData(attack_json)
+
     def stab(self):
         stab_json = {
-            "mode" : 3
+            "cmd": "stab"
         }
         self.sendData(stab_json)
 
@@ -147,7 +156,7 @@ def main():
     print moveTest
     moveTest = spiderCommunication.dance(2)
     print moveTest
-    moveTest = spiderCommunication.stab()
+    moveTest = spiderCommunication.attackMode()
     print moveTest
     moveTest = spiderCommunication.synchronizeFrontLegs(56)
     print moveTest
