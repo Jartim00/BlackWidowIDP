@@ -113,10 +113,12 @@ class Vision:
 		elif command == "Right":
 			mov.movementController(60,0)
 		elif command == "Attack":
+			mov.rest()
 			self.attackPast = True
+			#mov.stabbing()
 			'''Attack function does not excist yet'''
 			pass
-		movement().rust()
+		
 	
 	##decodes frame and returns x y coordinates of line
 	#@param frame raw jpeg image captured from a camera
