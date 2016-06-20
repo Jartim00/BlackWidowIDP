@@ -168,7 +168,6 @@ class Vision:
 			'''Attack function does not excist yet'''
 			# pass
 
-
 	##decodes frame and returns x y coordinates of line
 	#@param frame raw jpeg image captured from a camera
 	#@param Returns X and Y coordinate of line in array form [X,Y]
