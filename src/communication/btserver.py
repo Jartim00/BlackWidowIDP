@@ -4,10 +4,13 @@ import subprocess
 import json
 from vision.vision import Vision
 import threading
+from movement.stab import Stabby
 import movement.movement as movement
 import movement.carry as carry
 import gyro
 mv = movement.Movement()
+
+stab = Stabby()
 
 ## Bluetooth server for communication with the controller.
 class BluetoothServer(object):
@@ -87,6 +90,10 @@ class BluetoothServer(object):
 				if data is None or data == "":
 					continue
 			except bluetooth.btcommon.BluetoothError as e:
+				try:
+					mv.rest()
+				except:
+					pass
 				print "connection reset"
 				#if lost connection, accept connecion for reconnect
 				#set timeout
@@ -144,6 +151,7 @@ class BluetoothServer(object):
 	## Parses JSON from the client and executes commands.
 	#  Sends something back if needed.
 	def parseJSON(self,jsonData):
+		print jsonData
 		if 'mode' in jsonData:
 			#The command sets a mode
 			mode = jsonData['mode']
@@ -156,7 +164,10 @@ class BluetoothServer(object):
 						joy_y = joy_pos[1]
 						self.mainprogram.setJoyPos(joy_pos)
 						#call the move function
-						mv.movementController(joy_x,joy_y)
+						try:
+							mv.movementController(joy_x,joy_y)
+						except:
+							print "error in movement"
 			elif mode == 2:
 				if 'danceId' in jsonData:
 					danceId = jsonData['danceId']
@@ -167,9 +178,10 @@ class BluetoothServer(object):
 			elif mode == 3:
 				#stop everything???
 				self.stopEverything()
-				#call the stab function
-				#TODO
-				print "stab"
+				#call the attack mode function
+				stab.setAttackMode()
+				stab.setStabPos()
+				print "attack mode"
 			elif mode == 4:
 				#call the autonomousLine function
 				print "autonomousLine"
@@ -186,9 +198,7 @@ class BluetoothServer(object):
 				self.stopEverything()
 				# go to sleep
 				print "go to sleep"
-				for x in range(1,7):
-					mv.rest(x)
-				#TODO testen
+				mv.rest()
 		elif 'cmd' in jsonData:
 			cmd = jsonData['cmd']
 			if cmd == 'batteryStatus':
@@ -207,4 +217,7 @@ class BluetoothServer(object):
 					#rotate around the x axis
 					if len(gyro_pos) == 3:
 						self.mainprogram.setControllerGyroPos(gyro_pos)
-						#gyro.gyroSens(gyro_pos[0]) #TODO
+						stab.gyroSens(gyro_pos[1])
+			elif cmd == 'stab':
+				stab.stab()
+				stab.returning()
