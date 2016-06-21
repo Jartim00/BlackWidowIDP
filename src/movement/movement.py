@@ -276,7 +276,7 @@ class Movement:
 
 	#turn per 10 degrees
 	##moves the hexapod to the right in a certain angle in degrees #hardcoded!
-    def turnLeft(self):
+    def turnLeft(self, rotAngle):
         try:
             Movement.isMoving = True
             speed = 300
@@ -291,9 +291,9 @@ class Movement:
             sleep(0.05)
 
             #draai
-            ax.moveSpeedRW(11, 463, speed)
-            ax.moveSpeedRW(31, 463, speed)
-            ax.moveSpeedRW(51, 478, speed)
+            ax.moveSpeedRW(11, int(463 + rotAngle * 0.8), speed)
+            ax.moveSpeedRW(31, int(463 + rotAngle * 0.8), speed)
+            ax.moveSpeedRW(51, int(478 + rotAngle * 0.8), speed)
             ax.action()
             sleep(0.05)
 
@@ -318,9 +318,9 @@ class Movement:
             ax.moveSpeedRW(11, 512, speed)
             ax.moveSpeedRW(31, 512, speed)
             ax.moveSpeedRW(51, 512, speed)
-            ax.moveSpeedRW(21, 478, speed)
-            ax.moveSpeedRW(41, 463, speed)
-            ax.moveSpeedRW(61, 463, speed)
+            ax.moveSpeedRW(21, int(478+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(41, int(463+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(61, int(463+ rotAngle * 0.8), speed)
             ax.action()
             sleep(0.05)
 
@@ -345,9 +345,9 @@ class Movement:
             ax.moveSpeedRW(21, 512, speed)
             ax.moveSpeedRW(41, 512, speed)
             ax.moveSpeedRW(61, 512, speed)
-            ax.moveSpeedRW(11, 463, speed)
-            ax.moveSpeedRW(31, 463, speed)
-            ax.moveSpeedRW(51, 478, speed)
+            ax.moveSpeedRW(11, int(463+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(31, int(463+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(51, int(478+ rotAngle * 0.8), speed)
             ax.action()
             sleep(0.05)
     	except:
@@ -362,7 +362,7 @@ class Movement:
 
 	#turn per 10 degrees
 	##moves the hexapod to the right in a certain angle in degrees #hardcoded!
-    def turnRight(self):
+    def turnRight(self, rotAngle):
         try:
             Movement.isMoving = True
             speed = 300
@@ -376,9 +376,9 @@ class Movement:
             sleep(0.05)
 
             #draai
-            ax.moveSpeedRW(11, 561, speed)
-            ax.moveSpeedRW(31, 561, speed)
-            ax.moveSpeedRW(51, 546, speed)
+            ax.moveSpeedRW(11, int(561+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(31, int(561+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(51, int(546+ rotAngle * 0.8), speed)
             ax.action()
             sleep(0.05)
 
@@ -403,9 +403,9 @@ class Movement:
             ax.moveSpeedRW(11, 512, speed)
             ax.moveSpeedRW(31, 512, speed)
             ax.moveSpeedRW(51, 512, speed)
-            ax.moveSpeedRW(21, 546, speed)
-            ax.moveSpeedRW(41, 561, speed)
-            ax.moveSpeedRW(61, 561, speed)
+            ax.moveSpeedRW(21, int(546+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(41, int(561+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(61, int(561+ rotAngle * 0.8), speed)
             ax.action()
             sleep(0.05)
 
@@ -430,10 +430,9 @@ class Movement:
             ax.moveSpeedRW(21, 512, speed)
             ax.moveSpeedRW(41, 512, speed)
             ax.moveSpeedRW(61, 512, speed)
-            #draai
-            ax.moveSpeedRW(11, 561, speed)
-            ax.moveSpeedRW(31, 561, speed)
-            ax.moveSpeedRW(51, 546, speed)
+            ax.moveSpeedRW(11, int(561+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(31, int(561+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(51, int(546+ rotAngle * 0.8), speed)
             ax.action()
             sleep(0.05)
     	except:
@@ -464,6 +463,8 @@ class Movement:
     		elif y < -10:
            		print "Move backward"
                 	self.moveBackward(0,0,0,1,int(sCalc.speed(x,y)))
+                else:
+                        self.rest()
     	elif x <= -10 and x >= -50:#move angle to left
             if y >= 0:
                 print "Move forward to left"
@@ -479,9 +480,9 @@ class Movement:
                 print "Move backward to right"
                 self.moveBackward(angle_mod, angle_mod_inverted, 0, -1,int(sCalc.speed(x,y)))
         elif x < -50:
-                self.turnLeft()
+                self.turnLeft(x)
         elif x > 50:
-                self.turnRight()
+                self.turnRight(x)
         #self.rest()
     	"""if y >= 10:
 	    print "forward"
