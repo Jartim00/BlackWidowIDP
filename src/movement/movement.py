@@ -33,13 +33,13 @@ class Movement:
             ax.moveSpeed(leg*10 + 1, 512, 450)
             ax.moveSpeed(leg*10 + 2, loc[0], 450)
             ax.moveSpeed(leg*10 + 3, loc[1], 450)
-            sleep(0.04)
+            #sleep(0.04)
         except:
             try:
                 ax.moveSpeed(leg*10 + 1, 512, 450)
                 ax.moveSpeed(leg*10 + 2, loc[0], 450)
                 ax.moveSpeed(leg*10 + 3, loc[1], 450)
-                sleep(0.04)
+                #sleep(0.04)
             except:
     	       pass
 
@@ -47,6 +47,7 @@ class Movement:
 	    for x in range(1, 7):
 			self.restLeg(x)
             ax.action()
+	    sleep(0.1)
 
    ##Raises hexapod leg from the ground
    #@param leg Integer representing leg id ranges between 1 to 6
@@ -175,44 +176,51 @@ class Movement:
     #@param gate_mod Float representing distance between body and length in millimeters
     #@param speed int representing speed between 0 and 1023
     def moveBackward(self, moveAngleLeft, moveAngleRight, gate_mod, left, speed):
-        Movement.isMoving = True
-        for x in range(2, 7, 2):
-            self.raiselegs(x)
-        ax.action()
-        #sleep(0.05)
-        for x in range(2, 7, 2):
-            self.stapzuruck(x, moveAngleRight, gate_mod, speed)
-        ax.action()
-        #sleep(0.05)
-        for x in range(2, 7, 2):
-            self.lowerlegs(x)
-        ax.action()
-        #sleep(0.05)
-        for x in range(1, 7, 2):
-            self.raiselegs(x)
-        ax.action()
-        #sleep(0.05)
-        for x in range(2, 7, 2):
-            self.stapvooruit(x, moveAngleLeft, gate_mod, speed)
-        ax.action()
-        #sleep(0.05)
-        for x in range(1, 7, 2):
-            self.stapzuruck(x, moveAngleRight*left, gate_mod, speed)#right
-        ax.action()
-        #sleep(0.05)
-        for x in range(1, 7, 2):
-            self.lowerlegs(x)
-        ax.action()
-        #sleep(0.05)
-        for x in range(2, 7, 2):
-            self.raiselegs(x)
-        ax.action()
-        #sleep(0.05)
-        for x in range(1, 7, 2):
-            self.stapvooruit(x, moveAngleLeft*left, gate_mod, speed)
-        ax.action()
-        sleep(0.05)
-        Movement.isMoving = False
+        try:
+            Movement.isMoving = True
+            for x in range(2, 7, 2):
+                self.raiselegs(x)
+            ax.action()
+            #sleep(0.05)
+            for x in range(2, 7, 2):
+                self.stapzuruck(x, moveAngleRight, gate_mod, speed)
+            ax.action()
+            #sleep(0.05)
+            for x in range(2, 7, 2):
+                self.lowerlegs(x)
+            ax.action()
+            #sleep(0.05)
+            for x in range(1, 7, 2):
+                self.raiselegs(x)
+            ax.action()
+            #sleep(0.05)
+            for x in range(2, 7, 2):
+                self.stapvooruit(x, moveAngleLeft, gate_mod, speed)
+            ax.action()
+            #sleep(0.05)
+            for x in range(1, 7, 2):
+                self.stapzuruck(x, moveAngleRight*left, gate_mod, speed)#right
+            ax.action()
+            #sleep(0.05)
+            for x in range(1, 7, 2):
+                self.lowerlegs(x)
+            ax.action()
+            #sleep(0.05)
+            for x in range(2, 7, 2):
+                self.raiselegs(x)
+            ax.action()
+            #sleep(0.05)
+            for x in range(1, 7, 2):
+                self.stapvooruit(x, moveAngleLeft*left, gate_mod, speed)
+            ax.action()
+            sleep(0.05)
+        except:
+            try:
+                self.rest()
+            except:
+                pass
+        finally:
+            Movement.isMoving = False
 
     ##Moves the hexapod forward using inverse kinematics
     #@param moveAngleLeft Float representing angle modifier used to change walking angle to the left side
@@ -220,212 +228,222 @@ class Movement:
     #@param gate_mod Float representing distance between body and length in millimeters
     #@param speed int representing speed between 0 and 1023
     def moveForward(self, moveAngleLeft, moveAngleRight, gate_mod, speed):
-        Movement.isMoving = True
-        for x in range(2, 7, 2):
-            self.raiselegs(x)
-        ax.action()
-        #sleep(0.05)
-        for x in range(2, 7, 2):
-            self.stapvooruit(x, moveAngleLeft, gate_mod, speed)#, 8.0
-        ax.action()
-        #sleep(0.05)
-        for x in range(2, 7, 2):
-            self.lowerlegs(x)
-        ax.action()
-        #sleep(0.05)
-        for x in range(1, 7, 2):
-            self.raiselegs(x)
-        ax.action()
-        #sleep(0.05)
-        for x in range(2, 7, 2):
-            self.stapzuruck(x, moveAngleRight, gate_mod, speed)
-        ax.action()
-        #sleep(0.05)
-        for x in range(1, 7, 2):
-            self.stapvooruit(x, moveAngleLeft, gate_mod, speed)#, -8.0
-        ax.action()
-        #sleep(0.05)
-        for x in range(1, 7, 2):
-            self.lowerlegs(x)
-        ax.action()
-        #sleep(0.05)
-        for x in range(2, 7, 2):
-            self.raiselegs(x)
-        ax.action()
-        #sleep(0.05)
-        for x in range(1, 7, 2):
-            self.stapzuruck(x, moveAngleRight, gate_mod, speed)
-        ax.action()
-        sleep(0.05)
-        Movement.isMoving = False
+        try:
+            Movement.isMoving = True
+            for x in range(2, 7, 2):
+                self.raiselegs(x)
+            ax.action()
+            #sleep(0.05)
+            for x in range(2, 7, 2):
+                self.stapvooruit(x, moveAngleLeft, gate_mod, speed)#, 8.0
+            ax.action()
+            #sleep(0.05)
+            for x in range(2, 7, 2):
+                self.lowerlegs(x)
+            ax.action()
+            #sleep(0.05)
+            for x in range(1, 7, 2):
+                self.raiselegs(x)
+            ax.action()
+            #sleep(0.05)
+            for x in range(2, 7, 2):
+                self.stapzuruck(x, moveAngleRight, gate_mod, speed)
+            ax.action()
+            #sleep(0.05)
+            for x in range(1, 7, 2):
+                self.stapvooruit(x, moveAngleLeft, gate_mod, speed)#, -8.0
+            ax.action()
+            #sleep(0.05)
+            for x in range(1, 7, 2):
+                self.lowerlegs(x)
+            ax.action()
+            #sleep(0.05)
+            for x in range(2, 7, 2):
+                self.raiselegs(x)
+            ax.action()
+            #sleep(0.05)
+            for x in range(1, 7, 2):
+                self.stapzuruck(x, moveAngleRight, gate_mod, speed)
+            ax.action()
+            sleep(0.05)
+        except:
+            try:
+                self.rest()
+            except:
+                pass
+        finally:
+            Movement.isMoving = False
 
-	#turn per 45 degrees
+	#turn per 10 degrees
 	##moves the hexapod to the right in a certain angle in degrees #hardcoded!
-    def turnLeft(self):
-    	Movement.isMoving = True
-    	speed = 300
-    	#poot omhoog
-    	ax.moveSpeedRW(12, 750, speed)
-    	ax.moveSpeedRW(13, 880, speed)
-    	ax.moveSpeedRW(32, 750, speed)
-    	ax.moveSpeedRW(33, 880, speed)
-    	ax.moveSpeedRW(52, 750, speed)
-    	ax.moveSpeedRW(53, 880, speed)
-    	ax.action()
-    	sleep(0.05)
+    def turnLeft(self, rotAngle):
+        try:
+            self.rest()
+            Movement.isMoving = True
+            speed = 300
+            #poot omhoog
+            ax.moveSpeedRW(12, 750, speed)
+            ax.moveSpeedRW(13, 980, speed)
+            ax.moveSpeedRW(32, 750, speed)
+            ax.moveSpeedRW(33, 980, speed)
+            ax.moveSpeedRW(52, 750, speed)
+            ax.moveSpeedRW(53, 980, speed)
+            ax.action()
+            sleep(0.05)
 
-    	#draai
-    	ax.moveSpeedRW(11, 463, speed)
-    	ax.moveSpeedRW(31, 463, speed)
-    	ax.moveSpeedRW(51, 478, speed)
-    	ax.action()
-    	sleep(0.05)
+            #draai
+            ax.moveSpeedRW(11, int(463 + rotAngle * 0.8), speed)
+            ax.moveSpeedRW(31, int(463 + rotAngle * 0.8), speed)
+            ax.moveSpeedRW(51, int(478 + rotAngle * 0.8), speed)
+            ax.action()
+            sleep(0.05)
 
-    	#poot omlaag
-    	ax.moveSpeedRW(12, 620, speed)
-    	ax.moveSpeedRW(32, 620, speed)
-    	ax.moveSpeedRW(52, 620, speed)
-    	ax.action()
-    	sleep(0.05)
+            #poot omlaag
+            ax.moveSpeedRW(12, 656, speed)
+            ax.moveSpeedRW(32, 656, speed)
+            ax.moveSpeedRW(52, 656, speed)
+            ax.action()
+            sleep(0.05)
 
-    	#poot omhoog
-    	ax.moveSpeedRW(22, 750, speed)
-    	ax.moveSpeedRW(23, 880, speed)
-    	ax.moveSpeedRW(42, 750, speed)
-    	ax.moveSpeedRW(43, 880, speed)
-    	ax.moveSpeedRW(62, 750, speed)
-    	ax.moveSpeedRW(63, 880, speed)
-    	ax.action()
-    	sleep(0.05)
+            #poot omhoog
+            ax.moveSpeedRW(22, 750, speed)
+            ax.moveSpeedRW(23, 980, speed)
+            ax.moveSpeedRW(42, 750, speed)
+            ax.moveSpeedRW(43, 980, speed)
+            ax.moveSpeedRW(62, 750, speed)
+            ax.moveSpeedRW(63, 980, speed)
+            ax.action()
+            sleep(0.05)
 
-    	#draai lichaam
-    	ax.moveSpeedRW(11, 512, speed)
-    	ax.moveSpeedRW(31, 512, speed)
-    	ax.moveSpeedRW(51, 512, speed)
-    	ax.action()
-    	sleep(0.05)
+            #draai lichaam
+            ax.moveSpeedRW(11, 512, speed)
+            ax.moveSpeedRW(31, 512, speed)
+            ax.moveSpeedRW(51, 512, speed)
+            ax.moveSpeedRW(21, int(478+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(41, int(463+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(61, int(463+ rotAngle * 0.8), speed)
+            ax.action()
+            sleep(0.05)
 
-    	ax.moveSpeedRW(21, 478, speed)
-    	ax.moveSpeedRW(41, 463, speed)
-    	ax.moveSpeedRW(61, 463, speed)
-    	ax.action()
-    	sleep(0.05)
+            #poot omlaag
+            ax.moveSpeedRW(22, 656, speed)
+            ax.moveSpeedRW(42, 656, speed)
+            ax.moveSpeedRW(62, 656, speed)
+            ax.action()
+            sleep(0.05)
 
-    	#poot omlaag
-    	ax.moveSpeedRW(22, 620, speed)
-    	ax.moveSpeedRW(42, 620, speed)
-    	ax.moveSpeedRW(62, 620, speed)
-    	ax.action()
-    	sleep(0.05)
+            #poot omhoog
+            ax.moveSpeedRW(12, 750, speed)
+            ax.moveSpeedRW(13, 980, speed)
+            ax.moveSpeedRW(32, 750, speed)
+            ax.moveSpeedRW(33, 980, speed)
+            ax.moveSpeedRW(52, 750, speed)
+            ax.moveSpeedRW(53, 980, speed)
+            ax.action()
+            sleep(0.05)
 
-    	#poot omhoog
-    	ax.moveSpeedRW(12, 750, speed)
-    	ax.moveSpeedRW(13, 880, speed)
-    	ax.moveSpeedRW(32, 750, speed)
-    	ax.moveSpeedRW(33, 880, speed)
-    	ax.moveSpeedRW(52, 750, speed)
-    	ax.moveSpeedRW(53, 880, speed)
-    	ax.action()
-    	sleep(0.05)
-
-    	#draai lichaam
-    	ax.moveSpeedRW(21, 512, speed)
-    	ax.moveSpeedRW(41, 512, speed)
-    	ax.moveSpeedRW(61, 512, speed)
-    	ax.action()
-    	sleep(0.05)
-
-    	ax.moveSpeedRW(11, 463, speed)
-    	ax.moveSpeedRW(31, 463, speed)
-    	ax.moveSpeedRW(51, 478, speed)
-    	ax.action()
-    	sleep(1)
-    	Movement.isMoving = False
+            #draai lichaam
+            ax.moveSpeedRW(21, 512, speed)
+            ax.moveSpeedRW(41, 512, speed)
+            ax.moveSpeedRW(61, 512, speed)
+            ax.moveSpeedRW(11, int(463+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(31, int(463+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(51, int(478+ rotAngle * 0.8), speed)
+            ax.action()
+            sleep(0.05)
+    	except:
+            try:
+                self.rest()
+            except:
+                pass
+        finally:
+            Movement.isMoving = False
 
 
 
-	#turn per 45 degrees
+	#turn per 10 degrees
 	##moves the hexapod to the right in a certain angle in degrees #hardcoded!
-    def turnRight(self):
-    	Movement.isMoving = True
-    	speed = 300
-        ax.moveSpeedRW(12, 750, speed)
-        ax.moveSpeedRW(13, 880, speed)
-        ax.moveSpeedRW(32, 750, speed)
-        ax.moveSpeedRW(33, 880, speed)
-        ax.moveSpeedRW(52, 750, speed)
-        ax.moveSpeedRW(53, 880, speed)
-        ax.action()
-        sleep(0.05)
+    def turnRight(self, rotAngle):
+        try:
+            self.rest()
+            Movement.isMoving = True
+            speed = 300
+            ax.moveSpeedRW(12, 750, speed)
+            ax.moveSpeedRW(13, 980, speed)
+            ax.moveSpeedRW(32, 750, speed)
+            ax.moveSpeedRW(33, 980, speed)
+            ax.moveSpeedRW(52, 750, speed)
+            ax.moveSpeedRW(53, 980, speed)
+            ax.action()
+            sleep(0.05)
 
-        #draai
-        ax.moveSpeedRW(11, 561, speed)
-        ax.moveSpeedRW(31, 561, speed)
-        ax.moveSpeedRW(51, 546, speed)
-        ax.action()
-        sleep(0.05)
+            #draai
+            ax.moveSpeedRW(11, int(561+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(31, int(561+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(51, int(546+ rotAngle * 0.8), speed)
+            ax.action()
+            sleep(0.05)
 
-           #poot omlaag
-    	ax.moveSpeedRW(12, 620, speed)
-    	ax.moveSpeedRW(32, 620, speed)
-    	ax.moveSpeedRW(52, 620, speed)
-    	ax.action()
-    	sleep(0.05)
+            #poot omlaag
+            ax.moveSpeedRW(12, 656, speed)
+            ax.moveSpeedRW(32, 656, speed)
+            ax.moveSpeedRW(52, 656, speed)
+            ax.action()
+            sleep(0.05)
 
-    	#poot omhoog
-    	ax.moveSpeedRW(22, 750, speed)
-    	ax.moveSpeedRW(23, 880, speed)
-    	ax.moveSpeedRW(42, 750, speed)
-    	ax.moveSpeedRW(43, 880, speed)
-    	ax.moveSpeedRW(62, 750, speed)
-    	ax.moveSpeedRW(63, 880, speed)
-    	ax.action()
-    	sleep(0.05)
+            #poot omhoog
+            ax.moveSpeedRW(22, 750, speed)
+            ax.moveSpeedRW(23, 980, speed)
+            ax.moveSpeedRW(42, 750, speed)
+            ax.moveSpeedRW(43, 980, speed)
+            ax.moveSpeedRW(62, 750, speed)
+            ax.moveSpeedRW(63, 980, speed)
+            ax.action()
+            sleep(0.05)
 
-    	#draai lichaam
-    	ax.moveSpeedRW(11, 512, speed)
-    	ax.moveSpeedRW(31, 512, speed)
-    	ax.moveSpeedRW(51, 512, speed)
-    	ax.action()
-    	sleep(0.05)
+            #draai lichaam
+            ax.moveSpeedRW(11, 512, speed)
+            ax.moveSpeedRW(31, 512, speed)
+            ax.moveSpeedRW(51, 512, speed)
+            ax.moveSpeedRW(21, int(546+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(41, int(561+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(61, int(561+ rotAngle * 0.8), speed)
+            ax.action()
+            sleep(0.05)
 
-    	ax.moveSpeedRW(21, 546, speed)
-    	ax.moveSpeedRW(41, 561, speed)
-    	ax.moveSpeedRW(61, 561, speed)
-    	ax.action()
-    	sleep(0.05)
+            #poot omlaag
+            ax.moveSpeedRW(22, 656, speed)
+            ax.moveSpeedRW(42, 656, speed)
+            ax.moveSpeedRW(62, 656, speed)
+            ax.action()
+            sleep(0.05)
 
-    	#poot omlaag
-    	ax.moveSpeedRW(22, 620, speed)
-    	ax.moveSpeedRW(42, 620, speed)
-    	ax.moveSpeedRW(62, 620, speed)
-    	ax.action()
-    	sleep(0.05)
+            #poot omhoog
+            ax.moveSpeedRW(12, 750, speed)
+            ax.moveSpeedRW(13, 980, speed)
+            ax.moveSpeedRW(32, 750, speed)
+            ax.moveSpeedRW(33, 980, speed)
+            ax.moveSpeedRW(52, 750, speed)
+            ax.moveSpeedRW(53, 980, speed)
+            ax.action()
+            sleep(0.05)
 
-    	#poot omhoog
-    	ax.moveSpeedRW(12, 750, speed)
-    	ax.moveSpeedRW(13, 880, speed)
-    	ax.moveSpeedRW(32, 750, speed)
-    	ax.moveSpeedRW(33, 880, speed)
-    	ax.moveSpeedRW(52, 750, speed)
-    	ax.moveSpeedRW(53, 880, speed)
-    	ax.action()
-    	sleep(0.05)
-
-    	#draai lichaam
-    	ax.moveSpeedRW(21, 512, speed)
-    	ax.moveSpeedRW(41, 512, speed)
-    	ax.moveSpeedRW(61, 512, speed)
-    	ax.action()
-    	sleep(0.05)
-
-    	#draai
-    	ax.moveSpeedRW(11, 561, speed)
-    	ax.moveSpeedRW(31, 561, speed)
-    	ax.moveSpeedRW(51, 546, speed)
-    	ax.action()
-    	sleep(1)
-    	Movement.isMoving = False
+            #draai lichaam
+            ax.moveSpeedRW(21, 512, speed)
+            ax.moveSpeedRW(41, 512, speed)
+            ax.moveSpeedRW(61, 512, speed)
+            ax.moveSpeedRW(11, int(561+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(31, int(561+ rotAngle * 0.8), speed)
+            ax.moveSpeedRW(51, int(546+ rotAngle * 0.8), speed)
+            ax.action()
+            sleep(0.05)
+    	except:
+            try:
+                self.rest()
+            except:
+                pass
+        finally:
+            Movement.isMoving = False
     	#for x in range(1, 7):
     	#	self.rest(x)
 
@@ -447,6 +465,8 @@ class Movement:
     		elif y < -10:
            		print "Move backward"
                 	self.moveBackward(0,0,0,1,int(sCalc.speed(x,y)))
+                else:
+                        self.rest()
     	elif x <= -10 and x >= -50:#move angle to left
             if y >= 0:
                 print "Move forward to left"
@@ -462,9 +482,9 @@ class Movement:
                 print "Move backward to right"
                 self.moveBackward(angle_mod, angle_mod_inverted, 0, -1,int(sCalc.speed(x,y)))
         elif x < -50:
-                self.turnLeft()
+                self.turnLeft(x)
         elif x > 50:
-                self.turnRight()
+                self.turnRight(x)
         #self.rest()
     	"""if y >= 10:
 	    print "forward"
