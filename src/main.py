@@ -70,7 +70,7 @@ class MainProgram(object):
     def startUpdateThread(self):
         print "starting update thread..."
         threading.Thread(target=self.fastAPIUpdates,args=(self.servos,)).start()
-        threading.Thread(target=self.slowAPIUpdates).start()
+        #threading.Thread(target=self.slowAPIUpdates).start()
 
     ## Starts the REST API
     def startRESTAPI(self):
@@ -122,7 +122,8 @@ class MainProgram(object):
     def getFastAPIJSON(self):
         infoJSON = {"servos":[],
                     "gyro":self.getGyroPos(),
-                    "joy_pos":self.getJoyPos()
+                    "joy_pos":self.getJoyPos(),
+                    "spiderBattery":[self.getBatteryStatus()]
                     }
         for servo in self.servos:
             infoJSON["servos"].append(
@@ -160,7 +161,7 @@ class MainProgram(object):
                self.updateServos(toUpdateServos)
                #send data to apps
                self.appServer.sendJSONToAll(self.getFastAPIJSON())
-               sleep(0.5)
+               sleep(10)
            except Exception, e:
                print "Timeout error in update API thread...", e
 

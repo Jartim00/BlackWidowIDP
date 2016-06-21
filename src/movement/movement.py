@@ -276,18 +276,13 @@ class Movement:
 
 	#turn per 10 degrees
 	##moves the hexapod to the right in a certain angle in degrees #hardcoded!
-<<<<<<< HEAD
     def turnLeft(self, rotAngle):
-=======
-    def turnLeft(self):
->>>>>>> ef2576e9bd1a259edba26d3e3b7a022dd798a3b1
         try:
             self.rest()
             Movement.isMoving = True
             speed = 300
             #poot omhoog
             ax.moveSpeedRW(12, 750, speed)
-<<<<<<< HEAD
             ax.moveSpeedRW(13, 980, speed)
             ax.moveSpeedRW(32, 750, speed)
             ax.moveSpeedRW(33, 980, speed)
@@ -354,80 +349,6 @@ class Movement:
             ax.moveSpeedRW(11, int(463+ rotAngle * 0.8), speed)
             ax.moveSpeedRW(31, int(463+ rotAngle * 0.8), speed)
             ax.moveSpeedRW(51, int(478+ rotAngle * 0.8), speed)
-=======
-            ax.moveSpeedRW(13, 880, speed)
-            ax.moveSpeedRW(32, 750, speed)
-            ax.moveSpeedRW(33, 880, speed)
-            ax.moveSpeedRW(52, 750, speed)
-            ax.moveSpeedRW(53, 880, speed)
-            ax.action()
-            sleep(0.05)
-
-            #draai
-            ax.moveSpeedRW(11, 463, speed)
-            ax.moveSpeedRW(31, 463, speed)
-            ax.moveSpeedRW(51, 478, speed)
-            ax.action()
-            sleep(0.05)
-
-            #poot omlaag
-            ax.moveSpeedRW(12, 620, speed)
-            ax.moveSpeedRW(32, 620, speed)
-            ax.moveSpeedRW(52, 620, speed)
-            ax.action()
-            sleep(0.05)
-
-            #poot omhoog
-            ax.moveSpeedRW(22, 750, speed)
-            ax.moveSpeedRW(23, 880, speed)
-            ax.moveSpeedRW(42, 750, speed)
-            ax.moveSpeedRW(43, 880, speed)
-            ax.moveSpeedRW(62, 750, speed)
-            ax.moveSpeedRW(63, 880, speed)
-            ax.action()
-            sleep(0.05)
-
-            #draai lichaam
-            ax.moveSpeedRW(11, 512, speed)
-            ax.moveSpeedRW(31, 512, speed)
-            ax.moveSpeedRW(51, 512, speed)
-            ax.action()
-            sleep(0.05)
-
-            ax.moveSpeedRW(21, 478, speed)
-            ax.moveSpeedRW(41, 463, speed)
-            ax.moveSpeedRW(61, 463, speed)
-            ax.action()
-            sleep(0.05)
-
-            #poot omlaag
-            ax.moveSpeedRW(22, 620, speed)
-            ax.moveSpeedRW(42, 620, speed)
-            ax.moveSpeedRW(62, 620, speed)
-            ax.action()
-            sleep(0.05)
-
-            #poot omhoog
-            ax.moveSpeedRW(12, 750, speed)
-            ax.moveSpeedRW(13, 880, speed)
-            ax.moveSpeedRW(32, 750, speed)
-            ax.moveSpeedRW(33, 880, speed)
-            ax.moveSpeedRW(52, 750, speed)
-            ax.moveSpeedRW(53, 880, speed)
-            ax.action()
-            sleep(0.05)
-
-            #draai lichaam
-            ax.moveSpeedRW(21, 512, speed)
-            ax.moveSpeedRW(41, 512, speed)
-            ax.moveSpeedRW(61, 512, speed)
-            ax.action()
-            sleep(0.05)
-
-            ax.moveSpeedRW(11, 463, speed)
-            ax.moveSpeedRW(31, 463, speed)
-            ax.moveSpeedRW(51, 478, speed)
->>>>>>> ef2576e9bd1a259edba26d3e3b7a022dd798a3b1
             ax.action()
             sleep(0.05)
     	except:
@@ -442,17 +363,12 @@ class Movement:
 
 	#turn per 10 degrees
 	##moves the hexapod to the right in a certain angle in degrees #hardcoded!
-<<<<<<< HEAD
     def turnRight(self, rotAngle):
-=======
-    def turnRight(self):
->>>>>>> ef2576e9bd1a259edba26d3e3b7a022dd798a3b1
         try:
             self.rest()
             Movement.isMoving = True
             speed = 300
             ax.moveSpeedRW(12, 750, speed)
-<<<<<<< HEAD
             ax.moveSpeedRW(13, 980, speed)
             ax.moveSpeedRW(32, 750, speed)
             ax.moveSpeedRW(33, 980, speed)
@@ -519,81 +435,6 @@ class Movement:
             ax.moveSpeedRW(11, int(561+ rotAngle * 0.8), speed)
             ax.moveSpeedRW(31, int(561+ rotAngle * 0.8), speed)
             ax.moveSpeedRW(51, int(546+ rotAngle * 0.8), speed)
-=======
-            ax.moveSpeedRW(13, 880, speed)
-            ax.moveSpeedRW(32, 750, speed)
-            ax.moveSpeedRW(33, 880, speed)
-            ax.moveSpeedRW(52, 750, speed)
-            ax.moveSpeedRW(53, 880, speed)
-            ax.action()
-            sleep(0.05)
-
-            #draai
-            ax.moveSpeedRW(11, 561, speed)
-            ax.moveSpeedRW(31, 561, speed)
-            ax.moveSpeedRW(51, 546, speed)
-            ax.action()
-            sleep(0.05)
-
-            #poot omlaag
-            ax.moveSpeedRW(12, 620, speed)
-            ax.moveSpeedRW(32, 620, speed)
-            ax.moveSpeedRW(52, 620, speed)
-            ax.action()
-            sleep(0.05)
-
-            #poot omhoog
-            ax.moveSpeedRW(22, 750, speed)
-            ax.moveSpeedRW(23, 880, speed)
-            ax.moveSpeedRW(42, 750, speed)
-            ax.moveSpeedRW(43, 880, speed)
-            ax.moveSpeedRW(62, 750, speed)
-            ax.moveSpeedRW(63, 880, speed)
-            ax.action()
-            sleep(0.05)
-
-            #draai lichaam
-            ax.moveSpeedRW(11, 512, speed)
-            ax.moveSpeedRW(31, 512, speed)
-            ax.moveSpeedRW(51, 512, speed)
-            ax.action()
-            sleep(0.05)
-
-            ax.moveSpeedRW(21, 546, speed)
-            ax.moveSpeedRW(41, 561, speed)
-            ax.moveSpeedRW(61, 561, speed)
-            ax.action()
-            sleep(0.05)
-
-            #poot omlaag
-            ax.moveSpeedRW(22, 620, speed)
-            ax.moveSpeedRW(42, 620, speed)
-            ax.moveSpeedRW(62, 620, speed)
-            ax.action()
-            sleep(0.05)
-
-            #poot omhoog
-            ax.moveSpeedRW(12, 750, speed)
-            ax.moveSpeedRW(13, 880, speed)
-            ax.moveSpeedRW(32, 750, speed)
-            ax.moveSpeedRW(33, 880, speed)
-            ax.moveSpeedRW(52, 750, speed)
-            ax.moveSpeedRW(53, 880, speed)
-            ax.action()
-            sleep(0.05)
-
-            #draai lichaam
-            ax.moveSpeedRW(21, 512, speed)
-            ax.moveSpeedRW(41, 512, speed)
-            ax.moveSpeedRW(61, 512, speed)
-            ax.action()
-            sleep(0.05)
-
-            #draai
-            ax.moveSpeedRW(11, 561, speed)
-            ax.moveSpeedRW(31, 561, speed)
-            ax.moveSpeedRW(51, 546, speed)
->>>>>>> ef2576e9bd1a259edba26d3e3b7a022dd798a3b1
             ax.action()
             sleep(0.05)
     	except:

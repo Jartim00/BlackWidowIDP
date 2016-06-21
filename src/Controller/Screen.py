@@ -107,9 +107,12 @@ def imgselect_spin(batterij_status):
 def syncBattery():
     global bt
     while bt:
-        batteryStatus = bt_spider.getBatteryStatus()
+        try:
+            batteryStatus = bt_spider.getBatteryStatus()
+        except:
+            pass
         batterij_foto["image"] = imgselect_spin(batteryStatus)
-
+        sleep(10)
 spiderBatteryThread = threading.Thread(target=syncBattery)
 
 def main_loop():
@@ -181,6 +184,7 @@ def mode_3(): #Aanvalmode
     delay=1000
     if not aanval:
         aanval = True
+        bt_spider.attackMode()
         gyroThread = threading.Thread(target=bt_spider.synchronizeFrontLegs)
         gyroThread.start()
     else:
@@ -354,7 +358,7 @@ bt_connect = Button(win, text = "Koppel", font = myFont, command = bt_knop, heig
 buttons=[0,mode_1_button,mode_2_button,mode_3_button,mode_4_button,mode_5_button,mode_6_button]
 
 #dansmode1_button = Button(win, text = "Start", font = myFont, command = start_stop_dans, height=2, width=6, bg = inactive, state = dansstate, fg=achtergrond)
-prik_button = Button(win, text = "Prik", font = myFont, command = prik_uitvoer, height=2, width=6, bg = inactive, state = aanvalstate, fg=achtergrond)
+prik_button = Button(win, text = "Prik", font = myFont, command = bt_spider.stab, height=2, width=6, bg = inactive, state = aanvalstate, fg=achtergrond)
 
 controller_text = Label(win,text="Controller", fg=achtergrond)
 spin_text = Label(win,text="Spin", fg=achtergrond)
