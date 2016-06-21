@@ -82,18 +82,18 @@ class Vision:
 			return "Forward"
 		elif coord[0] <= (middleX - self.buffer):
 			print "left"
-			Vision.mov.movementController(-60,0)
+			Vision.mov.movementController(-41,0)
 			return "Left"
 		elif coord[0] >= (middleX + self.buffer):
 			print "Right"
-			Vision.mov.movementController(60,0)
+			Vision.mov.movementController(41,0)
 			return "Right"
 		return None
 
 	##starts autonomousLine sequence, which controls the spider. it needs to run on different thread!
 	def startAutonomousLine(self):
 		Vision.mov.rest()
-		self.buffer = 50
+		self.buffer = 80
 		self.running = True
 		while self.running:
 			frame =  self.cam.get_frame()
@@ -167,6 +167,7 @@ class Vision:
 			#mov.stabbing()
 			'''Attack function does not excist yet'''
 			# pass
+
 
 	##decodes frame and returns x y coordinates of line
 	#@param frame raw jpeg image captured from a camera
