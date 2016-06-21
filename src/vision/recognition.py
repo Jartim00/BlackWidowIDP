@@ -26,7 +26,7 @@ class Recognition:
 		upper_white = np.array([40, 56, 255])
 		thresholded = self.morph.thresholdImage(frame, lower_white, upper_white)
 		mask = self.morph.morphFrame(thresholded)
-		#mask = cv2.bitwise_not(mask)
+		mask = cv2.bitwise_not(mask)
 		#mask = cv2.GaussianBlur(mask,(5,5),0)
 		#mask = self.morph.floodFill(mask)
 		return self.__detectLineBlob(mask)
@@ -96,19 +96,19 @@ class Recognition:
 		height, width = mask.shape[:2]
 		middleThree = height / 3
 
-	    	max_area = 0
+    	max_area = 0
 		best_cnt = None
 		if len(contours) == 0:
 			return None
 
     		for cnt in contours:
         		area = cv2.contourArea(cnt)
-			M = cv2.moments(cnt)
-			if M["m00"] != 0:
-				cy = int(M['m01']/M['m00'])
-				if area > max_area and cy >= middleThree:
-					max_area = area
-            				best_cnt = cnt
+				M = cv2.moments(cnt)
+				if M["m00"] != 0:
+					cy = int(M['m01']/M['m00'])
+					if area > max_area and cy >= middleThree:
+						max_area = area
+        				best_cnt = cnt
 		if best_cnt is None:
 			return None
 	    	M = cv2.moments(best_cnt)
@@ -124,7 +124,7 @@ class Recognition:
 	def __cropFrame(self, frame):
 		rows, cols = frame.shape[:2]
 		x2 = cols
-		x1 = 0 	
+		x1 = 0
 		y1 = rows - Recognition.bufferX
 		y2 = rows
 		return frame[y1: y2, x1:x2]
@@ -157,12 +157,11 @@ class Recognition:
 
 		for cnt in contours:
 			area = cv2.contourArea(cnt)
-		M = cv2.moments(cnt)
-		if M["m00"] != 0:
-			cy = int(M['m01']/M['m00'])
-			if area > max_area:
-				max_area = area
-				best_cnt = cnt
+			M = cv2.moments(cnt)
+			if M["m00"] != 0:
+				if area > max_area:
+					max_area = area
+					best_cnt = cnt
 		if best_cnt is None:
 			return None
 		M = cv2.moments(best_cnt)
@@ -171,5 +170,5 @@ class Recognition:
 			cx = int(M["m10"] / M["m00"])
 			cy = int(M["m01"] / M["m00"])
 		else:
-				cx, cy = 0, 0
+			cx, cy = 0, 0
 		return [cx, cy]
