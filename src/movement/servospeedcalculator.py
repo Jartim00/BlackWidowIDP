@@ -36,8 +36,9 @@ def getSpeed(id,endPos,time):
 	curPos = ax.readPosition(id)
 	totalAngle = math.fabs(curPos - endPos)
 	speed = calculateSpeed(totalAngle, time)
-	if speed > 512:
-		raise Exception("Time is to low")
+	if speed > 1023:
+		e = "Time is too low! (" + str(int(speed)) + ")"
+		raise Exception(e)
 	return int(speed)
 
 ##Moves the servo to the endPos in the specified time.

@@ -8,13 +8,16 @@ from movement.stab import Stabby
 import movement.movement as movement
 import movement.carry as carry
 import gyro
+from movement.shatterme import Dance
+from movement.bridgetest import Bridge
 mv = movement.Movement()
 
 stab = Stabby()
+dance = Dance()
+bridge = Bridge()
 
 ## Bluetooth server for communication with the controller.
 class BluetoothServer(object):
-
 	#  @param bind_address The hexapod bluetooth address. Leave empty for letting anyone in.
 	#  @param port The port for the socket
 	#  @param mainprogram The mainprogram for setting main variables and calling main functions
@@ -29,6 +32,7 @@ class BluetoothServer(object):
 		self.visionDetection = Vision()
 		self.visionLineThread = threading.Thread(target=self.visionDetection.startAutonomousLine)
 		self.visionBalloonThread = threading.Thread(target=self.visionDetection.startAutonomousBalloon)
+		self.danceThread = threading.Thread(target=dance.showMeHowGoodYourDancingIs)
 		self.client_sock,self.address = (None,None)
 
 	## Starts the bluetooth server
@@ -127,6 +131,7 @@ class BluetoothServer(object):
 	## Things that need to be stopped before doing another action.
 	def stopEverything(self):
 		self.stopVision()
+		self.stopDancing()
 
 	## Stops the balloon and line detection
 	def stopVision(self):
@@ -138,6 +143,13 @@ class BluetoothServer(object):
 		print "join last thread"
 		if self.visionBalloonThread.isAlive():
 			self.visionBalloonThread.join()
+
+	## Stops dancing and waits for the thread to join
+	def stopDancing(self):
+		if not self.danceThread.isAlive():
+			return
+		dance.stop = True
+		self.danceThread.join()
 
 	## Returns  a JSON string with the battery status
 	#  @param batteryStatus the battery status from 0 through 4
@@ -166,14 +178,15 @@ class BluetoothServer(object):
 						#call the move function
 						try:
 							mv.movementController(joy_x,joy_y)
-						except:
-							print "error in movement"
+						except Exception, e:
+							print "error in movement",e
 			elif mode == 2:
 				if 'danceId' in jsonData:
 					danceId = jsonData['danceId']
 					self.stopEverything()
 					#call the dance function
-					#TODO
+					self.danceThread = threading.Thread(target=dance.showMeHowGoodYourDancingIs)
+					self.danceThread.start()
 					print "dance"
 			elif mode == 3:
 				#stop everything???
@@ -217,7 +230,16 @@ class BluetoothServer(object):
 					#rotate around the x axis
 					if len(gyro_pos) == 3:
 						self.mainprogram.setControllerGyroPos(gyro_pos)
-						stab.gyroSens(gyro_pos[1])
+						try:
+							stab.gyroSens(gyro_pos[1])
+						except:
+							if gyro_pos[1] < -10:
+								stab.gyroSens(-10)
+							if gyro_pos[1] > 60:
+								stab.gyroSens(60)
 			elif cmd == 'stab':
 				stab.stab()
 				stab.returning()
+			elif cmd == 'crawl':
+				#TODO
+				print 'crawl'

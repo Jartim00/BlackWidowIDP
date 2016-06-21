@@ -78,6 +78,7 @@ def active_background():
     #dansmode1_button["activebackground"] = dansmode1_button["bg"]
     prik_button["activebackground"] = prik_button["bg"]
     bt_connect["activebackground"] = bt_connect["bg"]
+    crawl_button["activebackground"] = bt_connect["bg"]
 
 def imgselect_controller():
     batterijsample=controller_battery.read()
@@ -359,7 +360,7 @@ buttons=[0,mode_1_button,mode_2_button,mode_3_button,mode_4_button,mode_5_button
 
 #dansmode1_button = Button(win, text = "Start", font = myFont, command = start_stop_dans, height=2, width=6, bg = inactive, state = dansstate, fg=achtergrond)
 prik_button = Button(win, text = "Prik", font = myFont, command = bt_spider.stab, height=2, width=6, bg = inactive, state = aanvalstate, fg=achtergrond)
-
+crawl_button = Button(win, text = "Kruip", font = myFont, command = bt_spider.crawl, height=2, width=6, bg = inactive, fg=achtergrond)
 controller_text = Label(win,text="Controller", fg=achtergrond)
 spin_text = Label(win,text="Spin", fg=achtergrond)
 
@@ -396,6 +397,7 @@ mode_6_button.grid(row=0,column=5)
 #dansmode1_button.grid(row=1,column=0, pady=7, rowspan=3)
 bt_connect.grid(row=1,column=1, pady=7, rowspan=3)
 prik_button.grid(row=1,column=0, pady=7, rowspan=3)
+crawl_button.grid(row=1,column=4,pady=7, rowspan=3)
 foto.grid(row=5,column=0,columnspan=10)
 batterij_controller.grid(row=1,column=2, rowspan=2)
 batterij_foto.grid(row=1,column=3, rowspan=2)

@@ -106,6 +106,12 @@ class SpiderCommunication(object):
         }
         self.sendData(stab_json)
 
+    def crawl(self):
+        crawl_json = {
+            "cmd": "crawl"
+        }
+        self.sendData(crawl_json)
+
     '''Sends the gyroscope position to the server.'''
     def setGyro(self,gyro_pos):
         print "gyro does work tough"

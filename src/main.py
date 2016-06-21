@@ -10,10 +10,12 @@ from ax import Ax12
 #import vision.vision
 import communication.btserver as btserver
 import communication.appserver as appserver
+from vision.recognition import Recognition
 import spider_battery
 import gyro
 ax = Ax12()
 
+rec = Recognition()
 class MainProgram(object):
     servos = []
     def __init__(self):
@@ -181,6 +183,7 @@ def gen(camera):
     """Video streaming generator function."""
     while True:
         frame = camera.get_frame()
+        #frame = rec.targetLineDebug(frame)
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
